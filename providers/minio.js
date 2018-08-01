@@ -123,6 +123,18 @@ class MinioProvider {
     }
 
     /**
+     * Requests an object from the server. The method returns a Promise that resolves to a Readable Stream containing the data.
+     * 
+     * @param {string} container - Name of the container
+     * @param {string} path - Path of the object, inside the container
+     * @returns {Promise<Stream>} Readable Stream containing the object's data
+     * @async
+     */
+    getObject(container, path) {
+        return this._minio.getObject(container, path)
+    }
+
+    /**
      * Returns a list of objects with a given prefix (folder). The list is not recursive, so prefixes (folders) are returned as such.
      * 
      * @param {string} container - Name of the container

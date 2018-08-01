@@ -33,12 +33,12 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
+    "digest-stream": "^2.0.0",
     "eslint": "^5.2.0",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "mocha-lcov-reporter": "^1.3.0",
-    "randomstring": "^1.1.5",
-    "should": "^13.2.2"
+    "randomstring": "^1.1.5"
   }
 }

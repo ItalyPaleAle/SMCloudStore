@@ -5,6 +5,7 @@
 const assert = require('assert')
 const SMCloud = require('../index')
 const randomstring = require('randomstring')
+const digestStream = require('digest-stream')
 const fs = require('fs')
 
 const authData = require('./data/auth')
@@ -31,25 +32,29 @@ describe('Minio provider', function() {
             file: 'test/data/benni-asal-756919-unsplash.jpg',
             destination: 'testimage.jpg',
             contentType: 'image/jpeg',
-            size: 647173
+            size: 647173,
+            digest: '1007c9d3516b054546a96754ae4651a2edaea5b7'
         },
         {
             file: 'test/data/pg1008.txt',
             destination: 'sub/folder/poem.txt',
             contentType: 'text/plain',
-            size: 893449
+            size: 893449,
+            digest: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
         },
         {
             string: 'M\'illumino d\'immenso',
             destination: 'test/strings/poem.txt',
             contentType: 'text/plain',
-            size: 20
+            size: 20,
+            digest: 'c07707cf9912ed73615dcf4cf7f21523dbaab329'
         },
         {
             buffer: fs.readFileSync('test/data/pg1008.txt'),
             destination: 'test/buffers/poem.txt',
             contentType: 'text/plain',
-            size: 893449
+            size: 893449,
+            digest: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
         }        
     ]
 
@@ -105,7 +110,7 @@ describe('Minio provider', function() {
         await client.ensureContainer(containers[0])
     })
 
-    it('listContainers', async function() {
+    it.skip('listContainers', async function() {
         // Sort our list
         containers = containers.sort()
 
@@ -124,6 +129,9 @@ describe('Minio provider', function() {
     })
 
     it('putObject', async function() {
+        // Increase timeout
+        this.timeout(15000)
+
         // Upload some files, in parallel
         const promises = []
         for (const i in testFiles) {
@@ -224,6 +232,36 @@ describe('Minio provider', function() {
             return listEqual(list, expect)
         }
         assert(await testPath(''))
+    })
+
+    it('getObject', async function() {
+        // Increase timeout
+        this.timeout(15000)
+
+        // Download the first 3 files and check their sha1 digest, in parallel
+        const promises = []
+        for (let i = 0; i < 3; i++) {
+            const e = testFiles[i]
+
+            const p = client.getObject(containers[0], e.destination)
+                .then((stream) => {
+                    return new Promise((resolve, reject) => {
+                        stream
+                            .pipe(digestStream('sha1', 'hex', (digest, length) => {
+                                assert(length == e.size)
+                                assert(digest == e.digest)
+                                resolve()
+                            }))
+                            .on('error', (err) => {
+                                reject(err)
+                            })
+                            .resume()
+                    })
+                })
+            promises.push(p)
+        }
+
+        await Promise.all(promises)
     })
 
     it('removeObject', async function() {
