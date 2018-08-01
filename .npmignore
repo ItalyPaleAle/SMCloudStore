@@ -1,0 +1,8 @@
+.travis.yml
+.eslintignore
+.eslintrc.yml
+.jsdoc.json  
+docs
+test
+coverage
+smconfig*.tgz

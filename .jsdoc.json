@@ -1,0 +1,28 @@
+{
+    "opts": {
+        "encoding": "utf8",
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "source": {
+        "include": [
+            "./",
+            "./plugins",
+            "./README.md"
+        ],
+        "exclude": [
+            "./test",
+            "./node_modules",
+            "./coverage"
+        ],
+        "includePattern": ".+\\.js?$"
+    },
+    "templates": {
+        "default": {
+            "includeDate": false
+        }
+    }
+}

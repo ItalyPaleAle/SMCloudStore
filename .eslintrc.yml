@@ -1,0 +1,65 @@
+env:
+  es6: true
+  node: true
+extends: 'eslint:recommended'
+parserOptions:
+  ecmaVersion: 8
+rules:
+  indent:
+    - error
+    - 4
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - never
+  no-var:
+    - error
+  prefer-const:
+    - warn
+  no-unused-vars:
+    - error
+    - args: none
+  brace-style:
+    - error
+    - stroustrup
+    - allowSingleLine: false
+  eol-last:
+    - error
+    - always
+  space-before-function-paren:
+    - error
+    - anonymous: never
+      named: never
+      asyncArrow: always
+  keyword-spacing:
+    - error
+    - before: true
+      after: true
+  key-spacing:
+    - error
+    - beforeColon: false
+      afterColon: true
+      mode: strict
+  comma-spacing:
+    - error
+  arrow-spacing:
+    - error
+  array-bracket-spacing:
+    - error
+    - never
+    - singleValue: false
+      objectsInArrays: true
+      arraysInArrays: true
+  object-curly-spacing:
+    - error
+    - never
+  space-in-parens:
+    - error
+    - never
+
+

@@ -1,0 +1,44 @@
+{
+  "name": "smcloud",
+  "version": "0.1.0",
+  "description": "Multi-cloud object storage library",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report html -- -R spec",
+    "test-travis": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
+    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItalyPaleAle/SMCloud.git"
+  },
+  "keywords": [
+    "configuration",
+    "config",
+    "environments",
+    "hapi"
+  ],
+  "author": "Alessandro Segala",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ItalyPaleAle/SMCloud/issues"
+  },
+  "homepage": "https://github.com/ItalyPaleAle/SMCloud",
+  "dependencies": {
+    "minio": "^6.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "eslint": "^5.2.0",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.5.5",
+    "mocha": "^5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "randomstring": "^1.1.5",
+    "should": "^13.2.2"
+  }
+}
