@@ -15,8 +15,8 @@ const SMCloud = {
             throw Error('The specified provider is not valid. Valid providers inlcude: ' + supportedProviders.join(', '))
         }
 
-        if (!connection || typeof connection !== 'object' || !Object.keys(connection).length) {
-            throw Error('The connection argument must be a non-empty plain object')
+        if (!connection) {
+            throw Error('The connection argument must be non-empty')
         }
 
         // Require the specific provider, then initialize it
@@ -31,6 +31,7 @@ const SMCloud = {
      */
     Providers: () => {
         return [
+            'azure',
             'minio'
         ]
     }

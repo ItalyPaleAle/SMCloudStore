@@ -114,12 +114,11 @@ class MinioProvider {
      * @param {string} path - Path where to store the object, inside the container
      * @param {Stream|string|Buffer} data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
      * @param {Object} [metadata] - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
-     * @param {number} [size] - Size of the object being uploaded; if not set, the stream will be uploaded until the end
      * @returns {Promise<void>} Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container, path, data, metadata, size) {
-        return this._minio.putObject(container, path, data, size, metadata)
+    putObject(container, path, data, metadata) {
+        return this._minio.putObject(container, path, data, metadata)
     }
 
     /**

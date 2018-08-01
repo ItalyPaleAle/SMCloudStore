@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/ItalyPaleAle/SMCloud",
   "dependencies": {
+    "azure-storage": "^2.10.0",
     "minio": "^6.0.0"
   },
   "devDependencies": {
