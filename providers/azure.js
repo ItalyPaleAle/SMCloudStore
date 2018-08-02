@@ -346,6 +346,19 @@ class AzureProvider {
      * @async
      */
     removeObject(container, path) {
+        return new Promise((resolve, reject) => {
+            this._azure.deleteBlob(container, path, (err, response) => {
+                if (err) {
+                    return reject(err)
+                }
+                else if (!response || !response.isSuccessful) {
+                    throw Error('Response was empty or not successful')
+                }
+                else {
+                    return resolve()
+                }
+            })
+        })
     }
 
     /* Internal methods */
