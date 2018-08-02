@@ -1,6 +1,7 @@
 'use strict'
 
 const Azure = require('azure-storage')
+const stream = require('stream')
 
 /**
  * Connection options for an Azure provider.
@@ -250,6 +251,22 @@ class AzureProvider {
      * @async
      */
     getObject(container, path) {
+        // Create a transform stream we can return in the result, which is readable
+        const duplexStream = new stream.Transform({
+            transform(chunk, encoding, done) {
+                done(null, chunk)
+            }
+        })
+        // Request the data
+        this._azure.getBlobToStream(container, path, duplexStream, (err, response) => {
+            // Pass errors to the stream as events
+            if (err) {
+                duplexStream.destroy(typeof err == 'object' && err instanceof Error) ? err : Error(err)
+            }
+        })
+
+        // Wrap this in a promise because the method expects result to be async
+        return Promise.resolve(duplexStream)
     }
 
     /**

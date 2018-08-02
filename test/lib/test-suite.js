@@ -60,14 +60,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 size: 893449,
                 digestMD5: 'c0656985bed744013a8003af58cc83bf',
                 digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
-            },
-            /*{
-                file: '/Users/alessandro/Movies/Vancouver for Reunion/Vancouver for Reunion v2 HD.mov',
-                destination: 'testvideo.mov',
-                contentType: 'video/quicktime',
-                size: 235172285,
-                digestSHA1: '5296b92af68714677cf2dde7d52d9291567cdb4d'
-            } */       
+            }
         ]
 
         // Enable bailing if a test fails
@@ -129,7 +122,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('putObject', async function() {
             // Increase timeout
-            this.timeout(15000)
+            this.timeout(60000)
 
             // Upload some files, in parallel
             const promises = []
@@ -260,7 +253,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('getObject', async function() {
             // Increase timeout
-            this.timeout(15000)
+            this.timeout(60000)
 
             // Download the first 3 files and check their sha1 digest, in parallel
             const promises = []
@@ -271,14 +264,14 @@ module.exports = (providerName, testSuiteOptions) => {
                     .then((stream) => {
                         return new Promise((resolve, reject) => {
                             stream
+                                .on('error', (err) => {
+                                    reject(err)
+                                })
                                 .pipe(digestStream('sha1', 'hex', (digest, length) => {
                                     assert(length == e.size)
                                     assert(digest == e.digestSHA1)
                                     resolve()
                                 }))
-                                .on('error', (err) => {
-                                    reject(err)
-                                })
                                 .resume()
                         })
                     })
