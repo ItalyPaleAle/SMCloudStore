@@ -18,7 +18,7 @@ const genContainerName = () => {
     })
 }
 
-module.exports = (providerName, constructorTest) => {
+module.exports = (providerName, testSuiteOptions) => {
     describe('Test suite for ' + providerName, function() {
 
         // Will hold a client instance
@@ -34,29 +34,40 @@ module.exports = (providerName, constructorTest) => {
                 destination: 'testimage.jpg',
                 contentType: 'image/jpeg',
                 size: 647173,
-                digest: '1007c9d3516b054546a96754ae4651a2edaea5b7'
+                digestMD5: 'eab029bf064a2a44cbfb46264606f7d3',
+                digestSHA1: '1007c9d3516b054546a96754ae4651a2edaea5b7'
             },
             {
                 file: 'test/data/pg1008.txt',
                 destination: 'sub/folder/poem.txt',
                 contentType: 'text/plain',
                 size: 893449,
-                digest: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
+                digestMD5: 'c0656985bed744013a8003af58cc83bf',
+                digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
             },
             {
                 string: 'M\'illumino d\'immenso',
                 destination: 'test/strings/poem.txt',
                 contentType: 'text/plain',
                 size: 20,
-                digest: 'c07707cf9912ed73615dcf4cf7f21523dbaab329'
+                digestMD5: '0ba618099a4475a45887d4022340b72b',
+                digestSHA1: 'c07707cf9912ed73615dcf4cf7f21523dbaab329'
             },
             {
                 buffer: fs.readFileSync('test/data/pg1008.txt'),
                 destination: 'test/buffers/poem.txt',
                 contentType: 'text/plain',
                 size: 893449,
-                digest: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
-            }        
+                digestMD5: 'c0656985bed744013a8003af58cc83bf',
+                digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
+            },
+            /*{
+                file: '/Users/alessandro/Movies/Vancouver for Reunion/Vancouver for Reunion v2 HD.mov',
+                destination: 'testvideo.mov',
+                contentType: 'video/quicktime',
+                size: 235172285,
+                digestSHA1: '5296b92af68714677cf2dde7d52d9291567cdb4d'
+            } */       
         ]
 
         // Enable bailing if a test fails
@@ -150,6 +161,17 @@ module.exports = (providerName, constructorTest) => {
         })
 
         it('listObjects', async function() {
+            // Sort objects by key
+            // Based on https://stackoverflow.com/a/31725356/192024
+            const ksort = (obj) => {
+                const keys = Object.keys(obj)
+                keys.sort()
+                return keys.reduce((target, key) => {
+                    target[key] = obj[key]
+                    return target
+                }, {})
+            }
+
             // Function that checks the list returned by the server with what we expect
             // Based on https://stackoverflow.com/a/34566587
             const listEqual = (list, expect) => {
@@ -158,11 +180,15 @@ module.exports = (providerName, constructorTest) => {
                     return false
                 }
 
-                // Convert each object in the array to a string so we can ignore the lastModified object
+                // Convert each object in the array to a string so we can ignore the lastModified and creationTime objects
                 const elemToString = (elem) => {
                     if (elem.lastModified && elem.lastModified instanceof Date) {
                         elem.lastModified = 'date'
                     }
+                    if (elem.creationTime && elem.creationTime instanceof Date) {
+                        elem.creationTime = 'date'
+                    }
+                    elem = ksort(elem)
                     return JSON.stringify(elem)
                 }
                 const listStr = list.map(elemToString)
@@ -195,11 +221,21 @@ module.exports = (providerName, constructorTest) => {
                         }
                         // We're expecting to find a file
                         else {
-                            expect.push({
+                            const expectEl = {
                                 path: e.destination,
                                 lastModified: 'date',
                                 size: e.size
-                            })
+                            }
+                            if (testSuiteOptions.listObjects.includes('includeContentMD5')) {
+                                expectEl.contentMD5 = e.digestMD5
+                            }
+                            if (testSuiteOptions.listObjects.includes('includeContentType')) {
+                                expectEl.contentType = e.contentType
+                            }
+                            if (testSuiteOptions.listObjects.includes('includeCreationTime')) {
+                                expectEl.creationTime = 'date'
+                            }
+                            expect.push(expectEl)
                         }
                     }
                 }
@@ -237,7 +273,7 @@ module.exports = (providerName, constructorTest) => {
                             stream
                                 .pipe(digestStream('sha1', 'hex', (digest, length) => {
                                     assert(length == e.size)
-                                    assert(digest == e.digest)
+                                    assert(digest == e.digestSHA1)
                                     resolve()
                                 }))
                                 .on('error', (err) => {

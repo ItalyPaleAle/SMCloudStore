@@ -12,8 +12,11 @@ const Azure = require('azure-storage')
  * 
  * @typedef {Object} ListItemObject
  * @param {string} path - Full path of the object inside the container
+ * @param {Date} [creationTime] - Date when the object was created
  * @param {Date} lastModified - Date when the object was last modified
  * @param {number} size - Size in bytes of the object
+ * @param {string} [contentType] - Content-Type of the object, if present
+ * @param {string} [contentMD5] - MD5 digest of the object, if present
  */
 /**
  * Dictionary of prefixes returned when listing a container.
@@ -103,7 +106,7 @@ class AzureProvider {
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
         const requestPromise = (continuationToken) => {
             return new Promise((resolve, reject) => {
-                this._azure.listContainersSegmented(continuationToken, {maxResults: 2}, (err, response) => {
+                this._azure.listContainersSegmented(continuationToken, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
@@ -258,6 +261,63 @@ class AzureProvider {
      * @async
      */
     listObjects(container, prefix) {
+        const resultList = []
+
+        // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
+        const requestPromise = (continuationToken) => {
+            return new Promise((resolve, reject) => {
+                this._azure.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/', maxResults: 2}, (err, response) => {
+                    if (err) {
+                        return reject(err)
+                    }
+                    
+                    // Iterate through the list of items and add objects to the result list
+                    for (const i in response.entries) {
+                        const e = response.entries[i]
+
+                        // Depending on pagination, we might get some emtpy items, so let's skip them
+                        if (!e || !e.name) {
+                            continue
+                        }
+
+                        // Is this a prefix (folder) or object? If etag is present, it's an object
+                        if (e.etag) {
+                            const res = {
+                                path: e.name,
+                                creationTime: e.creationTime ? new Date(e.creationTime) : undefined,
+                                lastModified: e.lastModified ? new Date(e.lastModified) : undefined,
+                                size: parseInt(e.contentLength, 10)
+                            }
+                            if (e.contentSettings && e.contentSettings.contentMD5) {
+                                // Azure returns the Content-MD5 header as base64, so convert it to JSON
+                                res.contentMD5 = Buffer.from(e.contentSettings.contentMD5, 'base64').toString('hex')
+                            }
+                            if (e.contentSettings && e.contentSettings.contentType) {
+                                res.contentType = e.contentSettings.contentType
+                            }
+                            resultList.push(res)
+                        }
+                        else {
+                            resultList.push({
+                                prefix: e.name
+                            })
+                        }
+                    }
+ 
+                    // Check if we have a continuation token
+                    if (response.continuationToken) {
+                        // We have a token, so need to make another request, returning a promise
+                        resolve(requestPromise(response.continuationToken))
+                    }
+                    else {
+                        // No token, so return the list of what we've collected
+                        resolve(resultList)
+                    }
+                })
+            })
+        }
+
+        return requestPromise(null)
     }
 
     /**

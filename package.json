@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/ItalyPaleAle/SMCloud",
   "dependencies": {
-    "azure-storage": "^2.10.0",
+    "azure-storage": "github:ItalyPaleAle/azure-storage-node#list-patch",
     "minio": "^6.0.0"
   },
   "devDependencies": {
