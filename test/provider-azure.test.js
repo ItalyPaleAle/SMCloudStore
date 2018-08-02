@@ -2,10 +2,7 @@
 
 'use strict'
 
-const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloud = require('../index')
-const authData = require('./data/auth')
 
 // Execute the test suite
 const testSuiteOptions = {

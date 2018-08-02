@@ -3,7 +3,7 @@
 'use strict'
 
 const assert = require('assert')
-const SMCloud = require('../../index')
+const CloudBox = require('../../index')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
@@ -67,7 +67,7 @@ module.exports = (providerName, testSuiteOptions) => {
         this.bail(true)
 
         it('constructor', function() {
-            client = SMCloud.Create(providerName, authData[providerName])
+            client = CloudBox.Create(providerName, authData[providerName])
             assert(client)
         })
 

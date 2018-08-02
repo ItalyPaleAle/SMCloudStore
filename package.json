@@ -1,7 +1,7 @@
 {
-  "name": "smcloud",
-  "version": "0.1.0",
-  "description": "Multi-cloud object storage library",
+  "name": "cloud-box",
+  "version": "0.0.1-pre",
+  "description": "Multi-cloud object storage module: AWS, Azure, GCP...",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItalyPaleAle/SMCloud.git"
+    "url": "git+https://github.com/ItalyPaleAle/CloudBox.git"
   },
   "keywords": [
     "configuration",
@@ -25,9 +25,9 @@
   "author": "Alessandro Segala",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ItalyPaleAle/SMCloud/issues"
+    "url": "https://github.com/ItalyPaleAle/CloudBox/issues"
   },
-  "homepage": "https://github.com/ItalyPaleAle/SMCloud",
+  "homepage": "https://github.com/ItalyPaleAle/CloudBox",
   "dependencies": {
     "azure-storage": "github:ItalyPaleAle/azure-storage-node#list-patch",
     "minio": "^6.0.0"

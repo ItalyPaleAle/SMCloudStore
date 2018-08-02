@@ -1,16 +1,16 @@
 'use strict'
 
-const SMCloud = {
+const CloudBox = {
     /**
      * Initializes a new client to interact with cloud providers' object storage services.
      * 
-     * @param {string} provider - Name of the cloud provider to use (see `SMCloud.Providers`)
+     * @param {string} provider - Name of the cloud provider to use (see `CloudBox.Providers`)
      * @param {Object} connection - Dictionary with connection options. List of keys is specific for every cloud provider
      * @returns {Object} An instance of a cloud provider module
      */
     Create: (provider, connection) => {
         // Validate arguments
-        const supportedProviders = SMCloud.Providers()
+        const supportedProviders = CloudBox.Providers()
         if (!provider || typeof provider !== 'string' || !supportedProviders.includes(provider)) {
             throw Error('The specified provider is not valid. Valid providers inlcude: ' + supportedProviders.join(', '))
         }
@@ -37,4 +37,4 @@ const SMCloud = {
     }
 }
 
-module.exports = SMCloud
+module.exports = CloudBox

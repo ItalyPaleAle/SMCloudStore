@@ -4,7 +4,7 @@
 
 const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloud = require('../index')
+const CloudBox = require('../index')
 const authData = require('./data/auth')
 
 // Execute the test suite
@@ -15,12 +15,12 @@ describe('Provider specific tests for minio', function() {
     it('constructor', function() {
         assert.throws(() => {
             // Empty connection
-            SMCloud.Create('minio', {})
+            CloudBox.Create('minio', {})
         }, /connection argument/i)
         
         assert.throws(() => {
             // Missing endPoint
-            SMCloud.Create('minio', {
+            CloudBox.Create('minio', {
                 accessKey: authData.minio.accessKey,
                 secretKey: authData.minio.secretKey
             })
