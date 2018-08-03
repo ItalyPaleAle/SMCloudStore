@@ -31,10 +31,10 @@ const stream = require('stream')
  */
 
 /**
- * @class AzureProvider
+ * @class AzureStorageProvider
  * Client to interact with Azure Blob Storage.
  */
-class AzureProvider {
+class AzureStorageProvider {
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
@@ -392,4 +392,4 @@ class AzureProvider {
     }
 }
 
-module.exports = AzureProvider
+module.exports = AzureStorageProvider

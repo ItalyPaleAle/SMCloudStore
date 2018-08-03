@@ -20,7 +20,7 @@ const SMCloudStore = {
         }
 
         // Require the specific provider, then initialize it
-        const providerModule = require('./providers/' + provider + '.js')
+        const providerModule = require('./providers/' + provider + 'Provider.js')
         return new providerModule(connection)
     },
 
@@ -31,9 +31,9 @@ const SMCloudStore = {
      */
     Providers: () => {
         return [
-            'aws-s3',
-            'azure',
-            'minio'
+            'AwsS3',
+            'AzureStorage',
+            'Minio'
         ]
     }
 }

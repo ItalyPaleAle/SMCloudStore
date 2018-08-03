@@ -1,6 +1,6 @@
 'use strict'
 
-const MinioProvider = require('./minio')
+const MinioProvider = require('./MinioProvider')
 
 /**
  * Connection options for an AwsS3 provider.

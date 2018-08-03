@@ -11,14 +11,14 @@ const testSuiteOptions = {
     containerNamePrefix: 'smcloudstoreawstest',
     region: 'us-east-1'
 }
-TestSuite('aws-s3', testSuiteOptions)
+TestSuite('AwsS3', testSuiteOptions)
 
 // Add custom, provider-specific tests
-describe('Provider specific tests for aws-s3', function() {
+describe('Provider-specific tests for AwsS3', function() {
     it('constructor', function() {
         assert.throws(() => {
             // Empty connection
-            SMCloudStore.Create('aws-s3', {})
+            SMCloudStore.Create('AwsS3', {})
         }, /connection argument/i)
     })
 })
