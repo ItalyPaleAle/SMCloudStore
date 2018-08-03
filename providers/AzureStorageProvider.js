@@ -283,7 +283,7 @@ class AzureStorageProvider {
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
         const requestPromise = (continuationToken) => {
             return new Promise((resolve, reject) => {
-                this._azure.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/', maxResults: 2}, (err, response) => {
+                this._azure.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
@@ -291,11 +291,6 @@ class AzureStorageProvider {
                     // Iterate through the list of items and add objects to the result list
                     for (const i in response.entries) {
                         const e = response.entries[i]
-
-                        // Depending on pagination, we might get some emtpy items, so let's skip them
-                        if (!e || !e.name) {
-                            continue
-                        }
 
                         // Is this a prefix (folder) or object? If etag is present, it's an object
                         if (e.etag) {
@@ -305,10 +300,12 @@ class AzureStorageProvider {
                                 lastModified: e.lastModified ? new Date(e.lastModified) : undefined,
                                 size: parseInt(e.contentLength, 10)
                             }
+                            /* istanbul ignore else */
                             if (e.contentSettings && e.contentSettings.contentMD5) {
                                 // Azure returns the Content-MD5 header as base64, so convert it to JSON
                                 res.contentMD5 = Buffer.from(e.contentSettings.contentMD5, 'base64').toString('hex')
                             }
+                            /* istanbul ignore else */
                             if (e.contentSettings && e.contentSettings.contentType) {
                                 res.contentType = e.contentSettings.contentType
                             }

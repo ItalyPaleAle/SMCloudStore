@@ -104,7 +104,7 @@ class MinioProvider {
      */
     listContainers() {
         return this._minio.listBuckets()
-            .then((list) => list.map((el) => (el && el.name) ? el.name : undefined))
+            .then((list) => list.map((el) => (el && el.name) || undefined))
     }
 
     /**
