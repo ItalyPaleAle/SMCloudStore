@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItalyPaleAle/CloudBox.git"
+    "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
   },
   "keywords": [
     "configuration",
@@ -25,9 +25,9 @@
   "author": "Alessandro Segala",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ItalyPaleAle/CloudBox/issues"
+    "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
-  "homepage": "https://github.com/ItalyPaleAle/CloudBox",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore",
   "dependencies": {
     "azure-storage": "github:ItalyPaleAle/azure-storage-node#list-patch",
     "minio": "^6.0.0"

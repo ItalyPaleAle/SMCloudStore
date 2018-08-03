@@ -42,6 +42,10 @@ class MinioProvider {
      * @param {MinioConnectionOptions} connection - Dictionary with connection options.
      */
     constructor(connection) {
+        if (!connection || !Object.keys(connection).length) {
+            throw new Error('Connection argument is empty')
+        }
+        
         // The Minio library will validate the connection object
         this._minio = new Minio.Client(connection)
     }

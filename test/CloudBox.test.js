@@ -2,15 +2,15 @@
 
 'use strict'
 
-const CloudBox = require('../index')
+const SMCloudStore = require('../index')
 const assert = require('assert')
 
-describe('CloudBox', function() {
+describe('SMCloudStore', function() {
 
-    it('CloudBox should export an object', function() {
-        assert(typeof CloudBox == 'object')
-        assert(typeof CloudBox.Create == 'function')
-        assert(typeof CloudBox.Providers == 'function')
+    it('SMCloudStore should export an object', function() {
+        assert(typeof SMCloudStore == 'object')
+        assert(typeof SMCloudStore.Create == 'function')
+        assert(typeof SMCloudStore.Providers == 'function')
     })
     
 })

@@ -1,4 +1,4 @@
-# CloudBox
+# SMCloudStore
 
 ````sh
 npm install cloud-box
