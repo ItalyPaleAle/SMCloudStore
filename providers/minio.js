@@ -68,6 +68,13 @@ class MinioProvider {
      */
     containerExists(container) {
         return this._minio.bucketExists(container)
+            .then((result) => {
+                return !!result
+            })
+            .catch((err) => {
+                // Treat exceptions as not founds
+                return false
+            })
     }
 
     /**

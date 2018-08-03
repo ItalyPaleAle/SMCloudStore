@@ -31,6 +31,7 @@ const CloudBox = {
      */
     Providers: () => {
         return [
+            'aws-s3',
             'azure',
             'minio'
         ]

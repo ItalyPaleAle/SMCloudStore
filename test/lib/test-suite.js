@@ -10,16 +10,28 @@ const fs = require('fs')
 
 const authData = require('../data/auth')
 
-const genContainerName = () => {
-    return randomstring.generate({
-        length: 8,
-        charset: 'alphabetic',
-        capitalization: 'lowercase'
-    })
-}
-
 module.exports = (providerName, testSuiteOptions) => {
+    const genContainerName = () => {
+        const parts = []
+
+        if (testSuiteOptions && testSuiteOptions.containerNamePrefix) {
+            parts.push(testSuiteOptions.containerNamePrefix)
+        }
+
+        parts.push(randomstring.generate({
+            length: 8,
+            charset: 'alphabetic',
+            capitalization: 'lowercase'
+        }))
+
+        return parts.join('-')
+    }
+
     describe('Test suite for ' + providerName, function() {
+
+        // Set default timeout to 10s and slow warning to 1s
+        this.timeout(10000)
+        this.slow(1000)
 
         // Will hold a client instance
         let client
@@ -72,14 +84,11 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('createContainer', async function() {
-            // Create 3 randomly-named containers
-            for (let i = 0; i < 3; i++) {
+            // Create 2 randomly-named containers
+            for (let i = 0; i < 2; i++) {
                 containers.push(genContainerName())
-                await client.createContainer(containers[i])
+                await client.createContainer(containers[i], (testSuiteOptions && testSuiteOptions.region))
             }
-
-            // Creating a container that already exists should fail
-            assert.rejects(client.createContainer(containers[0]))
         })
 
         it('containerExists', async function() {
@@ -99,7 +108,7 @@ module.exports = (providerName, testSuiteOptions) => {
             await client.ensureContainer(name)
 
             // Existing container
-            await client.ensureContainer(containers[0])
+            await client.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
         })
 
         it('listContainers', async function() {
@@ -108,7 +117,10 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Ensure that we have the containers we created before
             const list = await client.listContainers()
-            assert.deepEqual(list, containers)
+            assert(list && list.length >= containers.length)
+            for (const i in containers) {
+                assert(list.includes(containers[i]))
+            }
         })
 
         it('deleteContainer', async function() {
@@ -117,12 +129,13 @@ module.exports = (providerName, testSuiteOptions) => {
             await client.deleteContainer(name)
 
             // Deleting a container that doesn't exist
-            assert.rejects(client.deleteContainer('doesnotexist'))
+            await assert.rejects(client.deleteContainer('doesnotexist'))
         })
 
         it('putObject', async function() {
             // Increase timeout
             this.timeout(60000)
+            this.slow(0)
 
             // Upload some files, in parallel
             const promises = []
@@ -195,6 +208,7 @@ module.exports = (providerName, testSuiteOptions) => {
             }
 
             // Check recursively
+            const listObjectOptions = (testSuiteOptions && testSuiteOptions.listObjects) || []
             const testPath = async (path) => {
                 const list = await client.listObjects(containers[0], path)
 
@@ -219,13 +233,13 @@ module.exports = (providerName, testSuiteOptions) => {
                                 lastModified: 'date',
                                 size: e.size
                             }
-                            if (testSuiteOptions.listObjects.includes('includeContentMD5')) {
+                            if (listObjectOptions.includes('includeContentMD5')) {
                                 expectEl.contentMD5 = e.digestMD5
                             }
-                            if (testSuiteOptions.listObjects.includes('includeContentType')) {
+                            if (listObjectOptions.includes('includeContentType')) {
                                 expectEl.contentType = e.contentType
                             }
-                            if (testSuiteOptions.listObjects.includes('includeCreationTime')) {
+                            if (listObjectOptions.includes('includeCreationTime')) {
                                 expectEl.creationTime = 'date'
                             }
                             expect.push(expectEl)
@@ -254,6 +268,7 @@ module.exports = (providerName, testSuiteOptions) => {
         it('getObject', async function() {
             // Increase timeout
             this.timeout(60000)
+            this.slow(0)
 
             // Download the first 3 files and check their sha1 digest, in parallel
             const promises = []
