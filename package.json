@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore",
   "dependencies": {
+    "@google-cloud/storage": "^1.7.0",
     "azure-storage": "github:ItalyPaleAle/azure-storage-node#list-patch",
     "minio": "^6.0.0"
   },
