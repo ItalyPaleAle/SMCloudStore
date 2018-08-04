@@ -4,8 +4,8 @@ const Azure = require('azure-storage')
 const stream = require('stream')
 
 /**
- * Connection options for an Azure provider.
- * @typedef {Object} AzureConnectionOptions
+ * Connection options for an Azure Storage provider.
+ * @typedef {Object} AzureStorageConnectionOptions
  * @param {string} connectionString - Connection String, as returned by Azure
  */
 /**
@@ -38,7 +38,7 @@ class AzureStorageProvider {
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
-     * @param {AzureConnectionOptions} connection - Dictionary with connection options.
+     * @param {AzureStorageConnectionOptions} connection - Dictionary with connection options.
      */
     constructor(connection) {
         // The Azure library will validate the connection object

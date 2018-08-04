@@ -68,7 +68,7 @@ module.exports = (providerName, testSuiteOptions) => {
             {
                 buffer: fs.readFileSync('test/data/pg1008.txt'),
                 destination: 'test/buffers/poem.txt',
-                contentType: 'text/plain',
+                contentType: 'application/x-poem',
                 size: 893449,
                 digestMD5: 'c0656985bed744013a8003af58cc83bf',
                 digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
@@ -105,16 +105,13 @@ module.exports = (providerName, testSuiteOptions) => {
             // New container
             const name = genContainerName()
             containers.push(name)
-            await client.ensureContainer(name)
+            await client.ensureContainer(name, (testSuiteOptions && testSuiteOptions.region))
 
             // Existing container
             await client.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
         })
 
         it('listContainers', async function() {
-            // Sort our list
-            containers = containers.sort()
-
             // Ensure that we have the containers we created before
             const list = await client.listContainers()
             assert(list && list.length >= containers.length)
