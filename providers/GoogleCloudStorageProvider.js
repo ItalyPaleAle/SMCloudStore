@@ -14,8 +14,11 @@ const stream = require('stream')
  * 
  * @typedef {Object} ListItemObject
  * @param {string} path - Full path of the object inside the container
+ * @param {Date} [creationTime] - Date when the object was created
  * @param {Date} lastModified - Date when the object was last modified
  * @param {number} size - Size in bytes of the object
+ * @param {string} [contentType] - Content-Type of the object, if present
+ * @param {string} [contentMD5] - MD5 digest of the object, if present
  */
 /**
  * Dictionary of prefixes returned when listing a container.
@@ -191,6 +194,11 @@ class GoogleCloudStorageProvider {
      * @async
      */
     getObject(container, path) {
+        const bucket = this._client.bucket(container)
+        const file = bucket.file(path)
+        
+        // For Google Cloud Storage, this method doesn't actually need to be asynchronous
+        return Promise.resolve(file.createReadStream({validation: 'md5'}))
     }
 
     /**
@@ -202,6 +210,68 @@ class GoogleCloudStorageProvider {
      * @async
      */
     listObjects(container, prefix) {
+        let list = []
+        const requestPromise = (opts) => {
+            return new Promise((resolve, reject) => {
+                if (!opts) {
+                    opts = {
+                        delimiter: '/',
+                        autoPaginate: false,
+                        //maxResults: 2, // Debugging
+                        prefix
+                    }
+                }
+        
+                // Using the callback API so we can get the full list
+                this._client.bucket(container).getFiles(opts, (err, files, nextQuery, apiResponse) => {
+                    if (err) {
+                        return reject(err)
+                    }
+    
+                    if (files && files.length) {
+                        list = list.concat(files.map((el) => {
+                            const obj = {
+                                path: el.name
+                            }
+                            if (el.metadata) {
+                                if (el.metadata.size) {
+                                    obj.size = parseInt(el.metadata.size, 10)
+                                }
+                                if (el.metadata.updated) {
+                                    obj.lastModified = new Date(el.metadata.updated)
+                                }
+                                if (el.metadata.timeCreated) {
+                                    obj.creationTime = new Date(el.metadata.timeCreated)
+                                }
+                                if (el.metadata.md5Hash) {
+                                    // Google Cloud Storage returns the MD5 as base64, so convert it to HEX
+                                    obj.contentMD5 = Buffer.from(el.metadata.md5Hash, 'base64').toString('hex')
+                                }
+                                if (el.metadata.contentType) {
+                                    obj.contentType = el.metadata.contentType
+                                }
+                            }
+                            return obj
+                        }))
+                    }
+    
+                    if (apiResponse && apiResponse.prefixes) {
+                        list = list.concat(apiResponse.prefixes.map((el) => {
+                            return {prefix: el}
+                        }))
+                    }
+    
+                    if (nextQuery) {
+                        return resolve(requestPromise(nextQuery))
+                    }
+                    else {
+                        return resolve(list)
+                    }
+                })
+            })
+        }
+
+        return requestPromise(null)
     }
 
     /**
@@ -213,6 +283,11 @@ class GoogleCloudStorageProvider {
      * @async
      */
     removeObject(container, path) {
+        const bucket = this._client.bucket(container)
+        const file = bucket.file(path)   
+
+        // Returns a promise
+        return file.delete()
     }
 }
 
