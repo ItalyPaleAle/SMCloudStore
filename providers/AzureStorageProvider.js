@@ -2,6 +2,7 @@
 
 const Azure = require('azure-storage')
 const stream = require('stream')
+const StorageProvider = require('../lib/StorageProvider')
 
 /**
  * Connection options for an Azure Storage provider.
@@ -34,15 +35,20 @@ const stream = require('stream')
  * @class AzureStorageProvider
  * Client to interact with Azure Blob Storage.
  */
-class AzureStorageProvider {
+class AzureStorageProvider extends StorageProvider {
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
      * @param {AzureStorageConnectionOptions} connection - Dictionary with connection options.
      */
     constructor(connection) {
+        super()
+
+        // Provider name
+        this._provider = 'AzureStorage'
+
         // The Azure library will validate the connection object
-        this._azure = Azure.createBlobService(connection)
+        this._client = Azure.createBlobService(connection)
     }
 
     /**
@@ -66,7 +72,7 @@ class AzureStorageProvider {
      */
     containerExists(container) {
         return new Promise((resolve, reject) => {
-            this._azure.getContainerProperties(container, (err, response) => {
+            this._client.getContainerProperties(container, (err, response) => {
                 if (err) {
                     // If error is "Not Found", then just return false
                     return err.toString().match(/NotFound/) ?
@@ -107,7 +113,7 @@ class AzureStorageProvider {
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
         const requestPromise = (continuationToken) => {
             return new Promise((resolve, reject) => {
-                this._azure.listContainersSegmented(continuationToken, (err, response) => {
+                this._client.listContainersSegmented(continuationToken, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
@@ -149,7 +155,7 @@ class AzureStorageProvider {
      */
     deleteContainer(container) {
         return new Promise((resolve, reject) => {
-            this._azure.deleteContainer(container, (err, response) => {
+            this._client.deleteContainer(container, (err, response) => {
                 if (err) {
                     return reject(err)
                 }
@@ -229,11 +235,11 @@ class AzureStorageProvider {
 
             // Check if we have a stream
             if (typeof data == 'object' && typeof data.pipe == 'function') {
-                data.pipe(this._azure.createWriteStreamToBlockBlob(container, path, options, callback))
+                data.pipe(this._client.createWriteStreamToBlockBlob(container, path, options, callback))
             }
             // Strings and Buffers are supported too
             else if (typeof data == 'string' || (typeof data == 'object' && Buffer.isBuffer(data))) {
-                this._azure.createBlockBlobFromText(container, path, data, options, callback)
+                this._client.createBlockBlobFromText(container, path, data, options, callback)
             }
             // Fail otherwise
             else {
@@ -258,7 +264,7 @@ class AzureStorageProvider {
             }
         })
         // Request the data
-        this._azure.getBlobToStream(container, path, duplexStream, (err, response) => {
+        this._client.getBlobToStream(container, path, duplexStream, (err, response) => {
             // Pass errors to the stream as events
             if (err) {
                 duplexStream.destroy(typeof err == 'object' && err instanceof Error) ? err : Error(err)
@@ -283,7 +289,7 @@ class AzureStorageProvider {
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
         const requestPromise = (continuationToken) => {
             return new Promise((resolve, reject) => {
-                this._azure.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/'}, (err, response) => {
+                this._client.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
@@ -302,7 +308,7 @@ class AzureStorageProvider {
                             }
                             /* istanbul ignore else */
                             if (e.contentSettings && e.contentSettings.contentMD5) {
-                                // Azure returns the Content-MD5 header as base64, so convert it to JSON
+                                // Azure returns the Content-MD5 header as base64, so convert it to HEX
                                 res.contentMD5 = Buffer.from(e.contentSettings.contentMD5, 'base64').toString('hex')
                             }
                             /* istanbul ignore else */
@@ -344,7 +350,7 @@ class AzureStorageProvider {
      */
     removeObject(container, path) {
         return new Promise((resolve, reject) => {
-            this._azure.deleteBlob(container, path, (err, response) => {
+            this._client.deleteBlob(container, path, (err, response) => {
                 if (err) {
                     return reject(err)
                 }
@@ -374,7 +380,7 @@ class AzureStorageProvider {
                 // All containers are private by default
                 publicAccessLevel: null
             }
-            this._azure['createContainer' + (ifNotExists ? 'IfNotExists' : '')](container, options, (err, response) => {
+            this._client['createContainer' + (ifNotExists ? 'IfNotExists' : '')](container, options, (err, response) => {
                 if (err) {
                     return reject(err)
                 }

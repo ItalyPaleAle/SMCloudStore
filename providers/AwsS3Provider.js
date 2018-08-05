@@ -25,8 +25,11 @@ class AwsS3Provider extends MinioProvider {
             throw new Error('Connection argument is empty')
         }
 
+        // Initialize the Minio provider, on which this is based
         connection.endPoint = 's3.amazonaws.com'
         super(connection)
+
+        this._provider = 'AwsS3'
     }
 }
 

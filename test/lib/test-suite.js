@@ -34,10 +34,10 @@ module.exports = (providerName, testSuiteOptions) => {
         this.slow(1000)
 
         // Will hold a client instance
-        let client
+        let storage
 
         // Will contain a list of containers created for this test
-        let containers = []
+        const containers = []
 
         // Will contain a list of test files
         const testFiles = [
@@ -79,25 +79,35 @@ module.exports = (providerName, testSuiteOptions) => {
         this.bail(true)
 
         it('constructor', function() {
-            client = SMCloudStore.Create(providerName, authData[providerName])
-            assert(client)
+            storage = SMCloudStore.Create(providerName, authData[providerName])
+            assert(storage)
+        })
+
+        it('provider', function() {
+            // Should return the provider name
+            assert(storage.provider === providerName)
+        })
+
+        it('client', function() {
+            // Access the client directly
+            assert(typeof storage.client === 'object' && storage.client)
         })
 
         it('createContainer', async function() {
             // Create 2 randomly-named containers
             for (let i = 0; i < 2; i++) {
                 containers.push(genContainerName())
-                await client.createContainer(containers[i], (testSuiteOptions && testSuiteOptions.region))
+                await storage.createContainer(containers[i], (testSuiteOptions && testSuiteOptions.region))
             }
         })
 
         it('containerExists', async function() {
             let exists
 
-            exists = await client.containerExists(containers[0])
+            exists = await storage.containerExists(containers[0])
             assert(exists === true)
 
-            exists = await client.containerExists('doesnotexist')
+            exists = await storage.containerExists('doesnotexist')
             assert(exists === false)
         })
 
@@ -105,15 +115,15 @@ module.exports = (providerName, testSuiteOptions) => {
             // New container
             const name = genContainerName()
             containers.push(name)
-            await client.ensureContainer(name, (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(name, (testSuiteOptions && testSuiteOptions.region))
 
             // Existing container
-            await client.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
         })
 
         it('listContainers', async function() {
             // Ensure that we have the containers we created before
-            const list = await client.listContainers()
+            const list = await storage.listContainers()
             assert(list && list.length >= containers.length)
             for (const i in containers) {
                 assert(list.includes(containers[i]))
@@ -123,10 +133,10 @@ module.exports = (providerName, testSuiteOptions) => {
         it('deleteContainer', async function() {
             // Delete the last container in the list
             const name = containers.pop()
-            await client.deleteContainer(name)
+            await storage.deleteContainer(name)
 
             // Deleting a container that doesn't exist
-            await assert.rejects(client.deleteContainer('doesnotexist'))
+            await assert.rejects(storage.deleteContainer('doesnotexist'))
         })
 
         it('putObject', async function() {
@@ -157,7 +167,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 }
 
                 // Promise
-                const p = client.putObject(containers[0], testFiles[i].destination, upload, metadata)
+                const p = storage.putObject(containers[0], testFiles[i].destination, upload, metadata)
                 promises.push(p)
             }
             await Promise.all(promises)
@@ -207,7 +217,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // Check recursively
             const listObjectOptions = (testSuiteOptions && testSuiteOptions.listObjects) || []
             const testPath = async (path) => {
-                const list = await client.listObjects(containers[0], path)
+                const list = await storage.listObjects(containers[0], path)
 
                 // Check if it's what we were expecting
                 const expect = []
@@ -272,7 +282,7 @@ module.exports = (providerName, testSuiteOptions) => {
             for (let i = 0; i < 3; i++) {
                 const e = testFiles[i]
 
-                const p = client.getObject(containers[0], e.destination)
+                const p = storage.getObject(containers[0], e.destination)
                     .then((stream) => {
                         return new Promise((resolve, reject) => {
                             stream
@@ -297,7 +307,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // Delete all files uploaded, in parallel
             const promises = []
             for (const i in testFiles) {
-                promises.push(client.removeObject(containers[0], testFiles[i].destination))
+                promises.push(storage.removeObject(containers[0], testFiles[i].destination))
             }
             await Promise.all(promises)
         })
@@ -307,7 +317,7 @@ module.exports = (providerName, testSuiteOptions) => {
         after(async function() {
             const promises = []
             for (const i in containers) {
-                promises.push(client.deleteContainer(containers[i]))
+                promises.push(storage.deleteContainer(containers[i]))
             }
             await Promise.all(promises)
         })

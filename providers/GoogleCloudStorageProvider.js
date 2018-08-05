@@ -2,6 +2,7 @@
 
 const GCStorage = require('@google-cloud/storage')
 const stream = require('stream')
+const StorageProvider = require('../lib/StorageProvider')
 
 /**
  * Connection options for a Google Cloud Storage provider.
@@ -35,13 +36,18 @@ const stream = require('stream')
  * @class GoogleCloudStorageProvider
  * Client to interact with Google Cloud Storage.
  */
-class GoogleCloudStorageProvider {
+class GoogleCloudStorageProvider extends StorageProvider {
     /**
      * Initializes a new client to interact with Minio.
      * 
      * @param {GoogleCloudConnectionOptions} connection - Dictionary with connection options.
      */
     constructor(connection) {
+        super()
+
+        // Provider name
+        this._provider = 'GoogleCloudStorage'
+        
         if (!connection || !Object.keys(connection).length) {
             throw new Error('Connection argument is empty')
         }

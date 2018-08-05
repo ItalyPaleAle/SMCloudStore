@@ -1,6 +1,7 @@
 'use strict'
 
 const Minio = require('minio')
+const StorageProvider = require('../lib/StorageProvider')
 
 /**
  * Connection options for a Minio provider.
@@ -35,7 +36,7 @@ const Minio = require('minio')
  * Client to interact with a Minio object storage server.
  * This module can be used with AWS S3 too, as well as any other S3-compatible services.
  */
-class MinioProvider {
+class MinioProvider extends StorageProvider {
     /**
      * Initializes a new client to interact with Minio.
      * 
@@ -45,9 +46,14 @@ class MinioProvider {
         if (!connection || !Object.keys(connection).length) {
             throw new Error('Connection argument is empty')
         }
+
+        super()
+
+        // Provider name
+        this._provider = 'Minio'
         
         // The Minio library will validate the connection object
-        this._minio = new Minio.Client(connection)
+        this._client = new Minio.Client(connection)
     }
 
     /**
@@ -60,7 +66,7 @@ class MinioProvider {
      */
     createContainer(container, region) {
         // This returns a promise
-        return this._minio.makeBucket(container, region || '')
+        return this._client.makeBucket(container, region || '')
     }
 
     /**
@@ -71,7 +77,7 @@ class MinioProvider {
      * @async
      */
     containerExists(container) {
-        return this._minio.bucketExists(container)
+        return this._client.bucketExists(container)
             .then((result) => {
                 return !!result
             })
@@ -103,7 +109,7 @@ class MinioProvider {
      * @async
      */
     listContainers() {
-        return this._minio.listBuckets()
+        return this._client.listBuckets()
             .then((list) => list.map((el) => (el && el.name) || undefined))
     }
 
@@ -115,7 +121,7 @@ class MinioProvider {
      * @async
      */
     deleteContainer(container) {
-        return this._minio.removeBucket(container)
+        return this._client.removeBucket(container)
     }
 
     /**
@@ -129,7 +135,7 @@ class MinioProvider {
      * @async
      */
     putObject(container, path, data, metadata) {
-        return this._minio.putObject(container, path, data, metadata)
+        return this._client.putObject(container, path, data, metadata)
     }
 
     /**
@@ -141,7 +147,7 @@ class MinioProvider {
      * @async
      */
     getObject(container, path) {
-        return this._minio.getObject(container, path)
+        return this._client.getObject(container, path)
     }
 
     /**
@@ -154,7 +160,7 @@ class MinioProvider {
      */
     listObjects(container, prefix) {
         return new Promise((resolve, reject) => {
-            const stream = this._minio.listObjectsV2(container, prefix, false)
+            const stream = this._client.listObjectsV2(container, prefix, false)
             const list = []
             stream.on('data', (obj) => {
                 let res
@@ -197,7 +203,7 @@ class MinioProvider {
      * @async
      */
     removeObject(container, path) {
-        return this._minio.removeObject(container, path)
+        return this._client.removeObject(container, path)
     }
 }
 
