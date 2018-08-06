@@ -10,7 +10,7 @@
     "tslint": "find src -name *.ts -type f -exec './node_modules/.bin/tslint' {} \\;",
     "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
     "lint": "npm run tslint && npm run eslint",
-    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json",
+    "typedoc": "./node_modules/.bin/typedoc --name SMCloud --out docs/ --readme README.md --module commonjs --mode file",
     "prepublishOnly": "npm run test"
   },
   "repository": {
@@ -44,11 +44,11 @@
     "digest-stream": "^2.0.0",
     "eslint": "^5.3.0",
     "istanbul": "v1.1.0-alpha.1",
-    "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "mocha-lcov-reporter": "^1.3.0",
     "randomstring": "^1.1.5",
     "tslint": "^5.11.0",
+    "typedoc": "^0.11.1",
     "typescript": "^3.0.1"
   }
 }

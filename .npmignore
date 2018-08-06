@@ -1,7 +1,6 @@
 .travis.yml
 .eslintignore
 .eslintrc.yml
-.jsdoc.json
 .vscode
 docs
 test
@@ -9,4 +8,5 @@ coverage
 start-container.sh
 src
 tsconfig.json
+tslint.json
 smcloudstore*.tgz
