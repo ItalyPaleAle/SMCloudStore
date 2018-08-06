@@ -1,10 +1,12 @@
 .travis.yml
 .eslintignore
 .eslintrc.yml
-.jsdoc.json
 .vscode
 docs
 test
 coverage
 start-container.sh
-cloud-box*.tgz
+src
+tsconfig.json
+tslint.json
+smcloudstore*.tgz

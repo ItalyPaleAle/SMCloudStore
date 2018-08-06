@@ -1,14 +1,17 @@
 'use strict'
 
+import {StorageProvider} from './lib/StorageProvider'
+
+// tslint:disable-next-line: variable-name
 const SMCloudStore = {
     /**
      * Initializes a new client to interact with cloud providers' object storage services.
      * 
-     * @param {string} provider - Name of the cloud provider to use (see `SMCloudStore.Providers`)
-     * @param {Object} connection - Dictionary with connection options. List of keys is specific for every cloud provider
-     * @returns {Object} An instance of a cloud provider module
+     * @param provider - Name of the cloud provider to use (see `SMCloudStore.Providers`)
+     * @param connection - Dictionary with connection options. List of keys is specific for every cloud provider
+     * @returns An instance of a cloud provider module
      */
-    Create: (provider, connection) => {
+    Create: (provider: string, connection: any): StorageProvider => {
         // Validate arguments
         const supportedProviders = SMCloudStore.Providers()
         if (!provider || typeof provider !== 'string' || !supportedProviders.includes(provider)) {
@@ -21,15 +24,16 @@ const SMCloudStore = {
 
         // Require the specific provider, then initialize it
         const providerModule = require('./providers/' + provider + 'Provider.js')
+
         return new providerModule(connection)
     },
 
     /**
      * Returns a list of supported providers.
      * 
-     * @returns {String[]} List of supported provider names
+     * @returns List of supported provider names
      */
-    Providers: () => {
+    Providers: (): string[] => {
         return [
             'AwsS3',
             'AzureStorage',
@@ -39,4 +43,4 @@ const SMCloudStore = {
     }
 }
 
-module.exports = SMCloudStore
+export = SMCloudStore

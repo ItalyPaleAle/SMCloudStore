@@ -4,7 +4,7 @@
 
 const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloudStore = require('../index')
+const SMCloudStore = require('../dist/index')
 
 // Execute the test suite
 const testSuiteOptions = {
