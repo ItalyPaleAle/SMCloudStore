@@ -69,11 +69,12 @@ class MinioProvider extends StorageProvider {
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    async ensureContainer(container: string, region?: string): Promise<void> {
-        const exists = await this.containerExists(container)
-        if (!exists) {
-            return this.createContainer(container, region)
-        }
+    ensureContainer(container: string, region?: string): Promise<void> {
+        return this.containerExists(container).then((exists) => {
+            if (!exists) {
+                return this.createContainer(container, region)
+            }
+        })
     }
 
     /**

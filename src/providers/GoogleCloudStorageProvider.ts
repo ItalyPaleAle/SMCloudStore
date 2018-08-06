@@ -84,11 +84,12 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    async ensureContainer(container: string, region: string): Promise<void> {
-        const exists = await this.containerExists(container)
-        if (!exists) {
-            return this.createContainer(container, region)
-        }
+    ensureContainer(container: string, region: string): Promise<void> {
+        return this.containerExists(container).then((exists) => {
+            if (!exists) {
+                return this.createContainer(container, region)
+            }
+        })
     }
 
     /**
@@ -97,14 +98,15 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @returns Promise that resolves with an array of all the containers
      * @async
      */
-    async listContainers(): Promise<string[]> {
-        const list = await this._client.getBuckets()
-        if (!list || !list[0] || !list[0].length) {
-            return []
-        }
-        else {
-            return list[0].map((el) => (el && el.name))
-        }
+    listContainers(): Promise<string[]> {
+        return this._client.getBuckets().then((list) => {
+            if (!list || !list[0] || !list[0].length) {
+                return []
+            }
+            else {
+                return list[0].map((el) => (el && el.name))
+            }
+        })
     }
 
     /**
