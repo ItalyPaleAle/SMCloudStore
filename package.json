@@ -7,8 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report html -- -R spec",
-    "test-travis": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "compile": "./node_modules/.bin/tsc",
+    "tsc": "./node_modules/.bin/tsc",
+    "test": "npm run compile && ./node_modules/.bin/_mocha",
     "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
     "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json"
   },
@@ -34,9 +35,12 @@
     "minio": "^6.0.0"
   },
   "devDependencies": {
+    "@types/google-cloud__storage": "^1.7.0",
+    "@types/minio": "^6.0.2",
+    "@types/node": "^10.5.6",
     "coveralls": "^3.0.2",
     "digest-stream": "^2.0.0",
-    "eslint": "^5.2.0",
+    "eslint": "^5.3.0",
     "istanbul": "v1.1.0-alpha.1",
     "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",

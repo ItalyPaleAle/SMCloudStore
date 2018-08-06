@@ -2,7 +2,7 @@
 
 'use strict'
 
-const SMCloudStore = require('../index')
+const SMCloudStore = require('../dist/index')
 const assert = require('assert')
 
 describe('SMCloudStore', function() {

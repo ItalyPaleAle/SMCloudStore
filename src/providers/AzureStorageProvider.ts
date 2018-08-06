@@ -1,76 +1,63 @@
 'use strict'
 
-const Azure = require('azure-storage')
-const stream = require('stream')
-const StorageProvider = require('../lib/StorageProvider')
+import * as Azure from 'azure-storage'
+import {Stream, Transform} from 'stream'
+import {StorageProvider, ListResults, ListItemObject, ListItemPrefix} from '../lib/StorageProvider'
+
+interface AzureStorageConnectionObject {
+    /** Name of the storage account */
+    storageAccount: string
+    /** Access key (secret key) for the storage account */
+    storageAccessKey: string
+    /** Endpoint to use. Default is `blob.storage.windows.net` */
+    host?: string
+}
+type AzureStorageConnectionOptions = String | AzureStorageConnectionObject
 
 /**
- * Connection options for an Azure Storage provider.
- * @typedef {Object} AzureStorageConnectionOptions
- * @param {string} connectionString - Connection String, as returned by Azure
- */
-/**
- * Dictionary of objects returned when listing a container.
- * 
- * @typedef {Object} ListItemObject
- * @param {string} path - Full path of the object inside the container
- * @param {Date} [creationTime] - Date when the object was created
- * @param {Date} lastModified - Date when the object was last modified
- * @param {number} size - Size in bytes of the object
- * @param {string} [contentType] - Content-Type of the object, if present
- * @param {string} [contentMD5] - MD5 digest of the object, if present
- */
-/**
- * Dictionary of prefixes returned when listing a container.
- * 
- * @typedef {Object} ListItemPrefix
- * @param {string} prefix - Name of the prefix
- */
-/**
- * The `listObjects` method returns an array with a mix of objects of type `ListItemObject` and `ListItemPrefix`
- * @typedef {Array<ListItemObject|ListItemPrefix>} ListResults
- */
-
-/**
- * @class AzureStorageProvider
  * Client to interact with Azure Blob Storage.
  */
 class AzureStorageProvider extends StorageProvider {
+    protected _client: Azure.BlobService
+
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
-     * @param {AzureStorageConnectionOptions} connection - Dictionary with connection options.
+     * @param connection - Dictionary with connection options.
      */
-    constructor(connection) {
+    constructor(connection: AzureStorageConnectionOptions) {
         super()
 
         // Provider name
         this._provider = 'AzureStorage'
 
         // The Azure library will validate the connection object
-        this._client = Azure.createBlobService(connection)
+        // TODO: Support object
+        this._client = Azure.createBlobService(connection as string)
     }
 
     /**
      * Create a container on the server.
      * 
-     * @param {string} container - Name of the container
-     * @param {string} [region] - The region parameter is ignored by Azure.
-     * @returns {Promise<void>} Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
+     * @param container - Name of the container
+     * @param region - The region parameter is ignored by Azure.
+     * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    createContainer(container, region) {
-        return this._createContainerInternal(container, false)
+    createContainer(container: string, region?: string): Promise<void> {
+        return this.createContainerInternal(container, false).then(() => {
+            return
+        })
     }
 
     /**
      * Check if a container exists.
      * 
-     * @param {string} container - Name of the container
-     * @returns {Promise<boolean>} Promises that resolves with a boolean indicating if the container exists.
+     * @param container - Name of the container
+     * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container) {
+    containerExists(container: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this._client.getContainerProperties(container, (err, response) => {
                 if (err) {
@@ -92,26 +79,28 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Create a container on the server if it doesn't already exist.
      * 
-     * @param {string} container - Name of the container
-     * @param {string} [region] - The region parameter is ignored by Azure.
-     * @returns {Promise<void>} Promise that resolves once the container has been created
+     * @param container - Name of the container
+     * @param region - The region parameter is ignored by Azure.
+     * @returns Promise that resolves once the container has been created
      * @async
      */
-    ensureContainer(container, region) {
-        return this._createContainerInternal(container, true)
+    ensureContainer(container: string, region?: string): Promise<void> {
+        return this.createContainerInternal(container, true).then(() => {
+            return 
+        })
     }
 
     /**
      * Lists all containers belonging to the user
      * 
-     * @returns {Promise<string[]>} Promise that resolves with an array of all the containers
+     * @returns Promise that resolves with an array of all the containers
      * @async
      */
-    listContainers() {
-        const resultList = []
+    listContainers(): Promise<string[]> {
+        const resultList = [] as string[]
 
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
-        const requestPromise = (continuationToken) => {
+        const requestPromise = (continuationToken: Azure.common.ContinuationToken): Promise<string[]> => {
             return new Promise((resolve, reject) => {
                 this._client.listContainersSegmented(continuationToken, (err, response) => {
                     if (err) {
@@ -149,11 +138,11 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Removes a contaienr from the server
      * 
-     * @param {string} container - Name of the container
-     * @returns {Promise<void>} Promise that resolves once the container has been removed
+     * @param container - Name of the container
+     * @returns Promise that resolves once the container has been removed
      * @async
      */
-    deleteContainer(container) {
+    deleteContainer(container: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this._client.deleteContainer(container, (err, response) => {
                 if (err) {
@@ -172,51 +161,56 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Uploads a stream to the object storage server
      * 
-     * @param {string} container - Name of the container
-     * @param {string} path - Path where to store the object, inside the container
-     * @param {Stream|string|Buffer} data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param {Object} [metadata] - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
-     * @returns {Promise<void>} Promise that resolves once the object has been uploaded
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
+     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
+     * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container, path, data, metadata) {
+    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any): Promise<void> {
         if (!data) {
             throw Error('Argument data is empty')
         }
 
         // Azure wants some headers, like Content-Type, outside of the metadata object
-        const contentSettings = {}
+        const options = {
+            metadata: {},
+            contentSettings: {}
+        } as Azure.BlobService.CreateBlockBlobRequestOptions
+
         if (metadata) {
-            if (metadata['Content-Type']) {
-                contentSettings.contentType = metadata['Content-Type']
-                delete metadata['Content-Type']
+            // Clone the metadata object before altering it
+            const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
+
+            if (metadataClone['Content-Type']) {
+                options.contentSettings.contentType = metadataClone['Content-Type']
+                delete metadataClone['Content-Type']
             }
-            if (metadata['Content-Encoding']) {
-                contentSettings.contentEncoding = metadata['Content-Encoding']
-                delete metadata['Content-Encoding']
+            if (metadataClone['Content-Encoding']) {
+                options.contentSettings.contentEncoding = metadataClone['Content-Encoding']
+                delete metadataClone['Content-Encoding']
             }
-            if (metadata['Content-Language']) {
-                contentSettings.contentLanguage = metadata['Content-Language']
-                delete metadata['Content-Language']
+            if (metadataClone['Content-Language']) {
+                options.contentSettings.contentLanguage = metadataClone['Content-Language']
+                delete metadataClone['Content-Language']
             }
-            if (metadata['Cache-Control']) {
-                contentSettings.cacheControl = metadata['Cache-Control']
-                delete metadata['Cache-Control']
+            if (metadataClone['Cache-Control']) {
+                options.contentSettings.cacheControl = metadataClone['Cache-Control']
+                delete metadataClone['Cache-Control']
             }
-            if (metadata['Content-Disposition']) {
-                contentSettings.contentDisposition = metadata['Content-Disposition']
-                delete metadata['Content-Disposition']
+            if (metadataClone['Content-Disposition']) {
+                options.contentSettings.contentDisposition = metadataClone['Content-Disposition']
+                delete metadataClone['Content-Disposition']
             }
-            if (metadata['Content-MD5']) {
+            if (metadataClone['Content-MD5']) {
                 // Content-MD5 is auto-generated if not sent by the user
                 // If sent by the user, then Azure uses it to ensure data did not get altered in transit
-                contentSettings.contentMD5 = metadata['Content-MD5']
-                delete metadata['Content-MD5']
+                options.contentSettings.contentMD5 = metadataClone['Content-MD5']
+                delete metadataClone['Content-MD5']
             }
-        }
-        const options = {
-            metadata,
-            contentSettings
+
+            options.metadata = metadataClone
         }
 
         return new Promise((resolve, reject) => {
@@ -234,8 +228,8 @@ class AzureStorageProvider extends StorageProvider {
             }
 
             // Check if we have a stream
-            if (typeof data == 'object' && typeof data.pipe == 'function') {
-                data.pipe(this._client.createWriteStreamToBlockBlob(container, path, options, callback))
+            if (typeof data == 'object' && typeof (data as any).pipe == 'function') {
+                (data as Stream).pipe(this._client.createWriteStreamToBlockBlob(container, path, options, callback))
             }
             // Strings and Buffers are supported too
             else if (typeof data == 'string' || (typeof data == 'object' && Buffer.isBuffer(data))) {
@@ -251,14 +245,14 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Requests an object from the server. The method returns a Promise that resolves to a Readable Stream containing the data.
      * 
-     * @param {string} container - Name of the container
-     * @param {string} path - Path of the object, inside the container
-     * @returns {Promise<Stream>} Readable Stream containing the object's data
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @returns Readable Stream containing the object's data
      * @async
      */
-    getObject(container, path) {
+    getObject(container: string, path: string): Promise<Stream> {
         // Create a transform stream we can return in the result, which is readable
-        const duplexStream = new stream.Transform({
+        const duplexStream = new Transform({
             transform(chunk, encoding, done) {
                 done(null, chunk)
             }
@@ -267,7 +261,7 @@ class AzureStorageProvider extends StorageProvider {
         this._client.getBlobToStream(container, path, duplexStream, (err, response) => {
             // Pass errors to the stream as events
             if (err) {
-                duplexStream.destroy(typeof err == 'object' && err instanceof Error) ? err : Error(err)
+                duplexStream.destroy((typeof err == 'object' && err instanceof Error) ? err : Error(err))
             }
         })
 
@@ -278,18 +272,23 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Returns a list of objects with a given prefix (folder). The list is not recursive, so prefixes (folders) are returned as such.
      * 
-     * @param {string} container - Name of the container
-     * @param {string} prefix - Prefix (folder) inside which to list objects
-     * @returns {Promise<ListResults>} List of elements returned by the server
+     * @param container - Name of the container
+     * @param prefix - Prefix (folder) inside which to list objects
+     * @returns List of elements returned by the server
      * @async
      */
-    listObjects(container, prefix) {
+    listObjects(container: string, prefix: string): Promise<ListResults> {
         const resultList = []
 
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
-        const requestPromise = (continuationToken) => {
+        const requestPromise = (type: 'blob'|'prefix', continuationToken: Azure.common.ContinuationToken): Promise<ListResults> => {
             return new Promise((resolve, reject) => {
-                this._client.listBlobsOrBlobDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, {delimiter: '/'}, (err, response) => {
+                // The following properties/methods aren't defined in the typings file
+                const blobTypeConstants = (Azure.Constants.BlobConstants as any).ListBlobTypes
+                const listBlobType = (type == 'prefix') ? blobTypeConstants.Directory : blobTypeConstants.Blob
+                
+                const clientAny = this._client as any
+                clientAny._listBlobsOrDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
@@ -305,7 +304,7 @@ class AzureStorageProvider extends StorageProvider {
                                 creationTime: e.creationTime ? new Date(e.creationTime) : undefined,
                                 lastModified: e.lastModified ? new Date(e.lastModified) : undefined,
                                 size: parseInt(e.contentLength, 10)
-                            }
+                            } as ListItemObject
                             /* istanbul ignore else */
                             if (e.contentSettings && e.contentSettings.contentMD5) {
                                 // Azure returns the Content-MD5 header as base64, so convert it to HEX
@@ -320,14 +319,14 @@ class AzureStorageProvider extends StorageProvider {
                         else {
                             resultList.push({
                                 prefix: e.name
-                            })
+                            } as ListItemPrefix)
                         }
                     }
  
                     // Check if we have a continuation token
                     if (response.continuationToken) {
                         // We have a token, so need to make another request, returning a promise
-                        resolve(requestPromise(response.continuationToken))
+                        resolve(requestPromise(type, response.continuationToken))
                     }
                     else {
                         // No token, so return the list of what we've collected
@@ -337,18 +336,23 @@ class AzureStorageProvider extends StorageProvider {
             })
         }
 
-        return requestPromise(null)
+        return Promise.all([
+            requestPromise('blob', null),
+            requestPromise('prefix', null)
+        ]).then(() => {
+            return resultList
+        })
     }
 
     /**
      * Removes an object from the server
      * 
-     * @param {string} container - Name of the container
-     * @param {string} path - Path of the object, inside the container
-     * @returns {Promise<void>} Promise that resolves once the object has been removed
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @returns Promise that resolves once the object has been removed
      * @async
      */
-    removeObject(container, path) {
+    removeObject(container: string, path: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this._client.deleteBlob(container, path, (err, response) => {
                 if (err) {
@@ -368,31 +372,39 @@ class AzureStorageProvider extends StorageProvider {
 
     /**
      * Create a container on the server, choosing whether to use the "ifNotExists" method or not
-     * @param {string} container - Name of the container
-     * @param {boolean} ifNotExists - If true, use the "ifNotExists" method variant
-     * @returns {Promise<void>} Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
+     * @param container - Name of the container
+     * @param ifNotExists - If true, use the "ifNotExists" method variant
+     * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @private
      * @async
      */
-    _createContainerInternal(container, ifNotExists) {
+    private createContainerInternal(container: string, ifNotExists: boolean): Promise<void> {
         return new Promise((resolve, reject) => {
             const options = {
                 // All containers are private by default
                 publicAccessLevel: null
-            }
-            this._client['createContainer' + (ifNotExists ? 'IfNotExists' : '')](container, options, (err, response) => {
+            } as Azure.BlobService.CreateContainerOptions
+
+            const callback = (err, response) => {
                 if (err) {
                     return reject(err)
                 }
                 else if (response && response.name) {
-                    return resolve(true)
+                    return resolve()
                 }
                 else {
                     throw Error('Response does not contain storage account name')
                 }
-            })
+            }
+            
+            if (ifNotExists) {
+                this._client.createContainerIfNotExists(container, options, callback)
+            }
+            else {
+                this._client.createContainer(container, options, callback)
+            }
         })
     }
 }
 
-module.exports = AzureStorageProvider
+export = AzureStorageProvider
