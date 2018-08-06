@@ -2,6 +2,7 @@
 
 import {StorageProvider} from './lib/StorageProvider'
 
+// tslint:disable-next-line: variable-name
 const SMCloudStore = {
     /**
      * Initializes a new client to interact with cloud providers' object storage services.
@@ -23,7 +24,7 @@ const SMCloudStore = {
 
         // Require the specific provider, then initialize it
         const providerModule = require('./providers/' + provider + 'Provider.js')
-        
+
         return new providerModule(connection)
     },
 

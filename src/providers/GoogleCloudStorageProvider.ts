@@ -1,14 +1,11 @@
 'use strict'
 
 import GCStorage from '@google-cloud/storage'
-import {Stream, Duplex} from 'stream'
-import {StorageProvider, ListResults, ListItemObject, ListItemPrefix} from '../lib/StorageProvider'
+import {Duplex, Stream} from 'stream'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
 /**
  * Connection options for a Google Cloud Storage provider.
- * @typedef {Object} GoogleCloudConnectionOptions
- * @param {string} projectId - ID of the Google Cloud project
- * @param {string} keyFilename - Path of the JSON file containing the keys
  */
 interface GoogleCloudConnectionOptions {
     /** ID of the Google Cloud project */
@@ -33,11 +30,11 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
         // Provider name
         this._provider = 'GoogleCloudStorage'
-        
+
         if (!connection || !Object.keys(connection).length) {
             throw new Error('Connection argument is empty')
         }
-        
+
         // The Google Cloud library will validate the connection object
         this._client = GCStorage(connection)
     }
@@ -163,9 +160,9 @@ class GoogleCloudStorageProvider extends StorageProvider {
             const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
 
             const options = {
+                metadata: metadataClone,
                 resumable: false,
-                validation: 'md5',
-                metadata: metadataClone
+                validation: 'md5'
             } as GCStorage.WriteStreamOptions
 
             // Check if we have a Content-Type
@@ -195,7 +192,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
     getObject(container: string, path: string): Promise<Stream> {
         const bucket = this._client.bucket(container)
         const file = bucket.file(path)
-        
+
         // For Google Cloud Storage, this method doesn't actually need to be asynchronous
         return Promise.resolve(file.createReadStream({validation: 'md5'}))
     }
@@ -214,20 +211,20 @@ class GoogleCloudStorageProvider extends StorageProvider {
             return new Promise((resolve, reject) => {
                 if (!opts) {
                     opts = {
-                        delimiter: '/',
                         autoPaginate: false,
-                        //maxResults: 2, // Debugging
+                        delimiter: '/',
+                        // maxResults: 2, // For debug only
                         prefix
                     }
                 }
-        
+
                 // Using the callback API so we can get the full list
                 // Error in typings below
                 (this._client.bucket(container) as any).getFiles(opts, (err, files, nextQuery, apiResponse) => {
                     if (err) {
                         return reject(err)
                     }
-    
+
                     if (files && files.length) {
                         list = list.concat(files.map((el) => {
                             const obj = {
@@ -254,13 +251,13 @@ class GoogleCloudStorageProvider extends StorageProvider {
                             return obj
                         }))
                     }
-    
+
                     if (apiResponse && apiResponse.prefixes) {
                         list = list.concat(apiResponse.prefixes.map((el) => {
                             return {prefix: el} as ListItemPrefix
                         }))
                     }
-    
+
                     if (nextQuery) {
                         return resolve(requestPromise(nextQuery))
                     }
@@ -284,7 +281,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      */
     removeObject(container: string, path: string): Promise<void> {
         const bucket = this._client.bucket(container)
-        const file = bucket.file(path)   
+        const file = bucket.file(path)
 
         // Returns a promise
         return file.delete().then(() => {

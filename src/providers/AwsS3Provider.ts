@@ -3,6 +3,9 @@
 import Minio from 'minio'
 import MinioProvider from './MinioProvider'
 
+/**
+ * Connection options for an AWS S3 provider.
+ */
 interface AwsS3ConnectionOptions {
     /** Access Key for the server */
     accessKey: string

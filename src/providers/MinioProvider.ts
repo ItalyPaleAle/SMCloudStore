@@ -2,7 +2,7 @@
 
 import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
 import {Stream} from 'stream'
-import {StorageProvider, ListResults, ListItemObject, ListItemPrefix} from '../lib/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
 /**
  * Client to interact with a Minio object storage server.
@@ -25,7 +25,7 @@ class MinioProvider extends StorageProvider {
 
         // Provider name
         this._provider = 'Minio'
-        
+
         // The Minio library will validate the connection object
         this._client = new MinioClient(connection)
     }
@@ -142,8 +142,8 @@ class MinioProvider extends StorageProvider {
                 // If we have a file, add path, lastModified and size
                 if (obj.name && obj.lastModified) {
                     res = {
-                        path: obj.name,
                         lastModified: obj.lastModified,
+                        path: obj.name,
                         size: obj.size
                     } as ListItemObject
                 }

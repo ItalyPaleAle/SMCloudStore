@@ -39,7 +39,7 @@ export abstract class StorageProvider {
         this._client = null
         this._provider = null
     }
-    
+
     /**
      * Returns the name of the provider
      * @returns Provider name

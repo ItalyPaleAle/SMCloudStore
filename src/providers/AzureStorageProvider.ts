@@ -2,8 +2,11 @@
 
 import * as Azure from 'azure-storage'
 import {Stream, Transform} from 'stream'
-import {StorageProvider, ListResults, ListItemObject, ListItemPrefix} from '../lib/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
+/**
+ * Connection options for an Azure Blob Storage provider.
+ */
 interface AzureStorageConnectionObject {
     /** Name of the storage account */
     storageAccount: string
@@ -12,7 +15,7 @@ interface AzureStorageConnectionObject {
     /** Endpoint to use. Default is `blob.storage.windows.net` */
     host?: string
 }
-type AzureStorageConnectionOptions = String | AzureStorageConnectionObject
+type AzureStorageConnectionOptions = string | AzureStorageConnectionObject
 
 /**
  * Client to interact with Azure Blob Storage.
@@ -86,7 +89,7 @@ class AzureStorageProvider extends StorageProvider {
      */
     ensureContainer(container: string, region?: string): Promise<void> {
         return this.createContainerInternal(container, true).then(() => {
-            return 
+            return
         })
     }
 
@@ -106,19 +109,21 @@ class AzureStorageProvider extends StorageProvider {
                     if (err) {
                         return reject(err)
                     }
-                    
+
                     // Iterate through entries
                     if (!response.entries || !Array.isArray(response.entries)) {
                         throw Error('Response does not contain an entries array')
                     }
                     for (const i in response.entries) {
-                        const e = response.entries[i]
-                        if (!e || !e.name) {
-                            throw Error('Invalid entry')
+                        if (response.entries.hasOwnProperty(i)) {
+                            const e = response.entries[i]
+                            if (!e || !e.name) {
+                                throw Error('Invalid entry')
+                            }
+                            resultList.push(e.name)
                         }
-                        resultList.push(e.name)
                     }
- 
+
                     // Check if we have a continuation token
                     if (response.continuationToken) {
                         // We have a token, so need to make another request, returning a promise
@@ -175,8 +180,8 @@ class AzureStorageProvider extends StorageProvider {
 
         // Azure wants some headers, like Content-Type, outside of the metadata object
         const options = {
-            metadata: {},
-            contentSettings: {}
+            contentSettings: {},
+            metadata: {}
         } as Azure.BlobService.CreateBlockBlobRequestOptions
 
         if (metadata) {
@@ -286,43 +291,45 @@ class AzureStorageProvider extends StorageProvider {
                 // The following properties/methods aren't defined in the typings file
                 const blobTypeConstants = (Azure.Constants.BlobConstants as any).ListBlobTypes
                 const listBlobType = (type == 'prefix') ? blobTypeConstants.Directory : blobTypeConstants.Blob
-                
+
                 const clientAny = this._client as any
                 clientAny._listBlobsOrDircotriesSegmentedWithPrefix(container, prefix, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
-                    
+
                     // Iterate through the list of items and add objects to the result list
                     for (const i in response.entries) {
-                        const e = response.entries[i]
+                        if (response.entries.hasOwnProperty(i)) {
+                            const e = response.entries[i]
 
-                        // Is this a prefix (folder) or object? If etag is present, it's an object
-                        if (e.etag) {
-                            const res = {
-                                path: e.name,
-                                creationTime: e.creationTime ? new Date(e.creationTime) : undefined,
-                                lastModified: e.lastModified ? new Date(e.lastModified) : undefined,
-                                size: parseInt(e.contentLength, 10)
-                            } as ListItemObject
-                            /* istanbul ignore else */
-                            if (e.contentSettings && e.contentSettings.contentMD5) {
-                                // Azure returns the Content-MD5 header as base64, so convert it to HEX
-                                res.contentMD5 = Buffer.from(e.contentSettings.contentMD5, 'base64').toString('hex')
+                            // Is this a prefix (folder) or object? If etag is present, it's an object
+                            if (e.etag) {
+                                const res = {
+                                    creationTime: e.creationTime ? new Date(e.creationTime) : undefined,
+                                    lastModified: e.lastModified ? new Date(e.lastModified) : undefined,
+                                    path: e.name,
+                                    size: parseInt(e.contentLength, 10)
+                                } as ListItemObject
+                                /* istanbul ignore else */
+                                if (e.contentSettings && e.contentSettings.contentMD5) {
+                                    // Azure returns the Content-MD5 header as base64, so convert it to HEX
+                                    res.contentMD5 = Buffer.from(e.contentSettings.contentMD5, 'base64').toString('hex')
+                                }
+                                /* istanbul ignore else */
+                                if (e.contentSettings && e.contentSettings.contentType) {
+                                    res.contentType = e.contentSettings.contentType
+                                }
+                                resultList.push(res)
                             }
-                            /* istanbul ignore else */
-                            if (e.contentSettings && e.contentSettings.contentType) {
-                                res.contentType = e.contentSettings.contentType
+                            else {
+                                resultList.push({
+                                    prefix: e.name
+                                } as ListItemPrefix)
                             }
-                            resultList.push(res)
-                        }
-                        else {
-                            resultList.push({
-                                prefix: e.name
-                            } as ListItemPrefix)
                         }
                     }
- 
+
                     // Check if we have a continuation token
                     if (response.continuationToken) {
                         // We have a token, so need to make another request, returning a promise
@@ -375,7 +382,6 @@ class AzureStorageProvider extends StorageProvider {
      * @param container - Name of the container
      * @param ifNotExists - If true, use the "ifNotExists" method variant
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
-     * @private
      * @async
      */
     private createContainerInternal(container: string, ifNotExists: boolean): Promise<void> {
@@ -396,7 +402,7 @@ class AzureStorageProvider extends StorageProvider {
                     throw Error('Response does not contain storage account name')
                 }
             }
-            
+
             if (ifNotExists) {
                 this._client.createContainerIfNotExists(container, options, callback)
             }

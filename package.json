@@ -7,8 +7,11 @@
     "compile": "./node_modules/.bin/tsc",
     "tsc": "./node_modules/.bin/tsc",
     "test": "npm run compile && ./node_modules/.bin/_mocha",
+    "tslint": "find src -name *.ts -type f -exec './node_modules/.bin/tslint' {} \\;",
     "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
-    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json"
+    "lint": "npm run tslint && npm run eslint",
+    "jsdoc": "./node_modules/.bin/jsdoc -c .jsdoc.json",
+    "prepublishOnly": "npm run test"
   },
   "repository": {
     "type": "git",
@@ -45,6 +48,7 @@
     "mocha": "^5.2.0",
     "mocha-lcov-reporter": "^1.3.0",
     "randomstring": "^1.1.5",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1"
   }
 }
