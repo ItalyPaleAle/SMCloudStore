@@ -1,7 +1,7 @@
 # SMCloudStore
 
 ````sh
-npm install cloud-box
+npm install smcloudstore
 ````
 
 Library to interact with object storage services across multiple cloud providers.

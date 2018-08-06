@@ -11,7 +11,7 @@ const SMCloudStore = {
      * @param connection - Dictionary with connection options. List of keys is specific for every cloud provider
      * @returns An instance of a cloud provider module
      */
-    Create: (provider: string, connection: {} | string): StorageProvider => {
+    Create: (provider: string, connection: any): StorageProvider => {
         // Validate arguments
         const supportedProviders = SMCloudStore.Providers()
         if (!provider || typeof provider !== 'string' || !supportedProviders.includes(provider)) {
