@@ -11,7 +11,7 @@ const testSuiteOptions = {
     containerNamePrefix: 'smcloudstoreawstest',
     region: 'us-east-1'
 }
-//TestSuite('AwsS3', testSuiteOptions)
+TestSuite('AwsS3', testSuiteOptions)
 
 // Add custom, provider-specific tests
 describe('Provider-specific tests for AwsS3', function() {

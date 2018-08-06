@@ -7,4 +7,6 @@ docs
 test
 coverage
 start-container.sh
-cloud-box*.tgz
+src
+tsconfig.json
+smcloudstore*.tgz

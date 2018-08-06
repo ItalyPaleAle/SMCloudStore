@@ -1,18 +1,18 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
-        "allowJs": true,
         "target": "es2017",
         "module": "commonjs",
         "esModuleInterop": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "declaration": true,
         "types": [
             "node"
         ]
     },
     "include": [
-        "./src/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules"

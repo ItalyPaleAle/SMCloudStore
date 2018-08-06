@@ -288,7 +288,7 @@ class AzureStorageProvider extends StorageProvider {
                 const listBlobType = (type == 'prefix') ? blobTypeConstants.Directory : blobTypeConstants.Blob
                 
                 const clientAny = this._client as any
-                clientAny._listBlobsOrDirectoriesSegmentedWithPrefix(container, prefix, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
+                clientAny._listBlobsOrDircotriesSegmentedWithPrefix(container, prefix, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
