@@ -2,6 +2,14 @@
 
 import {StorageProvider} from './StorageProvider'
 
+const providers = {
+    AwsS3: 'smcloudstore-aws-s3',
+    AzureStorage: 'smcloudstore-azure-storage',
+    GenericS3: 'smcloudstore-generic-s3',
+    GoogleCloudStorage: 'smcloudstore-google-cloud-storage',
+    Minio: 'smcloudstore-minio',
+}
+
 // tslint:disable-next-line: variable-name
 const SMCloudStore = {
     /**
@@ -23,7 +31,7 @@ const SMCloudStore = {
         }
 
         // Require the specific provider, then initialize it
-        const providerModule = require('./lib/' + provider + 'Provider.js')
+        const providerModule = require(providers[provider])
 
         return new providerModule(connection)
     },
@@ -33,15 +41,7 @@ const SMCloudStore = {
      * 
      * @returns List of supported provider names
      */
-    Providers: (): string[] => {
-        return [
-            'AwsS3',
-            'AzureStorage',
-            'GenericS3',
-            'GoogleCloudStorage',
-            'Minio'
-        ]
-    }
+    Providers: (): string[] => Object.keys(providers)
 }
 
 export = SMCloudStore

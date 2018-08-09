@@ -32,7 +32,7 @@ class AzureStorageProvider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'AzureStorage'
+        this._provider = 'azure-storage'
 
         // The Azure library will validate the connection object
         // TODO: Support object

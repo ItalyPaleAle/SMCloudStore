@@ -35,7 +35,7 @@ class AwsS3Provider extends GenericS3Provider {
         minioConnection.endPoint = 's3.amazonaws.com'
         super(minioConnection)
 
-        this._provider = 'AwsS3'
+        this._provider = 'aws-s3'
     }
 }
 

@@ -4,25 +4,26 @@
 
 const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloudStore = require('../dist/index')
 const authData = require('./data/auth')
 
 // Execute the test suite
-TestSuite('Minio')
+TestSuite('minio')
 
 // Add custom, provider-specific tests
-describe('Provider-specific tests for Minio', function() {
+describe('Provider-specific tests for minio', function() {
+    const Provider = require('../packages/smcloudstore-minio')
+
     it('constructor', function() {
         assert.throws(() => {
             // Empty connection
-            SMCloudStore.Create('Minio', {})
+            new Provider({})
         }, /connection argument/i)
         
         assert.throws(() => {
             // Missing endPoint
-            SMCloudStore.Create('Minio', {
-                accessKey: authData.Minio.accessKey,
-                secretKey: authData.Minio.secretKey
+            new Provider({
+                accessKey: authData.minio.accessKey,
+                secretKey: authData.minio.secretKey
             })
         }, /invalid endpoint/i)
     })

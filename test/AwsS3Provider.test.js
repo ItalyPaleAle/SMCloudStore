@@ -4,21 +4,22 @@
 
 const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloudStore = require('../dist/index')
 
 // Execute the test suite
 const testSuiteOptions = {
     containerNamePrefix: 'smcloudstoreawstest',
     region: 'us-east-1'
 }
-TestSuite('AwsS3', testSuiteOptions)
+TestSuite('aws-s3', testSuiteOptions)
 
 // Add custom, provider-specific tests
-describe('Provider-specific tests for AwsS3', function() {
+describe('Provider-specific tests for aws-s3', function() {
+    const Provider = require('../packages/smcloudstore-aws-s3')
+
     it('constructor', function() {
         assert.throws(() => {
             // Empty connection
-            SMCloudStore.Create('AwsS3', {})
+            new Provider({})
         }, /connection argument/i)
     })
 })

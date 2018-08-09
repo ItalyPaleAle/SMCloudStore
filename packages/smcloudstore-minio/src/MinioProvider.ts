@@ -20,7 +20,7 @@ class MinioProvider extends GenericS3Provider {
         // Initialize the GenericS3 provider, on which this is based
         super(connection)
 
-        this._provider = 'Minio'
+        this._provider = 'minio'
     }
 }
 

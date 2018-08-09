@@ -3,7 +3,7 @@
 'use strict'
 
 const assert = require('assert')
-const SMCloudStore = require('../../dist/index')
+const SMCloudStore = require('../../packages/smcloudstore/dist/SMCloudStore')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
@@ -28,6 +28,8 @@ module.exports = (providerName, testSuiteOptions) => {
     }
 
     describe('Test suite for ' + providerName, function() {
+        // Load the provider's class
+        const Provider = require('../../packages/smcloudstore-' + providerName)
 
         // Set default timeout to 10s and slow warning to 1s
         this.timeout(10000)
@@ -79,7 +81,7 @@ module.exports = (providerName, testSuiteOptions) => {
         this.bail(true)
 
         it('constructor', function() {
-            storage = SMCloudStore.Create(providerName, authData[providerName])
+            storage = new Provider(authData[providerName])
             assert(storage)
         })
 

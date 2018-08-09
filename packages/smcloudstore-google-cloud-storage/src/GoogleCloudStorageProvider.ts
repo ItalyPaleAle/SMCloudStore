@@ -29,7 +29,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'GoogleCloudStorage'
+        this._provider = 'google-cloud-storage'
 
         if (!connection || !Object.keys(connection).length) {
             throw new Error('Connection argument is empty')

@@ -23,7 +23,7 @@ class GenericS3Provider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'GenericS3'
+        this._provider = 'generic-s3'
 
         // The Minio library will validate the connection object
         this._client = new MinioClient(connection)

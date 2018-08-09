@@ -6,7 +6,7 @@
         "moduleResolution": "node",
         "outDir": "./dist",
         "listFiles": false,
-        "sourceMap": true,
+        "sourceMap": false,
         "declaration": true,
         "types": [
             "node"
