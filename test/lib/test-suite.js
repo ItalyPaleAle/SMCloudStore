@@ -3,7 +3,6 @@
 'use strict'
 
 const assert = require('assert')
-const SMCloudStore = require('../../packages/smcloudstore/dist/SMCloudStore')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
