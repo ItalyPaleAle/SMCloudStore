@@ -5,7 +5,7 @@
   "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-azure-storage",
   "license": "MIT",
-  "main": "lib/AzureStorageProvider.js",
+  "main": "dist/AzureStorageProvider.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"

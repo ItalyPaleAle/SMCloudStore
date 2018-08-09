@@ -5,7 +5,7 @@
   "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-aws-s3",
   "license": "MIT",
-  "main": "lib/AwsS3Provider.js",
+  "main": "dist/AwsS3Provider.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"

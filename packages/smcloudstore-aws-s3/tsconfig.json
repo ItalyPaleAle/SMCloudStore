@@ -4,7 +4,8 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "listFiles": true,
+        "outDir": "./dist",
+        "listFiles": false,
         "sourceMap": true,
         "declaration": true,
         "types": [
@@ -12,9 +13,10 @@
         ]
     },
     "include": [
-        "packages/*/src/*"
+        "src/*"
     ],
     "exclude": [
-        "node_modules"
+        "**/node_modules",
+        "**/.git"
     ]
 }

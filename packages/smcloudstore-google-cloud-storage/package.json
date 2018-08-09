@@ -6,7 +6,7 @@
   "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-google-cloud-storage",
   "license": "MIT",
-  "main": "lib/GoogleCloudStorageProvider.js",
+  "main": "dist/GoogleCloudStorageProvider.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"

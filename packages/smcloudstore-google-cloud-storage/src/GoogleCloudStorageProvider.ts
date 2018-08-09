@@ -2,7 +2,7 @@
 
 import GCStorage from '@google-cloud/storage'
 import {Duplex, Stream} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore/lib/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore/dist/StorageProvider'
 
 /**
  * Connection options for a Google Cloud Storage provider.
