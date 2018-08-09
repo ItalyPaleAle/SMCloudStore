@@ -37,6 +37,7 @@ const SMCloudStore = {
         return [
             'AwsS3',
             'AzureStorage',
+            'GenericS3',
             'GoogleCloudStorage',
             'Minio'
         ]

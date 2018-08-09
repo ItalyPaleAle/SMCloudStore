@@ -1,7 +1,7 @@
 'use strict'
 
 import Minio from 'minio'
-import MinioProvider from './MinioProvider'
+import GenericS3Provider from './GenericS3Provider'
 
 /**
  * Connection options for an AWS S3 provider.
@@ -16,9 +16,9 @@ interface AwsS3ConnectionOptions {
 }
 
 /**
- * Client to interact with AWS S3. It is based on the MinioProvider class.
+ * Client to interact with AWS S3. It is based on the GenericS3 Provider class.
  */
-class AwsS3Provider extends MinioProvider {
+class AwsS3Provider extends GenericS3Provider {
     /**
      * Initializes a new client to interact with AWS S3.
      * 
@@ -29,7 +29,7 @@ class AwsS3Provider extends MinioProvider {
             throw new Error('Connection argument is empty')
         }
 
-        // Initialize the Minio provider, on which this is based
+        // Initialize the GenericS3 provider, on which this is based
         // Clone the property object before modifying it
         const minioConnection = Object.assign({}, connection) as Minio.ClientOptions
         minioConnection.endPoint = 's3.amazonaws.com'
