@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "bootstrap": "npx lerna bootstrap --hoist",
     "compile": "npm run tsc",
     "tsc": "sh scripts/compile.sh",
     "test": "npm run compile && ./node_modules/.bin/_mocha",
-    "tslint": "find src -name *.ts -type f -exec './node_modules/.bin/tslint' {} \\;",
+    "tslint": "find packages/*/src -name *.ts -type f -exec './node_modules/.bin/tslint' {} \\;",
     "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
     "lint": "npm run tslint && npm run eslint",
-    "typedoc": "./node_modules/.bin/typedoc --name SMCloud --out docs/ --readme README.md --module commonjs --mode file",
+    "typedoc": "./node_modules/.bin/typedoc --name SMCloudStore --out docs/ --readme README.md --module commonjs --mode file packages/*/",
     "docs": "npm run typedoc",
     "prepublishOnly": "npm run test"
   },

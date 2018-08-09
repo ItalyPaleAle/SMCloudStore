@@ -1,0 +1,1 @@
+# smcloudstore-google-cloud-storage

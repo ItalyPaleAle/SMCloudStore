@@ -1,8 +1,8 @@
 'use strict'
 
 import * as Azure from 'azure-storage'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore-core/dist/StorageProvider'
 import {Stream, Transform} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore/dist/StorageProvider'
 
 /**
  * Connection options for an Azure Blob Storage provider.

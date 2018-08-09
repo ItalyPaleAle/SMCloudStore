@@ -8,6 +8,7 @@
         "listFiles": false,
         "sourceMap": false,
         "declaration": true,
+        "declarationDir": "./typings",
         "types": [
             "node"
         ]

@@ -1,8 +1,8 @@
 'use strict'
 
 import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore-core/dist/StorageProvider'
 import {Stream} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore/dist/StorageProvider'
 
 /**
  * Client to interact with a generic S3 object storage server, using the Minio library.

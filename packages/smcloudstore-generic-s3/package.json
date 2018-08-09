@@ -17,7 +17,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "smcloudstore": "^0.1.0",
+    "smcloudstore-core": "^0.1.0",
     "minio": "^6.0.0"
   }
 }

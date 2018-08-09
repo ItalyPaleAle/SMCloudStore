@@ -1,8 +1,7 @@
 {
-  "name": "smcloudstore",
+  "name": "smcloudstore-core",
   "version": "0.1.0",
   "description": "Multi-cloud object storage module: AWS, Azure, GCP...",
-  "main": "dist/SMCloudStore.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"

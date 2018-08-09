@@ -3,7 +3,7 @@
 # Run TSC inside all packages
 
 # Start with the base package
-npx tsc -p packages/smcloudstore/
+npx tsc -p packages/smcloudstore-core/
 
 # Compile all packages
 npx tsc -p packages/smcloudstore-generic-s3/ # Must be before aws-s3 and minio

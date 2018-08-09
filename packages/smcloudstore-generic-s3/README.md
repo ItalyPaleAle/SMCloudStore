@@ -1,0 +1,1 @@
+# smcloudstore-generic-s3
