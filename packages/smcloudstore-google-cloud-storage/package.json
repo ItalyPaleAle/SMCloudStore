@@ -1,0 +1,24 @@
+{
+  "name": "smcloudstore-google-cloud-storage",
+  "version": "1.0.0",
+  "description": "TODO",
+  "keywords": [],
+  "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-google-cloud-storage",
+  "license": "MIT",
+  "main": "lib/GoogleCloudStorageProvider.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
+  },
+  "dependencies": {
+    "smcloudstore": "^0.1.0",
+    "@google-cloud/storage": "^1.7.0"
+  }
+}

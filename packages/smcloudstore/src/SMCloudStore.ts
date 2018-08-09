@@ -1,6 +1,6 @@
 'use strict'
 
-import {StorageProvider} from './lib/StorageProvider'
+import {StorageProvider} from './StorageProvider'
 
 // tslint:disable-next-line: variable-name
 const SMCloudStore = {
@@ -23,7 +23,7 @@ const SMCloudStore = {
         }
 
         // Require the specific provider, then initialize it
-        const providerModule = require('./providers/' + provider + 'Provider.js')
+        const providerModule = require('./lib/' + provider + 'Provider.js')
 
         return new providerModule(connection)
     },

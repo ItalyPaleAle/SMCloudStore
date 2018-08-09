@@ -1,7 +1,7 @@
 'use strict'
 
 import Minio from 'minio'
-import GenericS3Provider from './GenericS3Provider'
+import GenericS3Provider from 'smcloudstore-generic-s3'
 
 /**
  * Connection options for an AWS S3 provider.

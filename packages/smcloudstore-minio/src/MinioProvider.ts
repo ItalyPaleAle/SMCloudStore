@@ -1,7 +1,7 @@
 'use strict'
 
 import {ClientOptions as MinioClientOptions} from 'minio'
-import GenericS3Provider from './GenericS3Provider'
+import GenericS3Provider from 'smcloudstore-generic-s3'
 
 /**
  * Client to interact with Minio. It is based on the GenericS3 Provider class.

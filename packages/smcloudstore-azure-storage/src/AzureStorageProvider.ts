@@ -2,7 +2,7 @@
 
 import * as Azure from 'azure-storage'
 import {Stream, Transform} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore/lib/StorageProvider'
 
 /**
  * Connection options for an Azure Blob Storage provider.

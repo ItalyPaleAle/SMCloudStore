@@ -1,0 +1,23 @@
+{
+  "name": "smcloudstore-generic-s3",
+  "version": "0.1.0",
+  "description": "> TODO: description",
+  "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-generic-s3",
+  "license": "MIT",
+  "main": "lib/GenericS3Provider.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
+  },
+  "dependencies": {
+    "smcloudstore": "^0.1.0",
+    "minio": "^6.0.0"
+  }
+}
