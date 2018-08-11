@@ -4,7 +4,6 @@
 
 const assert = require('assert')
 const TestSuite = require('./lib/test-suite')
-const SMCloudStore = require('../dist/index')
 
 // Execute the test suite
 const testSuiteOptions = {
@@ -12,14 +11,16 @@ const testSuiteOptions = {
     region: 'us-central1',
     listObjects: ['includeContentType', 'includeContentMD5', 'includeCreationTime']
 }
-TestSuite('GoogleCloudStorage', testSuiteOptions)
+TestSuite('google-cloud-storage', testSuiteOptions)
 
 // Add custom, provider-specific tests
-describe('Provider-specific tests for GoogleCloudStorage', function() {
+describe('Provider-specific tests for google-cloud-storage', function() {
+    const Provider = require('../packages/google-cloud-storage')
+
     it('constructor', function() {
         assert.throws(() => {
             // Empty connection
-            SMCloudStore.Create('GoogleCloudStorage', {})
+            new Provider({})
         }, /connection argument/i)
     })
 })

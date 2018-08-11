@@ -1,8 +1,8 @@
 'use strict'
 
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
 import {Stream} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
 /**
  * Client to interact with a generic S3 object storage server, using the Minio library.
@@ -23,7 +23,7 @@ class GenericS3Provider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'GenericS3'
+        this._provider = 'generic-s3'
 
         // The Minio library will validate the connection object
         this._client = new MinioClient(connection)

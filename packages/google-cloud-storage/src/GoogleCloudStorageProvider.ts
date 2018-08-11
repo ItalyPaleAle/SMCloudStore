@@ -1,8 +1,8 @@
 'use strict'
 
 import GCStorage from '@google-cloud/storage'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Duplex, Stream} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
 /**
  * Connection options for a Google Cloud Storage provider.
@@ -29,7 +29,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'GoogleCloudStorage'
+        this._provider = 'google-cloud-storage'
 
         if (!connection || !Object.keys(connection).length) {
             throw new Error('Connection argument is empty')

@@ -1,6 +1,6 @@
 'use strict'
 
-import {StorageProvider} from './lib/StorageProvider'
+import {StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 
 // tslint:disable-next-line: variable-name
 const SMCloudStore = {
@@ -23,7 +23,7 @@ const SMCloudStore = {
         }
 
         // Require the specific provider, then initialize it
-        const providerModule = require('./providers/' + provider + 'Provider.js')
+        const providerModule = require('@smcloudstore/' + provider)
 
         return new providerModule(connection)
     },
@@ -35,11 +35,11 @@ const SMCloudStore = {
      */
     Providers: (): string[] => {
         return [
-            'AwsS3',
-            'AzureStorage',
-            'GenericS3',
-            'GoogleCloudStorage',
-            'Minio'
+            'aws-s3',
+            'azure-storage',
+            'generic-s3',
+            'google-cloud-storage',
+            'minio'
         ]
     }
 }

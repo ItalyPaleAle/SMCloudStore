@@ -2,11 +2,11 @@
 
 'use strict'
 
-const SMCloudStore = require('../dist/index')
 const assert = require('assert')
+const SMCloudStore = require('../packages/smcloudstore')
+const authData = require('./data/auth')
 
 describe('SMCloudStore', function() {
-
     it('SMCloudStore should export an object', function() {
         assert(typeof SMCloudStore == 'object')
         assert(typeof SMCloudStore.Create == 'function')
@@ -24,7 +24,10 @@ describe('SMCloudStore', function() {
 
         // Fail on empty connection data
         assert.throws(() => {
-            SMCloudStore.Create('Minio', null)
+            SMCloudStore.Create('minio', null)
         })
+
+        // Successfully create an object
+        assert(SMCloudStore.Create('minio', authData.minio))
     })
 })

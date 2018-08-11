@@ -1,7 +1,7 @@
 'use strict'
 
+import GenericS3Provider from '@smcloudstore/generic-s3'
 import Minio from 'minio'
-import GenericS3Provider from './GenericS3Provider'
 
 /**
  * Connection options for an AWS S3 provider.
@@ -35,7 +35,7 @@ class AwsS3Provider extends GenericS3Provider {
         minioConnection.endPoint = 's3.amazonaws.com'
         super(minioConnection)
 
-        this._provider = 'AwsS3'
+        this._provider = 'aws-s3'
     }
 }
 

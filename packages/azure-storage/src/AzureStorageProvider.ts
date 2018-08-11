@@ -1,8 +1,8 @@
 'use strict'
 
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import * as Azure from 'azure-storage'
 import {Stream, Transform} from 'stream'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '../lib/StorageProvider'
 
 /**
  * Connection options for an Azure Blob Storage provider.
@@ -32,7 +32,7 @@ class AzureStorageProvider extends StorageProvider {
         super()
 
         // Provider name
-        this._provider = 'AzureStorage'
+        this._provider = 'azure-storage'
 
         // The Azure library will validate the connection object
         // TODO: Support object

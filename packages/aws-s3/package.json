@@ -1,0 +1,22 @@
+{
+  "name": "@smcloudstore/aws-s3",
+  "version": "0.0.1",
+  "description": "AWS S3 library for SMCloudStore",
+  "author": "Alessandro Segala (ItalyPaleAle)",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/aws-s3",
+  "license": "MIT",
+  "main": "dist/AwsS3Provider.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
+  },
+  "dependencies": {
+    "@smcloudstore/generic-s3": "^0.0.1"
+  }
+}

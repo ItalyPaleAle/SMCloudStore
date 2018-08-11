@@ -8,8 +8,8 @@ const TestSuite = require('./lib/test-suite')
 const testSuiteOptions = {
     listObjects: ['includeContentType', 'includeContentMD5', 'includeCreationTime']
 }
-TestSuite('AzureStorage', testSuiteOptions)
+TestSuite('azure-storage', testSuiteOptions)
 
 // Add custom, provider-specific tests
-describe('Provider-specific tests for AzureStorage', function() {
+describe('Provider-specific tests for azure-storage', function() {
 })
