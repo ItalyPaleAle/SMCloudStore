@@ -1,6 +1,6 @@
 {
   "name": "@smcloudstore/minio",
-  "version": "0.0.2-0",
+  "version": "0.0.2-1",
   "description": "Minio library for SMCloudStore",
   "author": "Alessandro Segala (ItalyPaleAle)",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/minio",
@@ -20,7 +20,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "@smcloudstore/generic-s3": "^0.0.2-0"
+    "@smcloudstore/generic-s3": "^0.0.2-1"
   },
   "gitHead": "a9dc8afc96b70b92d1d1d53a296e59a2dd058b49"
 }
