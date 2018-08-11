@@ -1,6 +1,6 @@
 {
   "name": "@smcloudstore/generic-s3",
-  "version": "0.0.1",
+  "version": "0.0.2-0",
   "description": "Generic S3-compatible library for SMCloudStore",
   "author": "Alessandro Segala (ItalyPaleAle)",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/generic-s3",
@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
@@ -17,7 +20,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "@smcloudstore/core": "^0.0.1",
+    "@smcloudstore/core": "^0.0.2-0",
     "minio": "^6.0.0"
   }
 }

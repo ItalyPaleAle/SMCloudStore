@@ -1,6 +1,6 @@
 {
   "name": "smcloudstore",
-  "version": "0.0.1",
+  "version": "0.0.2-0",
   "description": "Multi-cloud object storage module, for AWS, Azure, Google Cloud & more",
   "repository": {
     "type": "git",
@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore",
   "dependencies": {
-    "@smcloudstore/core": "^0.0.1"
+    "@smcloudstore/core": "^0.0.2-0"
   },
   "devDependencies": {
-    "@smcloudstore/minio": "^0.0.1"
+    "@smcloudstore/minio": "^0.0.2-0"
   },
   "peerDependencies": {
     "@smcloudstore/aws-s3": "^0.0.1",

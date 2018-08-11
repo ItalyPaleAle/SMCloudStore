@@ -1,6 +1,6 @@
 {
   "name": "@smcloudstore/google-cloud-storage",
-  "version": "0.0.1",
+  "version": "0.0.2-0",
   "description": "Google Cloud Storage library for SMCloudStore",
   "keywords": [],
   "author": "Alessandro Segala (ItalyPaleAle)",
@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
@@ -18,7 +21,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "@smcloudstore/core": "^0.0.1",
-    "@google-cloud/storage": "^1.7.0"
+    "@google-cloud/storage": "^1.7.0",
+    "@smcloudstore/core": "^0.0.2-0"
   }
 }

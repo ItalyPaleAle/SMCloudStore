@@ -1,10 +1,13 @@
 {
   "name": "@smcloudstore/core",
-  "version": "0.0.1",
+  "version": "0.0.2-0",
   "description": "Core library for SMCloudStore",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": "Alessandro Segala (ItalyPaleAle)",
   "license": "MIT",
