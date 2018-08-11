@@ -1,17 +1,15 @@
 {
   "name": "@smcloudstore/core",
   "version": "0.0.1",
-  "description": "Multi-cloud object storage module: AWS, Azure, GCP...",
+  "description": "Core library for SMCloudStore",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
   },
-  "keywords": [
-  ],
-  "author": "Alessandro Segala",
+  "author": "Alessandro Segala (ItalyPaleAle)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
-  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore"
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/core"
 }

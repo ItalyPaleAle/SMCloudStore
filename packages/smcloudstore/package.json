@@ -1,0 +1,39 @@
+{
+  "name": "smcloudstore",
+  "version": "0.0.1",
+  "description": "Multi-cloud object storage module, for AWS, Azure, Google Cloud & more",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
+  },
+  "keywords": [
+    "cloud storage",
+    "object storage",
+    "cloud",
+    "storage",
+    "s3",
+    "azure",
+    "gcp",
+    "minio"
+  ],
+  "author": "Alessandro Segala (ItalyPaleAle)",
+  "license": "MIT",
+  "main": "dist/SMCloudStore.js",
+  "bugs": {
+    "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
+  },
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore",
+  "dependencies": {
+    "@smcloudstore/core": "^0.0.1"
+  },
+  "devDependencies": {
+    "@smcloudstore/minio": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@smcloudstore/aws-s3": "^0.0.1",
+    "@smcloudstore/azure-storage": "^0.0.1",
+    "@smcloudstore/generic-s3": "^0.0.1",
+    "@smcloudstore/google-cloud-storage": "^0.0.1",
+    "@smcloudstore/minio": "^0.0.1"
+  }
+}

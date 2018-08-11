@@ -1,8 +1,8 @@
 {
   "name": "@smcloudstore/minio",
   "version": "0.0.1",
-  "description": "> TODO: description",
-  "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
+  "description": "Minio library for SMCloudStore",
+  "author": "Alessandro Segala (ItalyPaleAle)",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/minio",
   "license": "MIT",
   "main": "dist/MinioProvider.js",

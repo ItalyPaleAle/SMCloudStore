@@ -11,3 +11,6 @@ npx tsc -p packages/aws-s3/
 npx tsc -p packages/azure-storage/
 npx tsc -p packages/google-cloud-storage/
 npx tsc -p packages/minio/
+
+# Compile the smcloudstore package
+npx tsc -p packages/smcloudstore/
