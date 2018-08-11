@@ -23,5 +23,6 @@
   "dependencies": {
     "@google-cloud/storage": "^1.7.0",
     "@smcloudstore/core": "^0.0.2-0"
-  }
+  },
+  "gitHead": "a9dc8afc96b70b92d1d1d53a296e59a2dd058b49"
 }

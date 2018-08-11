@@ -35,5 +35,6 @@
     "@smcloudstore/generic-s3": "^0.0.1",
     "@smcloudstore/google-cloud-storage": "^0.0.1",
     "@smcloudstore/minio": "^0.0.1"
-  }
+  },
+  "gitHead": "a9dc8afc96b70b92d1d1d53a296e59a2dd058b49"
 }
