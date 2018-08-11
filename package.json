@@ -10,7 +10,7 @@
     "tslint": "find packages/*/src -name *.ts -type f -exec './node_modules/.bin/tslint' {} \\;",
     "eslint": "./node_modules/.bin/eslint -c .eslintrc.yml .",
     "lint": "npm run tslint && npm run eslint",
-    "typedoc": "./node_modules/.bin/typedoc --name SMCloudStore --out docs/ --readme README.md --target --module commonjs --mode file packages/*/",
+    "typedoc": "./node_modules/.bin/typedoc --name SMCloudStore --out docs/ --readme README.md --target ES6 --module commonjs --mode file packages/core/src",
     "docs": "npm run typedoc",
     "prepublishOnly": "npm run test"
   },
