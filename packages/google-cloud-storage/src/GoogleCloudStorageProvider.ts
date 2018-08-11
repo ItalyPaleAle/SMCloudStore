@@ -26,7 +26,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @param connection - Dictionary with connection options.
      */
     constructor(connection: GoogleCloudConnectionOptions) {
-        super()
+        super(connection)
 
         // Provider name
         this._provider = 'google-cloud-storage'

@@ -36,8 +36,10 @@ export abstract class StorageProvider {
 
     /**
      * Initializes a new storage provider
+     * 
+     * @param connection - Connection options
      */
-    constructor() {
+    constructor(connection: any) {
         this._client = null
         this._provider = null
     }

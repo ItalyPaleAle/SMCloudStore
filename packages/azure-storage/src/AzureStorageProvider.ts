@@ -26,10 +26,10 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
-     * @param connection - Dictionary with connection options.
+     * @param connection - Connection options
      */
     constructor(connection: AzureStorageConnectionOptions) {
-        super()
+        super(connection)
 
         // Provider name
         this._provider = 'azure-storage'

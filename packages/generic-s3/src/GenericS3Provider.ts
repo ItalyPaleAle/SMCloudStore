@@ -20,7 +20,7 @@ class GenericS3Provider extends StorageProvider {
             throw new Error('Connection argument is empty')
         }
 
-        super()
+        super(connection)
 
         // Provider name
         this._provider = 'generic-s3'
