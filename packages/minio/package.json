@@ -1,11 +1,11 @@
 {
-  "name": "smcloudstore-generic-s3",
-  "version": "0.1.0",
+  "name": "@smcloudstore/minio",
+  "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
-  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-generic-s3",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/minio",
   "license": "MIT",
-  "main": "dist/GenericS3Provider.js",
+  "main": "dist/MinioProvider.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
@@ -17,7 +17,6 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "smcloudstore-core": "^0.1.0",
-    "minio": "^6.0.0"
+    "@smcloudstore/generic-s3": "^0.0.1"
   }
 }

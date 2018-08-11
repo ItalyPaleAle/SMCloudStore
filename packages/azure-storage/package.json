@@ -1,12 +1,11 @@
 {
-  "name": "smcloudstore-google-cloud-storage",
-  "version": "1.0.0",
-  "description": "TODO",
-  "keywords": [],
+  "name": "@smcloudstore/azure-storage",
+  "version": "0.0.1",
+  "description": "> TODO: description",
   "author": "Alessandro Segala <ItalyPaleAle@users.noreply.github.com>",
-  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/smcloudstore-google-cloud-storage",
+  "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/azure-storage",
   "license": "MIT",
-  "main": "dist/GoogleCloudStorageProvider.js",
+  "main": "dist/AzureStorageProvider.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
@@ -18,7 +17,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "smcloudstore-core": "^0.1.0",
-    "@google-cloud/storage": "^1.7.0"
+    "@smcloudstore/core": "^0.0.1",
+    "azure-storage": "^2.10.1"
   }
 }

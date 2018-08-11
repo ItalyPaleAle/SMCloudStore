@@ -1,7 +1,7 @@
 'use strict'
 
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import * as Azure from 'azure-storage'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore-core/dist/StorageProvider'
 import {Stream, Transform} from 'stream'
 
 /**

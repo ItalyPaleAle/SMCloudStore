@@ -14,7 +14,7 @@ TestSuite('aws-s3', testSuiteOptions)
 
 // Add custom, provider-specific tests
 describe('Provider-specific tests for aws-s3', function() {
-    const Provider = require('../packages/smcloudstore-aws-s3')
+    const Provider = require('../packages/aws-s3')
 
     it('constructor', function() {
         assert.throws(() => {

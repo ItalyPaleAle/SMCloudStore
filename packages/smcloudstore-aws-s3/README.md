@@ -1,1 +1,0 @@
-# smcloudstore-aws-s3

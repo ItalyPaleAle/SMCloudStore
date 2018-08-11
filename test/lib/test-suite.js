@@ -28,7 +28,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
     describe('Test suite for ' + providerName, function() {
         // Load the provider's class
-        const Provider = require('../../packages/smcloudstore-' + providerName)
+        const Provider = require('../../packages/' + providerName)
 
         // Set default timeout to 10s and slow warning to 1s
         this.timeout(10000)

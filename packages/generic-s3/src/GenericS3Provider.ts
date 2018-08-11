@@ -1,7 +1,7 @@
 'use strict'
 
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore-core/dist/StorageProvider'
 import {Stream} from 'stream'
 
 /**

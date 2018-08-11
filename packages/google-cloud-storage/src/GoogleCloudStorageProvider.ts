@@ -1,7 +1,7 @@
 'use strict'
 
 import GCStorage from '@google-cloud/storage'
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from 'smcloudstore-core/dist/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Duplex, Stream} from 'stream'
 
 /**

@@ -11,7 +11,7 @@ TestSuite('minio')
 
 // Add custom, provider-specific tests
 describe('Provider-specific tests for minio', function() {
-    const Provider = require('../packages/smcloudstore-minio')
+    const Provider = require('../packages/minio')
 
     it('constructor', function() {
         assert.throws(() => {

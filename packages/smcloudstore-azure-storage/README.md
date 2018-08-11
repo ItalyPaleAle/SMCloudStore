@@ -1,1 +1,0 @@
-# smcloudstore-azure-storage
