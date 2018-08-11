@@ -14,7 +14,7 @@ const SMCloudStore = {
     Create: (provider: string, connection: any): StorageProvider => {
         // Validate arguments
         const supportedProviders = SMCloudStore.Providers()
-        if (!provider || typeof provider !== 'string' || !supportedProviders.includes(provider)) {
+        if (!provider || typeof provider !== 'string' || supportedProviders.indexOf(provider) < 0) {
             throw Error('The specified provider is not valid. Valid providers inlcude: ' + supportedProviders.join(', '))
         }
 
