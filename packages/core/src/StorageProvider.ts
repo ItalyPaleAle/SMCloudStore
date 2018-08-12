@@ -136,7 +136,7 @@ export abstract class StorageProvider {
      * @returns List of elements returned by the server
      * @async
      */
-    abstract listObjects(container: string, prefix: string): Promise<ListResults>
+    abstract listObjects(container: string, prefix?: string): Promise<ListResults>
 
     /**
      * Removes an object from the server

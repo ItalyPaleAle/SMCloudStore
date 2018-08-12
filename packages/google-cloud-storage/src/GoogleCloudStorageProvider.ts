@@ -207,7 +207,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @returns List of elements returned by the server
      * @async
      */
-    listObjects(container: string, prefix: string): Promise<ListResults> {
+    listObjects(container: string, prefix?: string): Promise<ListResults> {
         let list = [] as ListResults
         const requestPromise = (opts: GCStorage.BucketQuery): Promise<ListResults> => {
             return new Promise((resolve, reject) => {

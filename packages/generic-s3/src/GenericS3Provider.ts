@@ -132,7 +132,7 @@ class GenericS3Provider extends StorageProvider {
      * @returns List of elements returned by the server
      * @async
      */
-    listObjects(container: string, prefix: string): Promise<ListResults> {
+    listObjects(container: string, prefix?: string): Promise<ListResults> {
         return new Promise((resolve, reject) => {
             const stream = this._client.listObjectsV2(container, prefix, false) as Stream
             const list = [] as ListResults

@@ -282,7 +282,7 @@ class AzureStorageProvider extends StorageProvider {
      * @returns List of elements returned by the server
      * @async
      */
-    listObjects(container: string, prefix: string): Promise<ListResults> {
+    listObjects(container: string, prefix?: string): Promise<ListResults> {
         const resultList = []
 
         // The response might be split into multiple pages, so we need to be prepared to make multiple requests and use a continuation token
@@ -293,7 +293,7 @@ class AzureStorageProvider extends StorageProvider {
                 const listBlobType = (type == 'prefix') ? blobTypeConstants.Directory : blobTypeConstants.Blob
 
                 const clientAny = this._client as any
-                clientAny._listBlobsOrDircotriesSegmentedWithPrefix(container, prefix, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
+                clientAny._listBlobsOrDircotriesSegmentedWithPrefix(container, prefix || null, continuationToken, listBlobType, {delimiter: '/'}, (err, response) => {
                     if (err) {
                         return reject(err)
                     }
