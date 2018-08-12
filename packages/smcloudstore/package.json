@@ -29,12 +29,5 @@
   "devDependencies": {
     "@smcloudstore/minio": "^0.0.2-1"
   },
-  "peerDependencies": {
-    "@smcloudstore/aws-s3": "^0.0.1",
-    "@smcloudstore/azure-storage": "^0.0.1",
-    "@smcloudstore/generic-s3": "^0.0.1",
-    "@smcloudstore/google-cloud-storage": "^0.0.1",
-    "@smcloudstore/minio": "^0.0.1"
-  },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
 }
