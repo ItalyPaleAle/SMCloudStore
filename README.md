@@ -45,7 +45,7 @@ Each cloud provider use different names for the same concept. In SMCloudStore, w
 
 ## API Guide
 
-Full API documentation is available on this project's [GitHub page](https://italypaleale.github.io/SMCloudStore/index.html) and in the [`/docs`](/docs) folder.
+Full API documentation is available on this project's [GitHub page](https://italypaleale.github.io/SMCloudStore/index.html) and in the [`/docs`](https://github.com/ItalyPaleAle/SMCloudStore/tree/master/docs) folder.
 
 Each cloud storage provider is implemented in a class defined in one of the modules above. All providers inherit from the [`StorageProvider`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html) abstract class, which is in the `@smcloudstore/core` package.
 
@@ -71,7 +71,7 @@ const connection = {
 const storage = SMCloudStore.create(provider, connection)
 ````
 
-The format of the `connection` argument varies by cloud provider. For more details, please refer to the README for each provider in the [`packages/`](/packages) folder.
+The format of the `connection` argument varies by cloud provider. For more details, please refer to the README for each provider in the [`packages/`](https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages) folder.
 
 Alternatively, you can create an instance of each provider by initializating the provider's class directly and invoking the [`constructor(connection)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#constructor) method. For example, to create a new Azure Blob Storage provider:
 
