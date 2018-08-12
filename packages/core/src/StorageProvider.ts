@@ -146,5 +146,5 @@ export abstract class StorageProvider {
      * @returns Promise that resolves once the object has been removed
      * @async
      */
-    abstract removeObject(container: string, path: string): Promise<void>
+    abstract deleteObject(container: string, path: string): Promise<void>
 }

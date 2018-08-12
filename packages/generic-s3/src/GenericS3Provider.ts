@@ -176,7 +176,7 @@ class GenericS3Provider extends StorageProvider {
      * @returns Promise that resolves once the object has been removed
      * @async
      */
-    removeObject(container: string, path: string): Promise<void> {
+    deleteObject(container: string, path: string): Promise<void> {
         return this._client.removeObject(container, path)
     }
 }

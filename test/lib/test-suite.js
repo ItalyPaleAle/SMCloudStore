@@ -304,11 +304,11 @@ module.exports = (providerName, testSuiteOptions) => {
             await Promise.all(promises)
         })
 
-        it('removeObject', async function() {
+        it('deleteObject', async function() {
             // Delete all files uploaded, in parallel
             const promises = []
             for (const i in testFiles) {
-                promises.push(storage.removeObject(containers[0], testFiles[i].destination))
+                promises.push(storage.deleteObject(containers[0], testFiles[i].destination))
             }
             await Promise.all(promises)
         })

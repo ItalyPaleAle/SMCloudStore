@@ -359,7 +359,7 @@ class AzureStorageProvider extends StorageProvider {
      * @returns Promise that resolves once the object has been removed
      * @async
      */
-    removeObject(container: string, path: string): Promise<void> {
+    deleteObject(container: string, path: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this._client.deleteBlob(container, path, (err, response) => {
                 if (err) {
