@@ -220,42 +220,27 @@
 				</ul>
 				<p>The method returns a Promise that resolves with a Readable Stream.</p>
 				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file</span>
-<span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> storage.putObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
+<span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> storage.getObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
 
 <span class="hljs-comment">// The method returns a Readable Stream that can be processed as you wish</span>
 <span class="hljs-comment">// For example, to write the stream to file:</span>
 stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createWriteStream(<span class="hljs-string">'write/to/someimage.jpg'</span>))
+</code></pre>
+				<h3 id="storage-getobjectasbuffer-container-path-">storage.getObjectAsBuffer(container, path)</h3>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer"><code>storage.getObjectAsBuffer(container, path)</code></a>] behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data in a Buffer object loaded in memory.</p>
+				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file as buffer</span>
+<span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">await</span> storage.getObjectAsBuffer(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
 
-<span class="hljs-comment">// If you'd rather load the data in memory into a Buffer</span>
-<span class="hljs-keyword">const</span> buffersCache = []
-stream.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
-    buffersCache.push(data)
-})
-stream.on(<span class="hljs-string">'end'</span>, () =&gt; {
-    <span class="hljs-keyword">let</span> buffer = Buffer.concat(buffersCache)
+<span class="hljs-comment">// Print the last 100 bytes from the Buffer</span>
+<span class="hljs-built_in">console</span>.log(buffer.slice(<span class="hljs-number">-100</span>))
+</code></pre>
+				<h3 id="storage-getobjectasstring-container-path-">storage.getObjectAsString(container, path)</h3>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring"><code>storage.getObjectAsString(container, path)</code></a>] behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data as an utf8-encoded string.</p>
+				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file as string</span>
+<span class="hljs-keyword">const</span> string = <span class="hljs-keyword">await</span> storage.getObjectAsString(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'textfile.txt'</span>)
 
-    <span class="hljs-comment">// Do your stuff with buffer</span>
-})
-stream.on(<span class="hljs-string">'error'</span>, (error) =&gt; {
-    <span class="hljs-comment">// Handle error</span>
-})
-
-<span class="hljs-comment">// The above could be promisified with:</span>
-<span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> buffersCache = []
-    stream.on(<span class="hljs-string">'data'</span>, (data) =&gt; {
-        buffersCache.push(data)
-    })
-    stream.on(<span class="hljs-string">'end'</span>, () =&gt; {
-        resolve(Buffer.concat(buffersCache))
-    })
-    stream.on(<span class="hljs-string">'error'</span>, (error) =&gt; {
-        reject(error)
-    })
-})
-
-<span class="hljs-comment">// Convert a Buffer to string</span>
-<span class="hljs-keyword">const</span> string = buffer.toString(<span class="hljs-string">'utf8'</span>)
+<span class="hljs-comment">// Print the string</span>
+<span class="hljs-built_in">console</span>.log(string)
 </code></pre>
 				<h3 id="storage-listobjects-container-prefix-">storage.listObjects(container, [prefix])</h3>
 				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listobjects"><code>storage.listObjects(container, [prefix])</code></a>] returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If <code>prefix</code> is not specified, the method will list the root &quot;folder&quot;.</p>

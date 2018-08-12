@@ -182,42 +182,35 @@ The method returns a Promise that resolves with a Readable Stream.
 
 ````js
 // Retrieve a file
-const stream = await storage.putObject('testcontainer', 'directory/someimage.jpg')
+const stream = await storage.getObject('testcontainer', 'directory/someimage.jpg')
 
 // The method returns a Readable Stream that can be processed as you wish
 // For example, to write the stream to file:
 stream.pipe(require('fs').createWriteStream('write/to/someimage.jpg'))
+````
 
-// If you'd rather load the data in memory into a Buffer
-const buffersCache = []
-stream.on('data', (data) => {
-    buffersCache.push(data)
-})
-stream.on('end', () => {
-    let buffer = Buffer.concat(buffersCache)
+### storage.getObjectAsBuffer(container, path)
 
-    // Do your stuff with buffer
-})
-stream.on('error', (error) => {
-    // Handle error
-})
+[`storage.getObjectAsBuffer(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer)] behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data in a Buffer object loaded in memory.
 
-// The above could be promisified with:
-const buffer = await new Promise((resolve, reject) => {
-    const buffersCache = []
-    stream.on('data', (data) => {
-        buffersCache.push(data)
-    })
-    stream.on('end', () => {
-        resolve(Buffer.concat(buffersCache))
-    })
-    stream.on('error', (error) => {
-        reject(error)
-    })
-})
+````js
+// Retrieve a file as buffer
+const buffer = await storage.getObjectAsBuffer('testcontainer', 'directory/someimage.jpg')
 
-// Convert a Buffer to string
-const string = buffer.toString('utf8')
+// Print the last 100 bytes from the Buffer
+console.log(buffer.slice(-100))
+````
+
+### storage.getObjectAsString(container, path)
+
+[`storage.getObjectAsString(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring)] behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data as an utf8-encoded string.
+
+````js
+// Retrieve a file as string
+const string = await storage.getObjectAsString('testcontainer', 'textfile.txt')
+
+// Print the string
+console.log(string)
 ````
 
 ### storage.listObjects(container, [prefix])
