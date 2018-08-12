@@ -31,8 +31,8 @@ module.exports = (providerName, testSuiteOptions) => {
         const Provider = require('../../packages/' + providerName)
 
         // Set default timeout to 10s and slow warning to 1s
-        this.timeout(10000)
-        this.slow(1000)
+        this.timeout(15000)
+        this.slow(2000)
 
         // Will hold a client instance
         let storage
@@ -129,6 +129,16 @@ module.exports = (providerName, testSuiteOptions) => {
             for (const i in containers) {
                 assert(list.includes(containers[i]))
             }
+        })
+
+        // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
+        it('…waiting…', async function() {
+            this.slow(10000)
+            this.timeout(3000)
+
+            await new Promise((resolve, reject) => {
+                setTimeout(resolve, 2000)
+            })
         })
 
         it('deleteContainer', async function() {
