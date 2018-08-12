@@ -129,6 +129,50 @@ export abstract class StorageProvider {
     abstract getObject(container: string, path: string): Promise<Stream>
 
     /**
+     * Requests an object from the server. The method returns a Promise that resolves to a Buffer object containing the data from the server.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @returns Buffer containing the object's data
+     * @async
+     */
+    getObjectAsBuffer(container: string, path: string): Promise<Buffer> {
+        // Get the data as stream
+        return this.getObject(container, path)
+            .then((stream) => {
+                // Read the stream into a Buffer
+                return new Promise((resolve, reject) => {
+                    const buffersCache = []
+                    stream.on('data', (data) => {
+                        buffersCache.push(data)
+                    })
+                    stream.on('end', () => {
+                        resolve(Buffer.concat(buffersCache))
+                    })
+                    stream.on('error', (error) => {
+                        reject(error)
+                    })
+                }) as Promise<Buffer>
+            })
+    }
+
+    /**
+     * Requests an object from the server. The method returns a Promise that resolves to an utf8-encoded string containing the data from the server.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @returns String containing the object's data
+     * @async
+     */
+    getObjectAsString(container: string, path: string): Promise<string> {
+        // Get the data as stream
+        return this.getObjectAsBuffer(container, path)
+            .then((buffer) => {
+                return buffer.toString('utf8')
+            })
+    }
+
+    /**
      * Returns a list of objects with a given prefix (folder). The list is not recursive, so prefixes (folders) are returned as such.
      * 
      * @param container - Name of the container

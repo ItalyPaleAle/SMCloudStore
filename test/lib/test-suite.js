@@ -314,6 +314,30 @@ module.exports = (providerName, testSuiteOptions) => {
             await Promise.all(promises)
         })
 
+        it('getObjectAsBuffer', async function() {
+            // Increase timeout
+            this.timeout(60000)
+            this.slow(0)
+
+            // Read a file as Buffer and compare the content
+            return storage.getObjectAsBuffer(containers[0], testFiles[3].destination)
+                .then((buffer) => {
+                    assert(buffer.equals(testFiles[3].buffer))
+                })
+        })
+
+        it('getObjectAsString', async function() {
+            // Increase timeout
+            this.timeout(60000)
+            this.slow(0)
+
+            // Read a file as Buffer and compare the content
+            return storage.getObjectAsString(containers[0], testFiles[2].destination)
+                .then((str) => {
+                    assert(str == testFiles[2].string)
+                })
+        })
+
         it('deleteObject', async function() {
             // Delete all files uploaded, in parallel
             const promises = []
