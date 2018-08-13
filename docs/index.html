@@ -65,7 +65,7 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="smcloudstore">SMCloudStore</h1>
-				<p>SMCloudStore is a Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers, including:</p>
+				<p>SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers, including:</p>
 				<ul>
 					<li><a href="https://aws.amazon.com/s3/">AWS S3</a></li>
 					<li><a href="https://azure.microsoft.com/en-us/services/storage/blobs/">Azure Blob Storage</a></li>
@@ -77,6 +77,7 @@
 				<p>Features:</p>
 				<ul>
 					<li>Simple, unified API to interact with all object storage providers</li>
+					<li>Lightweight and flexible: each provider is published as a separate package, so installing SMCloudStore won&#39;t add SDKs for each vendor and thousands of dependencies to your projects</li>
 					<li>Optimized for working with streams when putting/retrieving objects</li>
 				</ul>
 				<p>SMCloudStore is specifically focused on abstracting the differences between multiple object storage providers. This module&#39;s goals don&#39;t include support for other services that cloud providers might offer, such as databases, VMs, etc.</p>
@@ -123,7 +124,7 @@
 					</tbody>
 				</table>
 				<h2 id="api-guide">API Guide</h2>
-				<p>Full API documentation is available on this project&#39;s <a href="https://italypaleale.github.io/SMCloudStore/index.html">GitHub page</a> and in the <a href="/docs"><code>/docs</code></a> folder.</p>
+				<p>Full API documentation is available on this project&#39;s <a href="https://italypaleale.github.io/SMCloudStore/index.html">GitHub page</a> and in the <a href="https://github.com/ItalyPaleAle/SMCloudStore/tree/master/docs"><code>/docs</code></a> folder.</p>
 				<p>Each cloud storage provider is implemented in a class defined in one of the modules above. All providers inherit from the <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html"><code>StorageProvider</code></a> abstract class, which is in the <code>@smcloudstore/core</code> package.</p>
 				<p>All asynchronous methods in the examples below return Promises, which can be used as then-ables or with async/await in ES2016. The examples below show using async/await syntax, and assume that all async calls are included in async functions.</p>
 				<h3 id="initialization">Initialization</h3>
@@ -142,7 +143,7 @@
 <span class="hljs-comment">// Return an instance of the cloud storage provider class</span>
 <span class="hljs-keyword">const</span> storage = SMCloudStore.create(provider, connection)
 </code></pre>
-				<p>The format of the <code>connection</code> argument varies by cloud provider. For more details, please refer to the README for each provider in the <a href="/packages"><code>packages/</code></a> folder.</p>
+				<p>The format of the <code>connection</code> argument varies by cloud provider. For more details, please refer to the README for each provider in the <a href="https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages"><code>packages/</code></a> folder.</p>
 				<p>Alternatively, you can create an instance of each provider by initializating the provider&#39;s class directly and invoking the <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#constructor"><code>constructor(connection)</code></a> method. For example, to create a new Azure Blob Storage provider:</p>
 				<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
 <span class="hljs-keyword">const</span> AzureProvider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@smcloudstore/azure-storage'</span>)
@@ -155,26 +156,26 @@
 <span class="hljs-comment">// Initialize the provider object</span>
 <span class="hljs-keyword">const</span> storage = <span class="hljs-keyword">new</span> AzureProvider(connection)
 </code></pre>
-				<h3 id="storage-createcontainer-container-region-">storage.createContainer(container, [region])</h3>
-				<p>Using <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#createcontainer"><code>storage.createContainer(container, [region])</code></a> you can create a new container on the cloud storage server. The <code>region</code> argument is required by some providers only. The method returns a Promise that resolves with no value when the container has been created.</p>
+				<h3 id="storage-createcontainer-container-options-">storage.createContainer(container, [options])</h3>
+				<p>Using <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> you can create a new container on the cloud storage server. The <code>options</code> argument is a dictionary with various options, depending on the provider being used. The method returns a Promise that resolves with no value when the container has been created.</p>
 				<pre><code class="lang-js"><span class="hljs-comment">// Create a new container called "testcontainer"</span>
 <span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>)
 
-<span class="hljs-comment">// Some providers, like Google Cloud Storage and AWS S3 require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'us-east-1'</span>)
+<span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
+<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})
 </code></pre>
 				<h3 id="storage-containerexists-container-">storage.containerExists(container)</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#containerexists"><code>storage.containerExists(container)</code></a> returns a Promise that resolves with a boolean indicating whether a container exists on the provider.</p>
 				<pre><code class="lang-js"><span class="hljs-comment">// Once the async method resolves, exists will contain true or false</span>
 <span class="hljs-keyword">const</span> exists = <span class="hljs-keyword">await</span> storage.containerExists(<span class="hljs-string">'testcontainer'</span>)
 </code></pre>
-				<h3 id="storage-ensurecontainer-container-region-">storage.ensureContainer(container, [region])</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [region])</code></a> is similar to <code>storage.createContainer()</code>, but it creates the container only if it doesn&#39;t already exist. The method returns a Promise that resolves with no value when the container has been created.</p>
+				<h3 id="storage-ensurecontainer-container-options-">storage.ensureContainer(container, [options])</h3>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> is similar to <code>storage.createContainer()</code>, but it creates the container only if it doesn&#39;t already exist. The method returns a Promise that resolves with no value when the container has been created.</p>
 				<pre><code class="lang-js"><span class="hljs-comment">// Container "testcontainer" will be created only if it doesn't already exists</span>
 <span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>)
 
-<span class="hljs-comment">// Some providers, like Google Cloud Storage and AWS S3 require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'us-east-1'</span>)
+<span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
+<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})
 </code></pre>
 				<h3 id="storage-listcontainers-">storage.listContainers()</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listcontainers"><code>storage.listContainers()</code></a> returns a Promise that resolves with the list of names of the containers that the user owns on the storage server.</p>
