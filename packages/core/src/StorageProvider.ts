@@ -64,11 +64,11 @@ export abstract class StorageProvider {
      * Creates a container on the server.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container; some providers might ignore this
+     * @param options - Dictionary with options for creating the container; some providers might require some options.
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    abstract createContainer(container: string, region?: string): Promise<void>
+    abstract createContainer(container: string, options?: any): Promise<void>
 
     /**
      * Checks if a container exists.
@@ -83,11 +83,11 @@ export abstract class StorageProvider {
      * Creates a container on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container; some providers might ignore this
+     * @param options - Dictionary with options for creating the container; some providers might require some options.
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    abstract ensureContainer(container: string, region?: string): Promise<void>
+    abstract ensureContainer(container: string, options?: any): Promise<void>
 
     /**
      * Lists all containers belonging to the user

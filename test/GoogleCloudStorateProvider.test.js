@@ -8,7 +8,10 @@ const TestSuite = require('./lib/test-suite')
 // Execute the test suite
 const testSuiteOptions = {
     containerNamePrefix: 'smcloudstoregcstest',
-    region: 'us-central1',
+    createContainerOptions: {
+        class: 'regional',
+        region: 'us-central1',
+    },
     listObjects: ['includeContentType', 'includeContentMD5', 'includeCreationTime']
 }
 TestSuite('google-cloud-storage', testSuiteOptions)

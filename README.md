@@ -89,16 +89,16 @@ const connection = {
 const storage = new AzureProvider(connection)
 ````
 
-### storage.createContainer(container, [region])
+### storage.createContainer(container, [options])
 
-Using [`storage.createContainer(container, [region])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#createcontainer) you can create a new container on the cloud storage server. The `region` argument is required by some providers only. The method returns a Promise that resolves with no value when the container has been created.
+Using [`storage.createContainer(container, [options])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#createcontainer) you can create a new container on the cloud storage server. The `options` argument is a dictionary with various options, depending on the provider being used. The method returns a Promise that resolves with no value when the container has been created.
 
 ````js
 // Create a new container called "testcontainer"
 await storage.createContainer('testcontainer')
 
-// Some providers, like Google Cloud Storage and AWS S3 require specifying a region
-await storage.createContainer('testcontainer', 'us-east-1')
+// Some providers, like AWS S3, require specifying a region
+await storage.createContainer('testcontainer', {region: 'us-east-1'})
 ````
 
 ### storage.containerExists(container)
@@ -110,16 +110,16 @@ The method [`storage.containerExists(container)`](https://italypaleale.github.io
 const exists = await storage.containerExists('testcontainer')
 ````
 
-### storage.ensureContainer(container, [region])
+### storage.ensureContainer(container, [options])
 
-[`storage.ensureContainer(container, [region])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#ensurecontainer) is similar to `storage.createContainer()`, but it creates the container only if it doesn't already exist. The method returns a Promise that resolves with no value when the container has been created.
+[`storage.ensureContainer(container, [options])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#ensurecontainer) is similar to `storage.createContainer()`, but it creates the container only if it doesn't already exist. The method returns a Promise that resolves with no value when the container has been created.
 
 ````js
 // Container "testcontainer" will be created only if it doesn't already exists
 await storage.ensureContainer('testcontainer')
 
-// Some providers, like Google Cloud Storage and AWS S3 require specifying a region
-await storage.ensureContainer('testcontainer', 'us-east-1')
+// Some providers, like AWS S3, require specifying a region
+await storage.ensureContainer('testcontainer', {region: 'us-east-1'})
 ````
 
 ### storage.listContainers()

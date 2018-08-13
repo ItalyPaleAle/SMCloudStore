@@ -5,6 +5,14 @@ import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
 import {Stream} from 'stream'
 
 /**
+ * Options passed when creating a container
+ */
+interface GenericS3CreateContainerOptions {
+    /** Region in which to create the container; useful for AWS S3 and some other providers based on this */
+    region?: string
+}
+
+/**
  * Client to interact with a generic S3 object storage server, using the Minio library.
  */
 class GenericS3Provider extends StorageProvider {
@@ -33,13 +41,15 @@ class GenericS3Provider extends StorageProvider {
      * Create a container ("bucket") on the server.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container. Useful when interacting with AWS S3.
+     * @param options - Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    createContainer(container: string, region?: string): Promise<void> {
+    createContainer(container: string, options?: GenericS3CreateContainerOptions): Promise<void> {
+        const region = (options && options.region) || ''
+
         // This returns a promise
-        return this._client.makeBucket(container, region || '')
+        return this._client.makeBucket(container, region)
     }
 
     /**
@@ -64,14 +74,14 @@ class GenericS3Provider extends StorageProvider {
      * Create a container ("bucket") on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container. Useful when interacting with AWS S3.
+     * @param options - Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    ensureContainer(container: string, region?: string): Promise<void> {
+    ensureContainer(container: string, options?: GenericS3CreateContainerOptions): Promise<void> {
         return this.containerExists(container).then((exists) => {
             if (!exists) {
-                return this.createContainer(container, region)
+                return this.createContainer(container, options)
             }
         })
     }

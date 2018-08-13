@@ -15,6 +15,17 @@ interface GoogleCloudConnectionOptions {
 }
 
 /**
+ * Options passed when creating a container
+ */
+interface GoogleCloudCreateContainerOptions {
+    /** Storage class to use. Defaults to 'multi_regional' */
+    class?: 'multi_regional' | 'regional' | 'nearline' | 'coldline'
+
+    /** Region in which to create the container (or multi-regional location if using multi_regional storage). Defaults to 'us' is class is 'multi_regional'; 'us-central1' otherwise. */
+    region?: string
+}
+
+/**
  * Client to interact with Google Cloud Storage.
  */
 class GoogleCloudStorageProvider extends StorageProvider {
@@ -43,20 +54,45 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * Create a container ("bucket") on the server.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container.
+     * @param options - Dictionary with options for creating the container, including the region
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    createContainer(container: string, region: string): Promise<void> {
-        if (!region) {
-            throw Error('Argument region must be not empty')
+    createContainer(container: string, options?: GoogleCloudCreateContainerOptions): Promise<void> {
+        // Get storage options
+        if (!options) {
+            options = {}
+        }
+        const metadata = {} as GCStorage.BucketConfig
+        
+        // Set storage class and default location
+        switch (options.class) {
+            case 'multi_regional':
+                metadata.multiRegional = true
+                metadata.location = 'us'
+                break
+            case 'regional':
+                metadata.regional = true
+                metadata.location = 'us-central1'
+                break
+            case 'coldline':
+                metadata.coldline = true
+                metadata.location = 'us-central1'
+                break
+            case 'nearline':
+                metadata.nearline = true
+                metadata.location = 'us-central1'
+                break
         }
 
+        // Check if we have a location/region
+        if (options.region) {
+            metadata.location = options.region
+        }
+
+        // Create the bucket, returning a promise
         const bucket = this._client.bucket(container)
-        return bucket.create({
-            location: region,
-            regional: true
-        }).then(() => {
+        return bucket.create(metadata).then(() => {
             return
         })
     }
@@ -80,14 +116,14 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * Create a container ("bucket") on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param region - Region in which to create the container.
+     * @param options - Dictionary with options for creating the container, including the region
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    ensureContainer(container: string, region: string): Promise<void> {
+    ensureContainer(container: string, options?: GoogleCloudCreateContainerOptions): Promise<void> {
         return this.containerExists(container).then((exists) => {
             if (!exists) {
-                return this.createContainer(container, region)
+                return this.createContainer(container, options)
             }
         })
     }

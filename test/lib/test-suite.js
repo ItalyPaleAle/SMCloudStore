@@ -98,7 +98,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // Create 2 randomly-named containers
             for (let i = 0; i < 2; i++) {
                 containers.push(genContainerName())
-                await storage.createContainer(containers[i], (testSuiteOptions && testSuiteOptions.region))
+                await storage.createContainer(containers[i], (testSuiteOptions && testSuiteOptions.createContainerOptions))
             }
         })
 

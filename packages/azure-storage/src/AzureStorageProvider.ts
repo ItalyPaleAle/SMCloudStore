@@ -18,6 +18,17 @@ interface AzureStorageConnectionObject {
 type AzureStorageConnectionOptions = string | AzureStorageConnectionObject
 
 /**
+ * Options passed when creating a container
+ */
+interface AzureStorageCreateContainerOptions {
+    /** 
+     * Determine access level for all files in the container. Defaults to 'none' if not specified.
+     * 'public' and 'private' are not standard in the Azure APIs, and are aliased to 'container' and 'none' respectively.
+     */
+    access?: 'blob' | 'container' | 'none' | 'public' | 'private'
+}
+
+/**
  * Client to interact with Azure Blob Storage.
  */
 class AzureStorageProvider extends StorageProvider {
@@ -43,12 +54,12 @@ class AzureStorageProvider extends StorageProvider {
      * Create a container on the server.
      * 
      * @param container - Name of the container
-     * @param region - The region parameter is ignored by Azure.
+     * @param options - Dictionary with options for creating the container, including the access level (defaults to 'none' if not specified)
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    createContainer(container: string, region?: string): Promise<void> {
-        return this.createContainerInternal(container, false).then(() => {
+    createContainer(container: string, options?: AzureStorageCreateContainerOptions): Promise<void> {
+        return this.createContainerInternal(container, false, options).then(() => {
             return
         })
     }
@@ -83,12 +94,12 @@ class AzureStorageProvider extends StorageProvider {
      * Create a container on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param region - The region parameter is ignored by Azure.
+     * @param options - Dictionary with options for creating the container, including the access level (defaults to 'none' if not specified)
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    ensureContainer(container: string, region?: string): Promise<void> {
-        return this.createContainerInternal(container, true).then(() => {
+    ensureContainer(container: string, options?: AzureStorageCreateContainerOptions): Promise<void> {
+        return this.createContainerInternal(container, true, options).then(() => {
             return
         })
     }
@@ -381,15 +392,25 @@ class AzureStorageProvider extends StorageProvider {
      * Create a container on the server, choosing whether to use the "ifNotExists" method or not
      * @param container - Name of the container
      * @param ifNotExists - If true, use the "ifNotExists" method variant
+     * @param options - Dictionary with options for creating the container, including the access level (defaults to 'none' if not specified)
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    private createContainerInternal(container: string, ifNotExists: boolean): Promise<void> {
+    private createContainerInternal(container: string, ifNotExists: boolean, options?: AzureStorageCreateContainerOptions): Promise<void> {
         return new Promise((resolve, reject) => {
-            const options = {
+            const containerOpts = {
                 // All containers are private by default
                 publicAccessLevel: null
             } as Azure.BlobService.CreateContainerOptions
+            // Check if the user wants a public container
+            if (options && options.access) {
+                if (options.access == 'blob') {
+                    containerOpts.publicAccessLevel = 'blob'
+                }
+                else if (options.access == 'container' || options.access == 'public') {
+                    containerOpts.publicAccessLevel = 'container'
+                }
+            }
 
             const callback = (err, response) => {
                 if (err) {
@@ -404,10 +425,10 @@ class AzureStorageProvider extends StorageProvider {
             }
 
             if (ifNotExists) {
-                this._client.createContainerIfNotExists(container, options, callback)
+                this._client.createContainerIfNotExists(container, containerOpts, callback)
             }
             else {
-                this._client.createContainer(container, options, callback)
+                this._client.createContainer(container, containerOpts, callback)
             }
         })
     }

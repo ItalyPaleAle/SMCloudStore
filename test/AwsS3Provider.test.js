@@ -8,7 +8,9 @@ const TestSuite = require('./lib/test-suite')
 // Execute the test suite
 const testSuiteOptions = {
     containerNamePrefix: 'smcloudstoreawstest',
-    region: 'us-east-1'
+    createContainerOptions: {
+        region: 'us-east-1'
+    }
 }
 TestSuite('aws-s3', testSuiteOptions)
 
