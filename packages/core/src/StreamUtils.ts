@@ -24,6 +24,19 @@ export function StreamToBuffer(stream: Stream): Promise<Buffer> {
 }
 
 /**
+ * Returns a string with data read from the stream.
+ * 
+ * @param stream - Readable Stream to read data from
+ * @param encoding - String encoding to use; defaults to utf8
+ */
+export function StreamToString(stream: Stream, encoding?: string): Promise<string> {
+    return StreamToBuffer(stream)
+        .then((buffer) => {
+            return buffer.toString(encoding || 'utf8')
+        })
+}
+
+/**
  * Reads a certain amount of bytes from a Stream, returning a Buffer.
  * 
  * @param stream - Readable Stream to read data from

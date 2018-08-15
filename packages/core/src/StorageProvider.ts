@@ -1,7 +1,7 @@
 'use strict'
 
 import {Stream} from 'stream'
-import {StreamToBuffer} from './StreamUtils'
+import {StreamToBuffer, StreamToString} from './StreamUtils'
 
 /** Dictionary of objects returned when listing a container. */
 export interface ListItemObject {
@@ -147,19 +147,19 @@ export abstract class StorageProvider {
     }
 
     /**
-     * Requests an object from the server. The method returns a Promise that resolves to an utf8-encoded string containing the data from the server.
+     * Requests an object from the server. The method returns a Promise that resolves to a string containing the data from the server.
      * 
      * @param container - Name of the container
      * @param path - Path of the object, inside the container
+     * @param encoding - Optional encoding for the string; defaults to utf8
      * @returns String containing the object's data
      * @async
      */
-    getObjectAsString(container: string, path: string): Promise<string> {
+    getObjectAsString(container: string, path: string, encoding?: string): Promise<string> {
         // Get the data as stream
-        return this.getObjectAsBuffer(container, path)
-            .then((buffer) => {
-                return buffer.toString('utf8')
-            })
+        return this.getObject(container, path)
+            // Read the stream into a string
+            .then((stream) => StreamToString(stream, encoding))
     }
 
     /**
