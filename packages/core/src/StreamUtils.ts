@@ -7,6 +7,7 @@ import {Stream, Duplex} from 'stream'
  * 
  * @param stream - Readable Stream to read data from
  * @returns Promise that resolves to a Buffer containing the data from the stream
+ * @async
  */
 export function StreamToBuffer(stream: Stream): Promise<Buffer> {
     return new Promise((resolve, reject) => {
@@ -28,6 +29,8 @@ export function StreamToBuffer(stream: Stream): Promise<Buffer> {
  * 
  * @param stream - Readable Stream to read data from
  * @param encoding - String encoding to use; defaults to utf8
+ * @returns Promise that resolves to a string containing the data from the stream
+ * @async
  */
 export function StreamToString(stream: Stream, encoding?: string): Promise<string> {
     return StreamToBuffer(stream)
@@ -42,6 +45,7 @@ export function StreamToString(stream: Stream, encoding?: string): Promise<strin
  * @param stream - Readable Stream to read data from
  * @param size - Amount of data to read
  * @returns Promise that resolves to a Buffer with a length of at most `size`
+ * @async
  */
 export function ExtractFromBuffer(stream: Stream, size: number): Promise<Buffer> {
     return new Promise((resolve, reject) => {
