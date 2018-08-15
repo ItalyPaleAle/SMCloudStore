@@ -24,6 +24,19 @@ interface BackblazeB2CreateContainerOptions {
 }
 
 /**
+ * Returns a Promise that resolves after a certain amlount of time (in ms)
+ * 
+ * @param delay - ms to wait
+ * @returns Promise that resolves after the delay
+ * @async
+ */
+function waitPromise(delay: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
+    })
+}
+
+/**
  * Client to interact with Backblaze B2 cloud storage.
  */
 class BackblazeB2Provider extends StorageProvider {
@@ -164,88 +177,6 @@ class BackblazeB2Provider extends StorageProvider {
         // First step: get the bucketId for the container
         const promise = this._getBucketId(container)
 
-        // Backblaze recommends trying uploading files at least twice, so we're using a retry logic with a counter
-        let bucketIdOuter
-        const upload = (bucketId) => {
-            bucketIdOuter = bucketId
-
-            // Second step: get the upload url and upload authorization token
-            return this._client.getUploadUrl(bucketId)
-                // Third step: upload the file
-                .then((response) => {
-                    if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
-                        throw Error('Invalid response when requesting the upload url and upload authorization token')
-                    }
-
-                    // Convert data to a Buffer if it's a string
-                    if (data && typeof data == 'string') {
-                        data = Buffer.from(data as string, 'utf8')
-                    }
-
-                    // Request args
-                    const requestArgs = {
-                        uploadUrl: response.data.uploadUrl,
-                        uploadAuthToken: response.data.authorizationToken,
-                        filename: path,
-                        data: data,
-                        hash: 'do_not_verify', // TODO: Compute SHA1 at the end, as per https://www.backblaze.com/b2/docs/uploading.html
-                        info: {} as any,
-                        mime: 'application/octet-stream'
-                    }
-
-                    // Metadata
-                    if (metadata) {
-                        // Add custom headers
-                        // Maximum 10 headers, and they can only contain [A-Za-z0-9]
-                        // If headers don't start with 'X-Bz-Info-', the prefix will be added
-                        let i = 0
-                        for (const key in metadata) {
-                            if (!metadata.hasOwnProperty(key)) {
-                                continue
-                            }
-
-                            // Content-Type header has a special treatment
-                            if (key == 'Content-Type') {
-                                requestArgs.mime = metadata['Content-Type']
-                            }
-                            else {
-                                // We can't have more than 10 headers
-                                if (i == 10) {
-                                    throw Error('Cannot send more than 10 custom headers')
-                                }
-
-                                // Ensure the key is valid
-                                if (!key.match('^[A-Za-z0-9\-]+$')) {
-                                    throw Error('Invalid header format: must be A-Za-z0-9')
-                                }
-
-                                // Check if the prefix is there already
-                                if (key.substr(0, 10) != 'X-Bz-Info-') {
-                                    requestArgs.info['X-Bz-Info-' + key] = metadata[key]
-                                }
-                                else {
-                                    requestArgs.info[key] = metadata[key]
-                                }
-
-                                // Increment the counter
-                                i++
-                            }
-                        }
-                    }
-
-                    // Send the request
-                    return this._client.uploadFile(requestArgs)
-                })
-        }
-
-        // First attempt
-        return promise.then(upload)
-            .catch((error) => {
-                console.log('Upload failed with error; retrying', error)
-                // Retry once, after a 1s delay
-                return new Promise((resolve) => setTimeout(resolve, 1000))
-                    .then(() => upload(bucketIdOuter))
-            })
     }
 
     /**
@@ -361,8 +292,96 @@ class BackblazeB2Provider extends StorageProvider {
         }
     }
 
+    private _uploadFile(bucketId: string, path: string, data: string|Buffer, metadata?: any, length?: number): Promise<any> {
+        // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
+        let retryCounter = 0
+
+        // First, get the upload url and upload authorization token
+        return this._client.getUploadUrl(bucketId)
+            // Then upload the file
+            .then((response) => {
+                if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
+                    throw Error('Invalid response when requesting the upload url and upload authorization token')
+                }
+
+                // Convert data to a Buffer if it's a string
+                if (data && typeof data == 'string') {
+                    data = Buffer.from(data as string, 'utf8')
+                }
+
+                // Request args
+                const requestArgs = {
+                    uploadUrl: response.data.uploadUrl,
+                    uploadAuthToken: response.data.authorizationToken,
+                    filename: path,
+                    data: data,
+                    hash: 'do_not_verify', // TODO: Compute SHA1 at the end, as per https://www.backblaze.com/b2/docs/uploading.html
+                    info: {} as any,
+                    mime: 'application/octet-stream'
+                }
+
+                // Metadata
+                if (metadata) {
+                    // Add custom headers
+                    // Maximum 10 headers, and they can only contain [A-Za-z0-9]
+                    // If headers don't start with 'X-Bz-Info-', the prefix will be added
+                    let i = 0
+                    for (const key in metadata) {
+                        if (!metadata.hasOwnProperty(key)) {
+                            continue
+                        }
+
+                        // Content-Type header has a special treatment
+                        if (key == 'Content-Type') {
+                            requestArgs.mime = metadata['Content-Type']
+                        }
+                        else {
+                            // We can't have more than 10 headers
+                            if (i == 10) {
+                                throw Error('Cannot send more than 10 custom headers')
+                            }
+
+                            // Ensure the key is valid
+                            if (!key.match('^[A-Za-z0-9\-]+$')) {
+                                throw Error('Invalid header format: must be A-Za-z0-9')
+                            }
+
+                            // Check if the prefix is there already
+                            if (key.substr(0, 10) != 'X-Bz-Info-') {
+                                requestArgs.info['X-Bz-Info-' + key] = metadata[key]
+                            }
+                            else {
+                                requestArgs.info[key] = metadata[key]
+                            }
+
+                            // Increment the counter
+                            i++
+                        }
+                    }
+                }
+
+                // Send the request
+                return this._client.uploadFile(requestArgs)
+            })
+            .catch((err) => {
+                // TODO: REMOVE THIS
+                console.error('Upload failed with error ', err)
+                if (retryCounter < 3) {
+                    retryCounter++
+                    // Before retrying, wait for an increasing delay
+                    return waitPromise((retryCounter + 1) * 500)
+                        .then(() => this._uploadFile(bucketId))
+                }
+                else {
+                    // Let the error bubble up
+                    throw err
+                }
+            })
+    }
+
     private _uploadPart(fileId: string, partNumber: number, data: Buffer): Promise<any> {
         // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
+        let retryCounter = 0
 
         // First, get the upload url and upload authorization token
         return this._client.getUploadUrl({fileId: fileId})
@@ -378,6 +397,20 @@ class BackblazeB2Provider extends StorageProvider {
                     uploadAuthToken: response.data.authorizationToken,
                     data: data
                 })
+            })
+            .catch((err) => {
+                // TODO: REMOVE THIS
+                console.error('Upload failed with error ', err)
+                if (retryCounter < 3) {
+                    retryCounter++
+                    // Before retrying, wait for an increasing delay
+                    return waitPromise((retryCounter + 1) * 500)
+                        .then(() => this._uploadPart(fileId, partNumber, data))
+                }
+                else {
+                    // Let the error bubble up
+                    throw err
+                }
             })
     }
 }
