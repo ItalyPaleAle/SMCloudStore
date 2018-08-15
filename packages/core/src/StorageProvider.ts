@@ -1,6 +1,7 @@
 'use strict'
 
 import {Stream} from 'stream'
+import {StreamToBuffer} from './StreamUtils'
 
 /** Dictionary of objects returned when listing a container. */
 export interface ListItemObject {
@@ -16,6 +17,8 @@ export interface ListItemObject {
     contentType?: string
     /** MD5 digest of the object, if present */
     contentMD5?: string
+    /** SHA1 digest of the objet, if present */
+    contentSHA1?: string
 }
 
 /** Dictionary of prefixes returned when listing a container. */
@@ -139,21 +142,8 @@ export abstract class StorageProvider {
     getObjectAsBuffer(container: string, path: string): Promise<Buffer> {
         // Get the data as stream
         return this.getObject(container, path)
-            .then((stream) => {
-                // Read the stream into a Buffer
-                return new Promise((resolve, reject) => {
-                    const buffersCache = []
-                    stream.on('data', (data) => {
-                        buffersCache.push(data)
-                    })
-                    stream.on('end', () => {
-                        resolve(Buffer.concat(buffersCache))
-                    })
-                    stream.on('error', (error) => {
-                        reject(error)
-                    })
-                }) as Promise<Buffer>
-            })
+            // Read the stream into a Buffer
+            .then((stream) => StreamToBuffer(stream))
     }
 
     /**

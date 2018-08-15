@@ -236,7 +236,7 @@ const list = await storage.listObjects('testcontainer', '/')
     path: '/path/to/file.jpg',
     size: 123, // Size in bytes
     lastModified: Date() // Date object
-    // Some providers might return more data, such as contentType, contentMD5, and creationTime. Please refer to the documentation for details.
+    // Some providers might return more data, such as contentType, contentMD5, contentSHA1, and creationTime. Please refer to the documentation for details.
 }
 ````
 

@@ -59,7 +59,7 @@ class AzureStorageProvider extends StorageProvider {
      * @async
      */
     createContainer(container: string, options?: AzureStorageCreateContainerOptions): Promise<void> {
-        return this.createContainerInternal(container, false, options).then(() => {
+        return this._createContainerInternal(container, false, options).then(() => {
             return
         })
     }
@@ -99,7 +99,7 @@ class AzureStorageProvider extends StorageProvider {
      * @async
      */
     ensureContainer(container: string, options?: AzureStorageCreateContainerOptions): Promise<void> {
-        return this.createContainerInternal(container, true, options).then(() => {
+        return this._createContainerInternal(container, true, options).then(() => {
             return
         })
     }
@@ -396,7 +396,7 @@ class AzureStorageProvider extends StorageProvider {
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    private createContainerInternal(container: string, ifNotExists: boolean, options?: AzureStorageCreateContainerOptions): Promise<void> {
+    private _createContainerInternal(container: string, ifNotExists: boolean, options?: AzureStorageCreateContainerOptions): Promise<void> {
         return new Promise((resolve, reject) => {
             const containerOpts = {
                 // All containers are private by default
