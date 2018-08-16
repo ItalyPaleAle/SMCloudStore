@@ -12,7 +12,7 @@ describe('StreamUtils', function() {
         assert(typeof StreamUtils == 'object')
         assert(typeof StreamUtils.StreamToBuffer == 'function')
         assert(typeof StreamUtils.StreamToString == 'function')
-        assert(typeof StreamUtils.ExtractFromBuffer == 'function')
+        assert(typeof StreamUtils.ExtractFromStream == 'function')
     })
 
     it('StreamToBuffer should convert a stream to Buffer', function() {
@@ -50,10 +50,20 @@ describe('StreamUtils', function() {
         ])
     })
 
-    it('ExtractFromBuffer should extract the first N bytes from a stream', function() {
+    it('ExtractFromStream should extract the first N bytes from a stream', function() {
         const buffer = testFiles[3].buffer
-        const first100 = buffer.slice(0, 100)
-        const first1000 = buffer.slice(0, 1000)
+
+        // Test with a stream that will be used more than once, to ensure that data is put back in the stream
+        const reusableStream = fs.createReadStream(testFiles[3].originalPath)
+
+        // Function that tests for output
+        const testOutput = (size) => {
+            return (out) => {
+                assert(Buffer.isBuffer(out))
+                assert(out.byteLength == size)
+                assert(out.equals(buffer.slice(0, size)))
+            }
+        }
 
         // Run multiple tests
         return Promise.all([
@@ -61,36 +71,35 @@ describe('StreamUtils', function() {
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromBuffer(stream, 100)
+                    return StreamUtils.ExtractFromStream(stream, 100)
                 })
-                .then((out) => {
-                    assert(Buffer.isBuffer(out))
-                    assert(out.byteLength == 100)
-                    assert(first100.equals(out))
-                }),
+                .then(testOutput(100)),
             // 1000 bytes
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromBuffer(stream, 1000)
+                    return StreamUtils.ExtractFromStream(stream, 1000)
                 })
-                .then((out) => {
-                    assert(Buffer.isBuffer(out))
-                    assert(out.byteLength == 1000)
-                    assert(first1000.equals(out))
-                }),
+                .then(testOutput(1000)),
             // Longer than buffer
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromBuffer(stream, buffer.byteLength + 100)
+                    return StreamUtils.ExtractFromStream(stream, buffer.byteLength + 100)
                 })
-                .then((out) => {
-                    assert(Buffer.isBuffer(out))
-                    // Should have been truncated to the size of the file
-                    assert(out.byteLength == buffer.byteLength)
-                    assert(buffer.equals(out))
-                })
+                .then(testOutput(buffer.byteLength)),
+            // Reusable stream - part 1
+            Promise.resolve()
+                .then(() => StreamUtils.ExtractFromStream(reusableStream, 100))
+                .then(testOutput(100)),
+            // Reusable stream - part 2
+            Promise.resolve()
+                .then(() => StreamUtils.ExtractFromStream(reusableStream, 200))
+                .then(testOutput(200)),
+            // Reusable stream - part 3
+            Promise.resolve()
+                .then(() => StreamUtils.ExtractFromStream(reusableStream, buffer.byteLength + 100))
+                .then(testOutput(buffer.byteLength))
         ])
     })
 
