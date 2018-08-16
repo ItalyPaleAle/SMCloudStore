@@ -8,7 +8,7 @@ import {Stream, Readable} from 'stream'
  * @param val - Value to test
  */
 export function IsStream(val: any): boolean {
-    return (typeof val != 'object' || typeof val.pipe != 'function')
+    return (typeof val == 'object' && typeof val.pipe == 'function')
 }
 
 /**
@@ -58,8 +58,20 @@ export function StreamToString(stream: Stream, encoding?: string): Promise<strin
  * @async
  */
 export function ExtractFromStream(stream: Readable, size: number): Promise<Buffer> {
+    // Return an error if there's no Readable Stream
+    if (!stream || !IsStream(stream) || typeof stream.read !== 'function') {
+        throw Error('Argument stream must be a Readable Stream')
+    }
+
     // Ensure the stream isn't flowing
     stream.pause()
+
+    // Test if the stream has ended, so we don't keep the method hanging forever
+    // This is using a non-public API, so we can't assume it exists
+    const readableState = (stream as any)._readableState
+    if (readableState && readableState.ended === true) {
+        throw Error('Stream has ended already')
+    }
 
     // Returns a promise that resolves when we have read enough data from the stream.
     return new Promise((resolve, reject) => {

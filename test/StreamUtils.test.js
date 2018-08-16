@@ -99,7 +99,17 @@ describe('StreamUtils', function() {
             // Reusable stream - part 3
             Promise.resolve()
                 .then(() => StreamUtils.ExtractFromStream(reusableStream, buffer.byteLength + 100))
-                .then(testOutput(buffer.byteLength))
+                .then(testOutput(buffer.byteLength)),
+            // Reusable stream - part 4
+            Promise.resolve()
+                .then(() => StreamUtils.ExtractFromStream(reusableStream, buffer.byteLength + 100))
+                .then(testOutput(buffer.byteLength)),
+            // Stream that has ended
+            assert.rejects(() => {
+                const stream = fs.createReadStream('does-not-exist.txt')
+                stream.read(0)
+                return StreamUtils.ExtractFromStream(stream, buffer.byteLength + 100)
+            }, 'Stream has ended already')
         ])
     })
 
