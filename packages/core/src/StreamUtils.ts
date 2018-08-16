@@ -1,6 +1,15 @@
 'use strict'
 
-import {Stream, Duplex} from 'stream'
+import {Stream} from 'stream'
+
+/**
+ * Returns a boolean indicating whether a value is a Stream 
+ * 
+ * @param val - Value to test
+ */
+export function IsStream(val: any): boolean {
+    return (typeof val != 'object' || typeof val.pipe != 'function')
+}
 
 /**
  * Returns a Buffer with data read from the stream.

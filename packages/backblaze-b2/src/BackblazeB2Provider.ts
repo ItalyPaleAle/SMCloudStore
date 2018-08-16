@@ -2,8 +2,8 @@
 
 import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Stream} from 'stream'
+import B2Upload from './B2Upload'
 const B2 = require('backblaze-b2') as any
-
 
 /**
  * Connection options for a Backblaze B2 provider.
@@ -21,19 +21,6 @@ interface BackblazeB2ConnectionOptions {
 interface BackblazeB2CreateContainerOptions {
     /** Determine access level for all files in the container. Defaults to 'private' if not specified */
     access?: 'public' | 'private'
-}
-
-/**
- * Returns a Promise that resolves after a certain amlount of time (in ms)
- * 
- * @param delay - ms to wait
- * @returns Promise that resolves after the delay
- * @async
- */
-function waitPromise(delay: number): Promise<void> {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay)
-    })
 }
 
 /**
@@ -163,20 +150,26 @@ class BackblazeB2Provider extends StorageProvider {
      * The Backblaze B2 APIs have relatively poor support for streams, as it requires the size of the data to be sent at the beginning of the request. As a consequence, this method will upload the file using a different API based on the input data:
      * 
      * 1. If the length of the data can be known before the upload starts, makes a single upload call. This applies to all situations when `data` is a Buffer or a string, and when `data` is a stream and either the `length` argument is specified, or `data.byteLength` is defined.
-     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than 5MB the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. These APIs are used also when the length is known in advance, but it's bigger than 5GB. Maximum size is 200GB (using 20MB chunks).
+     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than 5MB the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. These APIs are used also when the length is known in advance, but it's bigger than 5GB. Maximum size is 200GB (using 20MB chunks - configurable with the `chunkSize` property).
      * 
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
      * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
-     * @param length - When passing a stream as data object, being able to specify the length of the data allows for faster uploads
+     * @param length - When passing a stream as data object, being able to specify the length of the data allows for faster uploads; this argument is ignored if `data` is not a Stream object
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
     putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, length?: number): Promise<void> {
-        // First step: get the bucketId for the container
-        const promise = this._getBucketId(container)
-
+        return Promise.resolve()
+            // First step: get the bucketId for the container
+            .then(() => this._getBucketId(container))
+            // Initialize the B2Upload class and start the upload process
+            .then((bucketId) => {
+                const uploader = new B2Upload(this._client, bucketId, path, data, metadata, length)
+                // This returns a promise
+                return uploader.start()
+            })
     }
 
     /**
@@ -290,128 +283,6 @@ class BackblazeB2Provider extends StorageProvider {
         else {
             return this._client.authorize()
         }
-    }
-
-    private _uploadFile(bucketId: string, path: string, data: string|Buffer, metadata?: any, length?: number): Promise<any> {
-        // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
-        let retryCounter = 0
-
-        // First, get the upload url and upload authorization token
-        return this._client.getUploadUrl(bucketId)
-            // Then upload the file
-            .then((response) => {
-                if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
-                    throw Error('Invalid response when requesting the upload url and upload authorization token')
-                }
-
-                // Convert data to a Buffer if it's a string
-                if (data && typeof data == 'string') {
-                    data = Buffer.from(data as string, 'utf8')
-                }
-
-                // Request args
-                const requestArgs = {
-                    uploadUrl: response.data.uploadUrl,
-                    uploadAuthToken: response.data.authorizationToken,
-                    filename: path,
-                    data: data,
-                    hash: 'do_not_verify', // TODO: Compute SHA1 at the end, as per https://www.backblaze.com/b2/docs/uploading.html
-                    info: {} as any,
-                    mime: 'application/octet-stream'
-                }
-
-                // Metadata
-                if (metadata) {
-                    // Add custom headers
-                    // Maximum 10 headers, and they can only contain [A-Za-z0-9]
-                    // If headers don't start with 'X-Bz-Info-', the prefix will be added
-                    let i = 0
-                    for (const key in metadata) {
-                        if (!metadata.hasOwnProperty(key)) {
-                            continue
-                        }
-
-                        // Content-Type header has a special treatment
-                        if (key == 'Content-Type') {
-                            requestArgs.mime = metadata['Content-Type']
-                        }
-                        else {
-                            // We can't have more than 10 headers
-                            if (i == 10) {
-                                throw Error('Cannot send more than 10 custom headers')
-                            }
-
-                            // Ensure the key is valid
-                            if (!key.match('^[A-Za-z0-9\-]+$')) {
-                                throw Error('Invalid header format: must be A-Za-z0-9')
-                            }
-
-                            // Check if the prefix is there already
-                            if (key.substr(0, 10) != 'X-Bz-Info-') {
-                                requestArgs.info['X-Bz-Info-' + key] = metadata[key]
-                            }
-                            else {
-                                requestArgs.info[key] = metadata[key]
-                            }
-
-                            // Increment the counter
-                            i++
-                        }
-                    }
-                }
-
-                // Send the request
-                return this._client.uploadFile(requestArgs)
-            })
-            .catch((err) => {
-                // TODO: REMOVE THIS
-                console.error('Upload failed with error ', err)
-                if (retryCounter < 3) {
-                    retryCounter++
-                    // Before retrying, wait for an increasing delay
-                    return waitPromise((retryCounter + 1) * 500)
-                        .then(() => this._uploadFile(bucketId))
-                }
-                else {
-                    // Let the error bubble up
-                    throw err
-                }
-            })
-    }
-
-    private _uploadPart(fileId: string, partNumber: number, data: Buffer): Promise<any> {
-        // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
-        let retryCounter = 0
-
-        // First, get the upload url and upload authorization token
-        return this._client.getUploadUrl({fileId: fileId})
-            .then((response) => {
-                if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
-                    throw Error('Invalid response when requesting the upload url and upload authorization token')
-                }
-
-                // Upload the part
-                return this._client.uploadPart({
-                    partNumber: partNumber,
-                    uploadUrl: response.data.uploadUrl,
-                    uploadAuthToken: response.data.authorizationToken,
-                    data: data
-                })
-            })
-            .catch((err) => {
-                // TODO: REMOVE THIS
-                console.error('Upload failed with error ', err)
-                if (retryCounter < 3) {
-                    retryCounter++
-                    // Before retrying, wait for an increasing delay
-                    return waitPromise((retryCounter + 1) * 500)
-                        .then(() => this._uploadPart(fileId, partNumber, data))
-                }
-                else {
-                    // Let the error bubble up
-                    throw err
-                }
-            })
     }
 }
 
