@@ -12,7 +12,7 @@ describe('StreamUtils', function() {
         assert(typeof StreamUtils == 'object')
         assert(typeof StreamUtils.StreamToBuffer == 'function')
         assert(typeof StreamUtils.StreamToString == 'function')
-        assert(typeof StreamUtils.ExtractFromStream == 'function')
+        assert(typeof StreamUtils.ReadChunkFromStream == 'function')
     })
 
     it('StreamToBuffer should convert a stream to Buffer', function() {
@@ -50,7 +50,7 @@ describe('StreamUtils', function() {
         ])
     })
 
-    it('ExtractFromStream should extract the first N bytes from a stream', function() {
+    it('ReadChunkFromStream should extract the first N bytes from a stream', function() {
         const buffer = testFiles[3].buffer
 
         // Test with a stream that will be used more than once, to ensure that data is put back in the stream
@@ -71,45 +71,39 @@ describe('StreamUtils', function() {
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromStream(stream, 100)
+                    return StreamUtils.ReadChunkFromStream(stream, 100)
                 })
                 .then(testOutput(100)),
             // 1000 bytes
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromStream(stream, 1000)
+                    return StreamUtils.ReadChunkFromStream(stream, 1000)
                 })
                 .then(testOutput(1000)),
             // Longer than buffer
             Promise.resolve()
                 .then(() => {
                     const stream = fs.createReadStream(testFiles[3].originalPath)
-                    return StreamUtils.ExtractFromStream(stream, buffer.byteLength + 100)
+                    return StreamUtils.ReadChunkFromStream(stream, buffer.byteLength + 100)
                 })
                 .then(testOutput(buffer.byteLength)),
-            // Reusable stream - part 1
+            // Peeking stream - part 1
             Promise.resolve()
-                .then(() => StreamUtils.ExtractFromStream(reusableStream, 100))
+                .then(() => StreamUtils.ReadChunkFromStream(reusableStream, 100, true))
                 .then(testOutput(100)),
-            // Reusable stream - part 2
+            // Peeking stream - part 2
             Promise.resolve()
-                .then(() => StreamUtils.ExtractFromStream(reusableStream, 200))
+                .then(() => StreamUtils.ReadChunkFromStream(reusableStream, 200, true))
                 .then(testOutput(200)),
-            // Reusable stream - part 3
+            // Peeking stream - part 3
             Promise.resolve()
-                .then(() => StreamUtils.ExtractFromStream(reusableStream, buffer.byteLength + 100))
+                .then(() => StreamUtils.ReadChunkFromStream(reusableStream, buffer.byteLength + 100, true))
                 .then(testOutput(buffer.byteLength)),
-            // Reusable stream - part 4
+            // Peeking stream - part 4
             Promise.resolve()
-                .then(() => StreamUtils.ExtractFromStream(reusableStream, buffer.byteLength + 100))
-                .then(testOutput(buffer.byteLength)),
-            // Stream that has ended
-            assert.rejects(() => {
-                const stream = fs.createReadStream('does-not-exist.txt')
-                stream.read(0)
-                return StreamUtils.ExtractFromStream(stream, buffer.byteLength + 100)
-            }, 'Stream has ended already')
+                .then(() => StreamUtils.ReadChunkFromStream(reusableStream, buffer.byteLength + 100, true))
+                .then(testOutput(buffer.byteLength))
         ])
     })
 

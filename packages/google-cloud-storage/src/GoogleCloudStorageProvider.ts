@@ -2,6 +2,7 @@
 
 import GCStorage from '@google-cloud/storage'
 import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
 
 /**
@@ -175,7 +176,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
         // Convert strings and buffers to streams
         let dataStream: Stream
-        if (typeof data == 'object' && typeof (data as any).pipe == 'function') {
+        if (IsStream(data)) {
             dataStream = data as Stream
         }
         else {

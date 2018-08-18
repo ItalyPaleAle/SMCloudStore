@@ -42,9 +42,16 @@ module.exports = (providerName, testSuiteOptions) => {
 
         // Contains a list of test files
         const testFiles = require('../data/test-files')
+        const largeFiles = require('../data/large-files')
 
         // Enable bailing (skip further tests) if a test fails
         this.bail(true)
+
+        before(function() {
+            if (testSuiteOptions.beforeTests) {
+                testSuiteOptions.beforeTests()
+            }
+        })
 
         it('constructor', function() {
             storage = new Provider(authData[providerName])
@@ -69,7 +76,7 @@ module.exports = (providerName, testSuiteOptions) => {
             }
         })
 
-        it('containerExists', async function() {
+        it.skip('containerExists', async function() {
             let exists
 
             exists = await storage.containerExists(containers[0])
@@ -79,7 +86,7 @@ module.exports = (providerName, testSuiteOptions) => {
             assert(exists === false)
         })
 
-        it('ensureContainer', async function() {
+        it.skip('ensureContainer', async function() {
             // New container
             const name = genContainerName()
             containers.push(name)
@@ -89,7 +96,7 @@ module.exports = (providerName, testSuiteOptions) => {
             await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
         })
 
-        it('listContainers', async function() {
+        it.skip('listContainers', async function() {
             // Ensure that we have the containers we created before
             const list = await storage.listContainers()
             assert(list && list.length >= containers.length)
@@ -99,7 +106,7 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
-        it('…waiting…', async function() {
+        it.skip('…waiting…', async function() {
             this.slow(10000)
             this.timeout(3000)
 
@@ -108,7 +115,7 @@ module.exports = (providerName, testSuiteOptions) => {
             })
         })
 
-        it('deleteContainer', async function() {
+        it.skip('deleteContainer', async function() {
             // Delete the last container in the list
             const name = containers.pop()
             await storage.deleteContainer(name)
@@ -124,30 +131,39 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Upload some files, in parallel
             const promises = []
-            for (const i in testFiles) {
-                let upload
-                // Stream
-                if (testFiles[i].file) {
-                    upload = fs.createReadStream(testFiles[i].file)
-                }
-                // String
-                else if (testFiles[i].string) {
-                    upload = testFiles[i].string
-                }
-                // Buffer
-                else if (testFiles[i].buffer) {
-                    upload = testFiles[i].buffer
-                }
+            const addTests = (files) => {
+                for (const i in files) {
+                    let upload
+                    // Stream
+                    if (files[i].file) {
+                        upload = fs.createReadStream(files[i].file)
+                    }
+                    // String
+                    else if (files[i].string) {
+                        upload = files[i].string
+                    }
+                    // Buffer
+                    else if (files[i].buffer) {
+                        upload = files[i].buffer
+                    }
 
-                // Metadata
-                const metadata = {
-                    'Content-Type': testFiles[i].contentType
-                }
+                    // Metadata
+                    const metadata = {
+                        'Content-Type': files[i].contentType
+                    }
 
-                // Promise
-                const p = storage.putObject(containers[0], testFiles[i].destination, upload, metadata)
-                promises.push(p)
+                    // Promise
+                    const p = storage.putObject(containers[0], files[i].destination, upload, metadata)
+                    promises.push(p)
+                }
             }
+            //addTests(testFiles)
+
+            // Check if we need to test with large files
+            if (testSuiteOptions.largeFiles) {
+                addTests(largeFiles)
+            }
+
             await Promise.all(promises)
         })
 
