@@ -4,6 +4,7 @@ SMCloudStore is a lightweight Node.js module that offers a simple API to interac
 
 - [AWS S3](https://aws.amazon.com/s3/)
 - [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/)
+- [Backblaze B2](https://www.backblaze.com/b2/cloud-storage.html)
 - [Google Cloud Storage](https://cloud.google.com/storage/)
 - [Minio](https://minio.io/)
 - Other S3-compatible providers
@@ -31,6 +32,7 @@ Modules for each cloud provider are available on separate packages, so you can c
 
 - [@smcloudstore/aws-s3](https://www.npmjs.com/package/@smcloudstore/aws-s3): <br /> `npm install --save @smcloudstore/aws-s3`
 - [@smcloudstore/azure-storage](https://www.npmjs.com/package/@smcloudstore/azure-storage): <br /> `npm install --save @smcloudstore/azure-storage`
+- [@smcloudstore/backblaze-b2](https://www.npmjs.com/package/@smcloudstore/backblaze-b2): <br /> `npm install --save @smcloudstore/backblaze-b2`
 - [@smcloudstore/google-cloud-storage](https://www.npmjs.com/package/@smcloudstore/google-cloud-storage): <br /> `npm install --save @smcloudstore/google-cloud-storage`
 - [@smcloudstore/minio](https://www.npmjs.com/package/@smcloudstore/minio): <br /> `npm install --save @smcloudstore/minio`
 - [@smcloudstore/generic-s3](https://www.npmjs.com/package/@smcloudstore/generic-s3): <br /> `npm install --save @smcloudstore/generic-s3`
@@ -39,10 +41,10 @@ Modules for each cloud provider are available on separate packages, so you can c
 
 Each cloud provider use different names for the same concept. In SMCloudStore, we're standardizing to the following nomenclature:
 
-| SMCloudStore | AWS | Azure | Google Cloud | Minio |
+| SMCloudStore | AWS | Azure | Backblaze | Google Cloud | Minio |
 | --- | --- | --- | --- | --- |
-| **Object** | Object | Blob | Object | Object |
-| **Container** | Bucket | Container | Bucket | Bucket |
+| **Object** | Object | Blob | File | Object | Object |
+| **Container** | Bucket | Container | Bucket | Bucket | Bucket |
 
 ## API Guide
 
