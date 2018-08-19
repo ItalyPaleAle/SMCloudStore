@@ -8,6 +8,9 @@
   --readme README.md \
   --target ES6 \
   --module commonjs \
-  --mode file \
-    packages/core/src \
-    packages/smcloudstore/src
+  --excludePrivate \
+  --excludeProtected \
+  --plugin typedoc-plugin-monorepo \
+  --external-modulemap  ".*\/packages\/([\\w\\-_]+)\/" \
+  --mode modules \
+    packages/*/src

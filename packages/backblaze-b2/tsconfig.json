@@ -3,6 +3,7 @@
         "target": "es2016",
         "module": "commonjs",
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",
         "outDir": "./dist",
         "listFiles": false,

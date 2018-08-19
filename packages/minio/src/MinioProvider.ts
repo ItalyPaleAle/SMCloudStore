@@ -1,6 +1,6 @@
 'use strict'
 
-import GenericS3Provider from '@smcloudstore/generic-s3'
+import GenericS3Provider = require('@smcloudstore/generic-s3')
 import {ClientOptions as MinioClientOptions} from 'minio'
 
 /**

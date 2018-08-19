@@ -42,7 +42,7 @@ Modules for each cloud provider are available on separate packages, so you can c
 Each cloud provider use different names for the same concept. In SMCloudStore, we're standardizing to the following nomenclature:
 
 | SMCloudStore | AWS | Azure | Backblaze | Google Cloud | Minio |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- |
 | **Object** | Object | Blob | File | Object | Object |
 | **Container** | Bucket | Container | Bucket | Bucket | Bucket |
 
@@ -145,7 +145,7 @@ await storage.deleteContainer('testcontainer')
 
 ### storage.putObject(container, path, data, metadata)
 
-[`storage.putObject(container, path, data, metadata)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#putobject)] is the method to put (upload) an object to the storage server.
+[`storage.putObject(container, path, data, metadata)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#putobject) is the method to put (upload) an object to the storage server.
 
 Arguments are:
 
@@ -174,7 +174,7 @@ await storage.putObject('testcontainer', 'directory/dante.txt', data, metadata)
 
 ### storage.getObject(container, path)
 
-[`storage.getObject(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobject)] allows getting (downloading) an object from the storage server.
+[`storage.getObject(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobject) allows getting (downloading) an object from the storage server.
 
 Arguments are:
 
@@ -194,7 +194,7 @@ stream.pipe(require('fs').createWriteStream('write/to/someimage.jpg'))
 
 ### storage.getObjectAsBuffer(container, path)
 
-[`storage.getObjectAsBuffer(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer)] behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data in a Buffer object loaded in memory.
+[`storage.getObjectAsBuffer(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer) behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data in a Buffer object loaded in memory.
 
 ````js
 // Retrieve a file as buffer
@@ -206,7 +206,7 @@ console.log(buffer.slice(-100))
 
 ### storage.getObjectAsString(container, path)
 
-[`storage.getObjectAsString(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring)] behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data as an utf8-encoded string.
+[`storage.getObjectAsString(container, path)`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring) behaves similarly to `storage.getObject()`, accepting the same arguments, but returns the data as a utf8-encoded string.
 
 ````js
 // Retrieve a file as string
@@ -218,7 +218,7 @@ console.log(string)
 
 ### storage.listObjects(container, [prefix])
 
-[`storage.listObjects(container, [prefix])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listobjects)] returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If `prefix` is not specified, the method will list the root "folder".
+[`storage.listObjects(container, [prefix])`](https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listobjects) returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If `prefix` is not specified, the method will list the root "folder".
 
 The method returns a Promise that resolves with an array of objects of type [`ListItemObject`](https://italypaleale.github.io/SMCloudStore/interfaces/listitemobject.html), containing information for an object on the server, or [`ListItemPrefix`](https://italypaleale.github.io/SMCloudStore/interfaces/listitemprefix.html), containing information for a prefix (folder).
 

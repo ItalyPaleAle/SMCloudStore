@@ -9,13 +9,13 @@ import {Readable, Stream} from 'stream'
  * 
  * This supports using Buffers and strings with the "simple APIs". It supports streams too, using either the "simple APIs" if the stream is less than `chunkSize`, or the large file APIs otherwise. The selection happens automatically.
  */
-export default class B2Upload {
+class B2Upload {
     /**
-     * Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 8MB.
+     * Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 9MB.
      * 
      * Note: there seems to be a bug in the current version of the backblaze-b2 package when the request body upload is > 10 MB, because of a downstream dependency on axios@0.17; once backblaze-b2 updates its dependency on axios, this might be fixed.
      */
-    static chunkSize = 8 * 1024 * 1024
+    static chunkSize = 9 * 1024 * 1024
 
     /** Backblaze recommends retrying all uploads at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times by default. */
     static retries = 3
@@ -357,9 +357,7 @@ export default class B2Upload {
                 })
             })
             .catch((err) => {
-                console.log('failed', retryCounter)
                 if (retryCounter < B2Upload.retries) {
-                    //console.log('failed', err)
                     retryCounter++
                     // Before retrying, wait for an increasing delay
                     return WaitPromise((retryCounter + 1) * 500)
@@ -376,3 +374,5 @@ export default class B2Upload {
         return doUpload()
     }
 }
+
+export = B2Upload
