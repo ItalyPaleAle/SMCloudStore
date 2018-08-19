@@ -182,7 +182,23 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     getObject(container: string, path: string): Promise<Stream> {
-        return this._client.getObject(container, path)
+        return this._ensureAuthorized()
+            .then(() => {
+                // Request the file
+                return this._client.downloadFileByName({
+                        bucketName: container,
+                        fileName: path,
+                        responseType: 'stream'
+                    })
+                    .then((response) => {
+                        // The stream is in response.data
+                        if (!response || !response.data) {
+                            throw Error('Invalid response when requesting the object')
+                        }
+
+                        return response.data
+                    })
+            })
     }
 
     /**
@@ -201,7 +217,8 @@ class BackblazeB2Provider extends StorageProvider {
                     bucketId: bucketId,
                     prefix: prefix || '',
                     delimiter: '/',
-                    maxFileCount: 1000
+                    maxFileCount: 1000,
+                    startFileName: startFileName
                 })
                 .then((response) => {
                     if (!response || !response.data || !response.data.files) {
@@ -257,7 +274,27 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     deleteObject(container: string, path: string): Promise<void> {
-        return this._client.removeObject(container, path)
+        // Request the bucketId for the container first
+        return this._getBucketId(container)
+            .then((bucketId) => {
+                if (!bucketId) {
+                    throw Error('Container not found: ' + container)
+                }
+
+                // Get the fileId
+                return this._getFileId(bucketId, path)
+            })
+            .then((fileId) => {
+                if (!fileId) {
+                    throw Error('File not found: ' + container)
+                }
+
+                // Delete the file, returning a promise
+                return this._client.deleteFileVersion({
+                    fileId: fileId,
+                    fileName: path
+                })
+            })
     }
 
     /**
@@ -286,6 +323,40 @@ class BackblazeB2Provider extends StorageProvider {
                 }
 
                 // Couldn't find the bucket
+                return null
+            })
+    }
+
+    /**
+     * Returns the fileId property for a given file name, as some B2 methods require a file's ID
+     * 
+     * @param bucketId - ID of the bucket
+     * @param fileName - Name of the file
+     * @returns Promise that resolves with the fileId
+     * @async
+     */
+    private _getFileId(bucketId: string, fileName: string): Promise<string> {
+        // There's no method in the B2 APIs to get a single file, so we need to request the list and use the file name as prefix
+        // No caching here, as this is expect to be more volatile data
+        return this._client.listFileNames({
+                bucketId: bucketId,
+                    prefix: fileName,
+                    delimiter: '/',
+                    maxFileCount: 1000
+            })
+            .then((response) => {
+                if (!response || !response.data || !response.data.files || !Array.isArray(response.data.files)) {
+                    return null
+                }
+
+                // Should match a single file with the exact name
+                for (const file of response.data.files) {
+                    if (file && file.fileName == fileName) {
+                        return file.fileId
+                    }
+                }
+
+                // Couldn't find the file
                 return null
             })
     }

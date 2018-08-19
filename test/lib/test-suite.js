@@ -6,6 +6,7 @@ const assert = require('assert')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
+const StreamUtils = require('../../packages/core/dist/StreamUtils')
 
 const authData = require('../data/auth')
 
@@ -76,7 +77,7 @@ module.exports = (providerName, testSuiteOptions) => {
             }
         })
 
-        it.skip('containerExists', async function() {
+        it('containerExists', async function() {
             let exists
 
             exists = await storage.containerExists(containers[0])
@@ -86,7 +87,7 @@ module.exports = (providerName, testSuiteOptions) => {
             assert(exists === false)
         })
 
-        it.skip('ensureContainer', async function() {
+        it('ensureContainer', async function() {
             // New container
             const name = genContainerName()
             containers.push(name)
@@ -96,7 +97,7 @@ module.exports = (providerName, testSuiteOptions) => {
             await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
         })
 
-        it.skip('listContainers', async function() {
+        it('listContainers', async function() {
             // Ensure that we have the containers we created before
             const list = await storage.listContainers()
             assert(list && list.length >= containers.length)
@@ -106,7 +107,7 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
-        it.skip('…waiting…', async function() {
+        it('…waiting…', async function() {
             this.slow(10000)
             this.timeout(3000)
 
@@ -115,7 +116,7 @@ module.exports = (providerName, testSuiteOptions) => {
             })
         })
 
-        it.skip('deleteContainer', async function() {
+        it('deleteContainer', async function() {
             // Delete the last container in the list
             const name = containers.pop()
             await storage.deleteContainer(name)
@@ -126,7 +127,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('putObject', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Upload some files, in parallel
@@ -168,6 +169,9 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('listObjects', async function() {
+            // Increase timeout
+            this.timeout(60000)
+
             let fileList = testFiles
             if (testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
@@ -221,28 +225,28 @@ module.exports = (providerName, testSuiteOptions) => {
                 // Check if it's what we were expecting
                 const expect = []
                 let expectFolders = []
-                for (const e of fileList) {
+                for (const file of fileList) {
                     // Files and folders inside the current path
-                    if (e.destination.startsWith(path)) {
+                    if (file.destination.startsWith(path)) {
                         // Check if we are expecting a folder
-                        const substringEnd = e.destination.indexOf('/', path.length)
+                        const substringEnd = file.destination.indexOf('/', path.length)
                         // We're expecting to find a folder
                         if (~substringEnd) {
-                            const expectFolder = e.destination.substring(0, substringEnd)
+                            const expectFolder = file.destination.substring(0, substringEnd)
                             expectFolders.push(expectFolder)
                         }
                         // We're expecting to find a file
                         else {
                             const expectEl = {
-                                path: e.destination,
+                                path: file.destination,
                                 lastModified: 'date',
-                                size: e.size
+                                size: file.size
                             }
                             if (listObjectOptions.includes('includeContentMD5')) {
-                                expectEl.contentMD5 = e.digestMD5
+                                expectEl.contentMD5 = file.digestMD5
                             }
                             if (listObjectOptions.includes('includeContentType')) {
-                                expectEl.contentType = e.contentType
+                                expectEl.contentType = file.contentType
                             }
                             if (listObjectOptions.includes('includeCreationTime')) {
                                 expectEl.creationTime = 'date'
@@ -272,7 +276,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('getObject', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Download the first 3 files and check their sha1 digest, in parallel
@@ -282,6 +286,9 @@ module.exports = (providerName, testSuiteOptions) => {
 
                 const p = storage.getObject(containers[0], e.destination)
                     .then((stream) => {
+                        // Ensure result is a Readable Stream
+                        assert(StreamUtils.IsReadableStream(stream))
+
                         return new Promise((resolve, reject) => {
                             stream
                                 .on('error', (err) => {
@@ -298,12 +305,34 @@ module.exports = (providerName, testSuiteOptions) => {
                 promises.push(p)
             }
 
+            // If we uploaded large files, test with one of those too
+            if (testSuiteOptions.testLargeFiles) {
+                promises.push(storage.getObject(containers[0], largeFiles[0].destination)
+                    .then((stream) => {
+                        // Ensure result is a Readable Stream
+                        assert(StreamUtils.IsReadableStream(stream))
+
+                        return new Promise((resolve, reject) => {
+                            stream
+                                .on('error', (err) => {
+                                    reject(err)
+                                })
+                                .pipe(digestStream('sha1', 'hex', (digest, length) => {
+                                    assert(length == largeFiles[0].size)
+                                    assert(digest == largeFiles[0].digestSHA1)
+                                    resolve()
+                                }))
+                                .resume()
+                        })
+                    }))
+            }
+
             await Promise.all(promises)
         })
 
         it('getObjectAsBuffer', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Read a file as Buffer and compare the content
@@ -315,7 +344,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('getObjectAsString', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Read a file as Buffer and compare the content
@@ -326,10 +355,17 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('deleteObject', async function() {
+            // Increase timeout
+            this.timeout(60000)
+
             // Delete all files uploaded, in parallel
             const promises = []
-            for (const i in testFiles) {
-                promises.push(storage.deleteObject(containers[0], testFiles[i].destination))
+            let fileList = testFiles
+            if (testSuiteOptions.testLargeFiles) {
+                fileList = fileList.concat(largeFiles)
+            }
+            for (const file of fileList) {
+                promises.push(storage.deleteObject(containers[0], file.destination))
             }
             await Promise.all(promises)
         })
