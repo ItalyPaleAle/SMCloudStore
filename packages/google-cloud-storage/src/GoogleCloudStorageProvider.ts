@@ -65,7 +65,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
             options = {}
         }
         const metadata = {} as GCStorage.BucketConfig
-        
+
         // Set storage class and default location
         switch (options.class) {
             case 'multi_regional':
@@ -253,7 +253,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
                         autoPaginate: false,
                         delimiter: '/',
                         // maxResults: 2, // For debug only
-                        prefix
+                        prefix: prefix
                     }
                 }
 

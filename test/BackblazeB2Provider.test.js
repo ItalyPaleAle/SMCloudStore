@@ -14,8 +14,8 @@ const testSuiteOptions = {
     listObjects: ['includeContentType'],
     testLargeFiles: true,
     beforeTests: () => {
-        // Before all tests, set the ChunkSize to 5MB, so we can use smaller files during test
-        B2Upload.ChunkSize = 5 * 1024 * 1024
+        // Before all tests, set the chunkSize to 5MB, so we can use smaller files during test
+        B2Upload.chunkSize = 5 * 1024 * 1024
     }
 }
 TestSuite('backblaze-b2', testSuiteOptions)

@@ -1,7 +1,5 @@
 'use strict'
 
-const fs = require('fs')
-
 const largeFiles = [
     {
         file: __dirname + '/nick-dietrich-781374-unsplash.jpg',

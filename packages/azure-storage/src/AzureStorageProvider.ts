@@ -269,7 +269,7 @@ class AzureStorageProvider extends StorageProvider {
     getObject(container: string, path: string): Promise<Stream> {
         // Create a transform stream we can return in the result, which is readable
         const duplexStream = new Transform({
-            transform(chunk, encoding, done) {
+            transform: (chunk, encoding, done) => {
                 done(null, chunk)
             }
         })

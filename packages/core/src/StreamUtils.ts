@@ -1,6 +1,6 @@
 'use strict'
 
-import {Stream, Readable} from 'stream'
+import {Readable, Stream} from 'stream'
 
 /**
  * Returns a boolean indicating whether a value is a Stream 
@@ -103,7 +103,7 @@ export function ReadChunkFromStream(stream: Readable, size: number, peek?: boole
                 stream.off('error', errorEvent)
 
                 // Return the data
-                resolve(data)   
+                resolve(data)
             }
             else {
                 // We need to wait longer for more data

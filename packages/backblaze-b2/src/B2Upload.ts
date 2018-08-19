@@ -1,20 +1,20 @@
 'use strict'
 
-import {ReadChunkFromStream, IsReadableStream} from '@smcloudstore/core/dist/StreamUtils'
-import {Stream, Readable} from 'stream'
+import {IsReadableStream, ReadChunkFromStream} from '@smcloudstore/core/dist/StreamUtils'
 import {WaitPromise} from '@smcloudstore/core/dist/Utils'
+import {Readable, Stream} from 'stream'
 
 /**
  * Manages the upload of objects to Backblaze B2.
  * 
- * This supports using Buffers and strings with the "simple APIs". It supports streams too, using either the "simple APIs" if the stream is less than `ChunkSize`, or the large file APIs otherwise. The selection happens automatically.
+ * This supports using Buffers and strings with the "simple APIs". It supports streams too, using either the "simple APIs" if the stream is less than `chunkSize`, or the large file APIs otherwise. The selection happens automatically.
  */
 class B2Upload {
     /** Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 20 MB. */
-    static ChunkSize = 20 * 1024 * 1024
+    static chunkSize = 20 * 1024 * 1024
 
     /** Backblaze recommends retrying all uploads at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times by default. */
-    static Retries = 3
+    static retries = 3
 
     /** Instance of the B2 client library */
     protected client: any
@@ -83,12 +83,12 @@ class B2Upload {
         }
 
         // First, ensure that chunkSize is at least 5MB
-        if (B2Upload.ChunkSize < 5 * 1024 * 1024) {
+        if (B2Upload.chunkSize < 5 * 1024 * 1024) {
             throw Error('chunkSize must be at least 5MB')
         }
 
         // Peek the first chunk from the stream (note this returns a Promise)
-        return ReadChunkFromStream(this.data as Readable, B2Upload.ChunkSize + 1, true)
+        return ReadChunkFromStream(this.data as Readable, B2Upload.chunkSize + 1, true)
             .then((firstChunk: Buffer) => {
                 // If we don't have a length argument specified, get the length of the first chunk
                 if (!this.length) {
@@ -101,7 +101,7 @@ class B2Upload {
 
                 // Check if the length is not longer than chunkSize: if it is, just upload the Buffer as a single file
                 // While B2 large file APIs support files that are at least 5 MB + 1 byte, we are splitting the data into chunkSize chunks, so there's no point in using the more complex API in case it's smaller
-                if (this.length <= B2Upload.ChunkSize) {
+                if (this.length <= B2Upload.chunkSize) {
                     // Returns a Promise
                     return this.putFile(firstChunk)
                 }
@@ -125,9 +125,9 @@ class B2Upload {
         if (!data) {
             data = this.data as Buffer
         }
-        
+
         // Ensure that data is a Buffer
-        if (!data || typeof data != 'object' || !Buffer.isBuffer(data)){
+        if (!data || typeof data != 'object' || !Buffer.isBuffer(data)) {
             throw Error('Argument data must be a Buffer')
         }
 
@@ -144,12 +144,12 @@ class B2Upload {
 
                 // Request args
                 const requestArgs = {
-                    uploadUrl: response.data.uploadUrl,
-                    uploadAuthToken: response.data.authorizationToken,
-                    filename: this.path,
                     data: data,
+                    filename: this.path,
                     info: {} as any,
-                    mime: 'application/octet-stream'
+                    mime: 'application/octet-stream',
+                    uploadAuthToken: response.data.authorizationToken,
+                    uploadUrl: response.data.uploadUrl
                 }
 
                 // Metadata
@@ -196,7 +196,7 @@ class B2Upload {
                 return this.client.uploadFile(requestArgs)
             })
             .catch((err) => {
-                if (retryCounter < B2Upload.Retries) {
+                if (retryCounter < B2Upload.retries) {
                     retryCounter++
                     // Before retrying, wait for an increasing delay
                     return WaitPromise((retryCounter + 1) * 500)
@@ -208,7 +208,7 @@ class B2Upload {
                 }
             })
     }
-    
+
     private putLargeFile(stream?: Readable): Promise<any> {
         // If we are not passed a stream, use this.data
         if (!stream) {
@@ -225,15 +225,18 @@ class B2Upload {
             streamEnded = true
         })
 
+        // Will contain fileId
+        let fileId = null
+
         // Returns a chunk at a time
-        const readChunk = (fileId: string, partNumber: number, hashes: string[]): Promise<{fileId: string, hashes: string[]}> => {
+        const readChunk = (partNumber: number, hashes: string[]): Promise<{fileId: string, hashes: string[]}> => {
             // If the stream has ended, return
             if (streamEnded) {
                 return Promise.resolve({fileId: fileId, hashes: hashes})
             }
 
             // Returns a Promise
-            return ReadChunkFromStream(stream, B2Upload.ChunkSize)
+            return ReadChunkFromStream(stream, B2Upload.chunkSize)
                 .then((data: Buffer) => {
                     // If we have no data, we reached the end of the stream
                     if (!data) {
@@ -263,14 +266,13 @@ class B2Upload {
                                 hashes.push(response.data.contentSha1)
 
                                 // Read the next chunk
-                                return readChunk(fileId, partNumber + 1, hashes)
+                                return readChunk(partNumber + 1, hashes)
                             })
                     }
                 })
         }
 
         // Start processing the file
-        let fileId = null
         return Promise.resolve()
             // First step: request the fileId
             .then(() => {
@@ -281,11 +283,11 @@ class B2Upload {
                 if (this.metadata && this.metadata['Content-Type']) {
                     contentType = this.metadata['Content-Type']
                 }
-                
+
                 return this.client.startLargeFile({
                     bucketId: this.bucketId,
-                    fileName: this.path,
-                    contentType: contentType
+                    contentType: contentType,
+                    fileName: this.path
                 })
             })
             // Second step: upload all parts
@@ -299,18 +301,14 @@ class B2Upload {
                 // Read from stream into chunks of chunkSize
                 // partNumber starts from 1
                 // Pass an empty array where all the SHA1 hashes are collected
-                return readChunk(fileId, 1, [])
+                return readChunk(1, [])
             })
-            // Third: commit the file
+            // Last: commit the file
             .then((result) => {
                 return this.client.finishLargeFile({
                     fileId: result.fileId,
                     partSha1Array: result.hashes
                 })
-            })
-            // End
-            .then((response) => {
-                //console.log(response)
             })
             // In case of errors, if we have a fileId, remove the incomplete upload
             .catch((err) => {
@@ -342,14 +340,14 @@ class B2Upload {
 
                 // Upload the part
                 return this.client.uploadPart({
+                    data: data,
                     partNumber: partNumber,
-                    uploadUrl: response.data.uploadUrl,
                     uploadAuthToken: response.data.authorizationToken,
-                    data: data
+                    uploadUrl: response.data.uploadUrl
                 })
             })
             .catch((err) => {
-                if (retryCounter < 3) {
+                if (retryCounter < B2Upload.retries) {
                     retryCounter++
                     // Before retrying, wait for an increasing delay
                     return WaitPromise((retryCounter + 1) * 500)

@@ -3,6 +3,7 @@
 import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Stream} from 'stream'
 import B2Upload from './B2Upload'
+// tslint:disable-next-line:no-var-requires
 const B2 = require('backblaze-b2') as any
 
 /**
@@ -27,12 +28,12 @@ interface BackblazeB2CreateContainerOptions {
  * Client to interact with Backblaze B2 cloud storage.
  */
 class BackblazeB2Provider extends StorageProvider {
+    /** Specifies for how long (in ms) to keep BucketId data in cache. Set to 0 to disable caching. Default is 15 minutes. */
+    static bucketIdCacheDuration = 900000
+
     protected _client: any
     private _isAuthorized: boolean
     private _bucketIdCache: {[s: string]: {result: string, time: number}}
-
-    /** Specifies for how long (in ms) to keep BucketId data in cache. Set to 0 to disable caching. Default is 15 minutes. */
-    static BucketIdCacheDuration = 900000
 
     /**
      * Initializes a new client to interact with Backblaze B2.
@@ -71,7 +72,7 @@ class BackblazeB2Provider extends StorageProvider {
         const access = (options && options.access && options.access == 'public')
             ? 'allPublic'
             : 'allPrivate'
-        
+
         // Ensure we are authorized, then perform the request
         return this._ensureAuthorized()
             .then(() => this._client.createBucket(container, access))
@@ -159,7 +160,7 @@ class BackblazeB2Provider extends StorageProvider {
      * The Backblaze B2 APIs have relatively poor support for streams, as it requires the size of the data to be sent at the beginning of the request. As a consequence, this method will upload the file using a different API based on the input data:
      * 
      * 1. If the length of the data can be known before the upload starts, makes a single upload call. This applies to all situations when `data` is a Buffer or a string, and when `data` is a stream and either the `length` argument is specified, or `data.byteLength` is defined.
-     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than `B2Upload.ChunkSize` (default: 20MB; minimum: 5MB) the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. Maximum size is 200GB (using 20MB chunks - configurable with the `B2Upload.chunkSize` property).
+     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than `B2Upload.chunkSize` (default: 20MB; minimum: 5MB) the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. Maximum size is 200GB (using 20MB chunks - configurable with the `B2Upload.chunkSize` property).
      * 
      * Notes on the metadata:
      * 
@@ -232,9 +233,9 @@ class BackblazeB2Provider extends StorageProvider {
         const requestList = (bucketId: string, startFileName: string): Promise<ListResults> => {
             return this._client.listFileNames({
                     bucketId: bucketId,
-                    prefix: prefix || '',
                     delimiter: '/',
                     maxFileCount: 1000,
+                    prefix: prefix || '',
                     startFileName: startFileName
                 })
                 .then((response) => {
@@ -247,10 +248,10 @@ class BackblazeB2Provider extends StorageProvider {
                         // If we have a file
                         if (file && file.action == 'upload') {
                             list.push({
-                                path: file.fileName,
-                                size: file.contentLength,
+                                contentType: file.contentType,
                                 lastModified: new Date(file.uploadTimestamp),
-                                contentType: file.contentType
+                                path: file.fileName,
+                                size: file.contentLength
                             } as ListItemObject)
                         }
                         else if (file && file.action == 'folder') {
@@ -259,7 +260,7 @@ class BackblazeB2Provider extends StorageProvider {
                             } as ListItemPrefix)
                         }
                     }
-                    
+
                     // Check if we have to make another request, or just return the list
                     if (response.data.nextFileName) {
                         return requestList(bucketId, response.data.nextFileName)
@@ -321,7 +322,7 @@ class BackblazeB2Provider extends StorageProvider {
     /**
      * Returns the bucketId property for a given bucket name, as most B2 methods require a bucket's ID.
      * 
-     * The result is cached in memory for a certain amount of time configured with `BackblazeB2Provider.BucketIdCacheDuration` (default: 15 minutes), and up to 100 IDs.
+     * The result is cached in memory for a certain amount of time configured with `BackblazeB2Provider.bucketIdCacheDuration` (default: 15 minutes), and up to 100 IDs.
      * 
      * @param bucketName - Name of the bucket
      * @returns Promise that resolves with the bucketId
@@ -330,10 +331,10 @@ class BackblazeB2Provider extends StorageProvider {
     private _getBucketId(bucketName: string): Promise<string> {
         // First, check if the data is cached, and the cache hasn't expired
         // (If caching is enabled at all)
-        const cachingEnabled = BackblazeB2Provider.BucketIdCacheDuration && BackblazeB2Provider.BucketIdCacheDuration > 0
+        const cachingEnabled = BackblazeB2Provider.bucketIdCacheDuration && BackblazeB2Provider.bucketIdCacheDuration > 0
         if (cachingEnabled
             && this._bucketIdCache[bucketName]
-            && (Date.now() - this._bucketIdCache[bucketName].time <  BackblazeB2Provider.BucketIdCacheDuration)
+            && (Date.now() - this._bucketIdCache[bucketName].time <  BackblazeB2Provider.bucketIdCacheDuration)
         ) {
             return Promise.resolve(this._bucketIdCache[bucketName].result)
         }
@@ -384,9 +385,9 @@ class BackblazeB2Provider extends StorageProvider {
         // No caching here, as this is expect to be more volatile data
         return this._client.listFileNames({
                 bucketId: bucketId,
-                    prefix: fileName,
-                    delimiter: '/',
-                    maxFileCount: 1000
+                delimiter: '/',
+                maxFileCount: 1000,
+                prefix: fileName
             })
             .then((response) => {
                 if (!response || !response.data || !response.data.files || !Array.isArray(response.data.files)) {
