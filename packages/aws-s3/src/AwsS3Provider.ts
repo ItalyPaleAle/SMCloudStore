@@ -12,7 +12,7 @@ interface AwsS3ConnectionOptions {
     /** Secret Key for the server */
     secretKey: string
     /** If true (default), connect via HTTPS */
-    secure?: boolean
+    useSSL?: boolean
 }
 
 /**
