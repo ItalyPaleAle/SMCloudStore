@@ -87,6 +87,9 @@ module.exports = (providerName, testSuiteOptions) => {
             exists = await storage.containerExists(containers[0])
             assert(exists === true)
 
+            exists = await storage.containerExists(containers[0] + '-2')
+            assert(exists === false)
+
             exists = await storage.containerExists('doesnotexist')
             assert(exists === false)
         })
@@ -95,18 +98,21 @@ module.exports = (providerName, testSuiteOptions) => {
             // New container
             const name = genContainerName()
             containers.push(name)
-            await storage.ensureContainer(name, (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(name, (testSuiteOptions && testSuiteOptions.createContainerOptions))
+
+            const exists = await storage.containerExists(name)
+            assert(exists === true)
 
             // Existing container
-            await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.createContainerOptions))
         })
 
         it('listContainers', async function() {
             // Ensure that we have the containers we created before
             const list = await storage.listContainers()
             assert(list && list.length >= containers.length)
-            for (const i in containers) {
-                assert(list.includes(containers[i]))
+            for (const el of containers) {
+                assert(list.includes(el))
             }
         })
 

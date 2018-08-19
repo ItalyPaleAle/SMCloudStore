@@ -20,7 +20,8 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "@smcloudstore/generic-s3": "^0.0.2-1"
+    "@smcloudstore/core": "^0.0.2-1",
+    "aws-sdk": "^2.296.0"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
 }
