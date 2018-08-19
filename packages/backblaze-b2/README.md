@@ -1,1 +1,1 @@
-# @smcloudstore/minio
+# @smcloudstore/backblaze-b2

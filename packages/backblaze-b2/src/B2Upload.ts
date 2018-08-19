@@ -9,9 +9,13 @@ import {Readable, Stream} from 'stream'
  * 
  * This supports using Buffers and strings with the "simple APIs". It supports streams too, using either the "simple APIs" if the stream is less than `chunkSize`, or the large file APIs otherwise. The selection happens automatically.
  */
-class B2Upload {
-    /** Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 20 MB. */
-    static chunkSize = 20 * 1024 * 1024
+export default class B2Upload {
+    /**
+     * Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 8MB.
+     * 
+     * Note: there seems to be a bug in the current version of the backblaze-b2 package when the request body upload is > 10 MB, because of a downstream dependency on axios@0.17; once backblaze-b2 updates its dependency on axios, this might be fixed.
+     */
+    static chunkSize = 8 * 1024 * 1024
 
     /** Backblaze recommends retrying all uploads at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times by default. */
     static retries = 3
@@ -134,8 +138,9 @@ class B2Upload {
         // Counter for re-trying uploads if there's an error
         let retryCounter = 0
 
-        // First, get the upload url and upload authorization token
-        return this.client.getUploadUrl(this.bucketId)
+        const doUpload = () => {
+            // First, get the upload url and upload authorization token
+            return this.client.getUploadUrl(this.bucketId)
             // Then upload the file
             .then((response) => {
                 if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
@@ -200,13 +205,17 @@ class B2Upload {
                     retryCounter++
                     // Before retrying, wait for an increasing delay
                     return WaitPromise((retryCounter + 1) * 500)
-                        .then(() => this.putFile())
+                        .then(() => {
+                            return doUpload()
+                        })
                 }
                 else {
                     // Let the error bubble up
                     throw err
                 }
             })
+        }
+        return doUpload()
     }
 
     private putLargeFile(stream?: Readable): Promise<any> {
@@ -331,8 +340,9 @@ class B2Upload {
         // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
         let retryCounter = 0
 
-        // First, get the upload part url and upload authorization token
-        return this.client.getUploadPartUrl({fileId: fileId})
+        const doUpload = () => {
+            // First, get the upload part url and upload authorization token
+            return this.client.getUploadPartUrl({fileId: fileId})
             .then((response) => {
                 if (!response || !response.data || !response.data.authorizationToken || !response.data.uploadUrl) {
                     throw Error('Invalid response when requesting the upload part url and upload authorization token')
@@ -347,18 +357,22 @@ class B2Upload {
                 })
             })
             .catch((err) => {
+                console.log('failed', retryCounter)
                 if (retryCounter < B2Upload.retries) {
+                    //console.log('failed', err)
                     retryCounter++
                     // Before retrying, wait for an increasing delay
                     return WaitPromise((retryCounter + 1) * 500)
-                        .then(() => this.putPart(fileId, partNumber, data))
+                        .then(() => {
+                            return doUpload()
+                        })
                 }
                 else {
                     // Let the error bubble up
                     throw err
                 }
             })
+        }
+        return doUpload()
     }
 }
-
-export = B2Upload

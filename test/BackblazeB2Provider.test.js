@@ -3,7 +3,7 @@
 'use strict'
 
 const TestSuite = require('./lib/test-suite')
-const B2Upload = require('../packages/backblaze-b2/dist/B2Upload')
+const B2Upload = require('../packages/backblaze-b2/dist/B2Upload').default
 
 // Execute the test suite
 const testSuiteOptions = {
@@ -15,7 +15,7 @@ const testSuiteOptions = {
     testLargeFiles: true,
     beforeTests: () => {
         // Before all tests, set the chunkSize to 5MB, so we can use smaller files during test
-        B2Upload.chunkSize = 5 * 1024 * 1024
+        B2Upload.chunkSize = 10 * 1024 * 1024
     }
 }
 TestSuite('backblaze-b2', testSuiteOptions)

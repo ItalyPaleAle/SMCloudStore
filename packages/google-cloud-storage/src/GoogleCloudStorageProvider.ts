@@ -1,6 +1,6 @@
 'use strict'
 
-import GCStorage from '@google-cloud/storage'
+import GCStorage = require('@google-cloud/storage')
 import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
