@@ -157,10 +157,10 @@ module.exports = (providerName, testSuiteOptions) => {
                     promises.push(p)
                 }
             }
-            //addTests(testFiles)
+            addTests(testFiles)
 
             // Check if we need to test with large files
-            if (testSuiteOptions.largeFiles) {
+            if (testSuiteOptions.testLargeFiles) {
                 addTests(largeFiles)
             }
 

@@ -87,7 +87,9 @@ export function ReadChunkFromStream(stream: Readable, size: number, peek?: boole
     // Returns a promise that resolves when we have read enough data from the stream.
     return new Promise((resolve, reject) => {
         // Callbacks on events
-        const errorEvent = (err) => reject(err)
+        const errorEvent = (err) => {
+            reject(err)
+        }
         const readableEvent = () => {
             // If we don't have enough data, and the stream hasn't ended, this will return null
             const data = stream.read(size)

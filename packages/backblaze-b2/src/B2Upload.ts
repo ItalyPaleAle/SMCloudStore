@@ -35,7 +35,7 @@ class B2Upload {
     /**
      * Initializes a new B2Upload class
      * 
-     * @param client - Instance of the B2 client library
+     * @param client - Instance of the B2 client library. It's expected authorization to be completed already, so auth data is stored in the library.
      * @param bucketId - Id of the target bucket
      * @param path - Path where to store the object, inside the container
      * @param data - Data to upload
@@ -100,12 +100,10 @@ class B2Upload {
                 // Check if the length is not longer than chunkSize: if it is, just upload the Buffer as a single file
                 // While B2 large file APIs support files that are at least 5 MB + 1 byte, we are splitting the data into chunkSize chunks, so there's no point in using the more complex API in case it's smaller
                 if (this.length <= B2Upload.ChunkSize) {
-                    console.log('small file')
                     // Returns a Promise
                     return this.putFile(firstChunk)
                 }
                 else {
-                    console.log('large file')
                     // If we're still here, then we need to upload the file using the large file APIs
                     // Returns a Promise
                     return this.putLargeFile()
@@ -221,39 +219,100 @@ class B2Upload {
             throw Error('Argument stream must be a Readable Stream')
         }
 
+        // Add a listener to understand when the stream ends
+        let streamEnded = false
+        stream.on('end', () => {
+            streamEnded = true
+        })
+
         // Returns a chunk at a time
-        const readChunk = (fileId: string, partNumber: number): Promise<void> => {
+        const readChunk = (fileId: string, partNumber: number, hashes: string[]): Promise<{fileId: string, hashes: string[]}> => {
+            // If the stream has ended, return
+            if (streamEnded) {
+                return Promise.resolve({fileId: fileId, hashes: hashes})
+            }
+
             // Returns a Promise
             return ReadChunkFromStream(stream, B2Upload.ChunkSize)
-                .then((data) => {
+                .then((data: Buffer) => {
                     // If we have no data, we reached the end of the stream
-                    if (data) {
+                    if (!data) {
+                        return {fileId: fileId, hashes: hashes}
+                    }
+                    else {
                         return this.putPart(fileId, partNumber, data)
                             .then((response) => {
-                                console.log(response, '\n\n')
+                                // Check response
+                                if (!response || !response.data) {
+                                    throw Error('Invalid response when uploading a part')
+                                }
+                                if (!response.data.fileId || response.data.fileId != fileId) {
+                                    throw Error('fileId for uploaded part does not match')
+                                }
+                                if (response.data.partNumber === undefined || response.data.partNumber != partNumber) {
+                                    throw Error('partNumber for uploaded part does not match')
+                                }
+                                if (!response.data.contentLength) {
+                                    throw Error('Invalid contentLength of uploaded part')
+                                }
+                                if (!response.data.contentSha1) {
+                                    throw Error('Invalid contentSha1 of uploaded part')
+                                }
+
+                                // Add the SHA1 hash to the list
+                                hashes.push(response.data.contentSha1)
 
                                 // Read the next chunk
-                                return readChunk(fileId, partNumber + 1)
+                                return readChunk(fileId, partNumber + 1, hashes)
                             })
                     }
                 })
         }
 
         // Start processing the file
+        let fileId = null
         return Promise.resolve()
             // First step: request the fileId
             // TODO: METADATA
             .then(() => this.client.startLargeFile({bucketId: this.bucketId, fileName: this.path}))
+            // Second step: upload all parts
             .then((response) => {
                 if (!response || !response.data || !response.data.fileId) {
                     throw Error('Invalid response when requesting the file id')
                 }
 
-                const fileId = response.data.fileId as string
+                fileId = response.data.fileId as string
 
                 // Read from stream into chunks of chunkSize
                 // partNumber starts from 1
-                return readChunk(fileId, 1)
+                // Pass an empty array where all the SHA1 hashes are collected
+                return readChunk(fileId, 1, [])
+            })
+            // Third: commit the file
+            .then((result) => {
+                return this.client.finishLargeFile({
+                    fileId: result.fileId,
+                    partSha1Array: result.hashes
+                })
+            })
+            // End
+            .then((response) => {
+                console.log(response)
+            })
+            // In case of errors, if we have a fileId, remove the incomplete upload
+            .catch((err) => {
+                // In all situations, just re-throw the error as callback
+                const cb = () => {
+                    throw err
+                }
+
+                if (fileId) {
+                    return this.client.cancelLargeFile({fileId: fileId})
+                        .then(cb, cb)
+                }
+                else {
+                    cb()
+                }
             })
     }
 

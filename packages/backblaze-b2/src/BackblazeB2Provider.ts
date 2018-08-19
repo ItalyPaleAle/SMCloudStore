@@ -122,7 +122,7 @@ class BackblazeB2Provider extends StorageProvider {
     }
 
     /**
-     * Removes a contaienr from the server
+     * Removes a container from the server
      * 
      * @param container - Name of the container
      * @returns Promise that resolves once the container has been removed
@@ -163,6 +163,7 @@ class BackblazeB2Provider extends StorageProvider {
     putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, length?: number): Promise<void> {
         return Promise.resolve()
             // First step: get the bucketId for the container
+            // This also calls _ensureAuthorized
             .then(() => this._getBucketId(container))
             // Initialize the B2Upload class and start the upload process
             .then((bucketId) => {

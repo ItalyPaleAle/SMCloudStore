@@ -101,7 +101,7 @@ export abstract class StorageProvider {
     abstract listContainers(): Promise<string[]>
 
     /**
-     * Removes a contaienr from the server
+     * Removes a container from the server
      * 
      * @param container - Name of the container
      * @returns Promise that resolves once the container has been removed
