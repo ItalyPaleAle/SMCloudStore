@@ -2,6 +2,7 @@
 
 import GCStorage from '@google-cloud/storage'
 import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
 
 /**
@@ -146,7 +147,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
     }
 
     /**
-     * Removes a contaienr from the server
+     * Removes a container from the server
      * 
      * @param container - Name of the container
      * @returns Promise that resolves once the container has been removed
@@ -175,7 +176,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
         // Convert strings and buffers to streams
         let dataStream: Stream
-        if (typeof data == 'object' && typeof (data as any).pipe == 'function') {
+        if (IsStream(data)) {
             dataStream = data as Stream
         }
         else {

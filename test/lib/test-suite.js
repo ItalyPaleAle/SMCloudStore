@@ -6,6 +6,7 @@ const assert = require('assert')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
+const StreamUtils = require('../../packages/core/dist/StreamUtils')
 
 const authData = require('../data/auth')
 
@@ -40,44 +41,18 @@ module.exports = (providerName, testSuiteOptions) => {
         // Will contain a list of containers created for this test
         const containers = []
 
-        // Will contain a list of test files
-        const testFiles = [
-            {
-                file: 'test/data/benni-asal-756919-unsplash.jpg',
-                destination: 'testimage.jpg',
-                contentType: 'image/jpeg',
-                size: 647173,
-                digestMD5: 'eab029bf064a2a44cbfb46264606f7d3',
-                digestSHA1: '1007c9d3516b054546a96754ae4651a2edaea5b7'
-            },
-            {
-                file: 'test/data/pg1008.txt',
-                destination: 'sub/folder/poem.txt',
-                contentType: 'text/plain',
-                size: 893449,
-                digestMD5: 'c0656985bed744013a8003af58cc83bf',
-                digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
-            },
-            {
-                string: 'M\'illumino d\'immenso',
-                destination: 'test/strings/poem.txt',
-                contentType: 'text/plain',
-                size: 20,
-                digestMD5: '0ba618099a4475a45887d4022340b72b',
-                digestSHA1: 'c07707cf9912ed73615dcf4cf7f21523dbaab329'
-            },
-            {
-                buffer: fs.readFileSync('test/data/pg1008.txt'),
-                destination: 'test/buffers/poem.txt',
-                contentType: 'application/x-poem',
-                size: 893449,
-                digestMD5: 'c0656985bed744013a8003af58cc83bf',
-                digestSHA1: '1d97b282a762d4b7b21c5bed5216cf8db2b3c54a'
-            }
-        ]
+        // Contains a list of test files
+        const testFiles = require('../data/test-files')
+        const largeFiles = require('../data/large-files')
 
-        // Enable bailing if a test fails
+        // Enable bailing (skip further tests) if a test fails
         this.bail(true)
+
+        before(function() {
+            if (testSuiteOptions.beforeTests) {
+                testSuiteOptions.beforeTests()
+            }
+        })
 
         it('constructor', function() {
             storage = new Provider(authData[providerName])
@@ -152,39 +127,56 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('putObject', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Upload some files, in parallel
             const promises = []
-            for (const i in testFiles) {
-                let upload
-                // Stream
-                if (testFiles[i].file) {
-                    upload = fs.createReadStream(testFiles[i].file)
-                }
-                // String
-                else if (testFiles[i].string) {
-                    upload = testFiles[i].string
-                }
-                // Buffer
-                else if (testFiles[i].buffer) {
-                    upload = testFiles[i].buffer
-                }
+            const addTests = (files) => {
+                for (const i in files) {
+                    let upload
+                    // Stream
+                    if (files[i].file) {
+                        upload = fs.createReadStream(files[i].file)
+                    }
+                    // String
+                    else if (files[i].string) {
+                        upload = files[i].string
+                    }
+                    // Buffer
+                    else if (files[i].buffer) {
+                        upload = files[i].buffer
+                    }
 
-                // Metadata
-                const metadata = {
-                    'Content-Type': testFiles[i].contentType
-                }
+                    // Metadata
+                    const metadata = {
+                        'Content-Type': files[i].contentType
+                    }
 
-                // Promise
-                const p = storage.putObject(containers[0], testFiles[i].destination, upload, metadata)
-                promises.push(p)
+                    // Promise
+                    const p = storage.putObject(containers[0], files[i].destination, upload, metadata)
+                    promises.push(p)
+                }
             }
+            addTests(testFiles)
+
+            // Check if we need to test with large files
+            if (testSuiteOptions.testLargeFiles) {
+                addTests(largeFiles)
+            }
+
             await Promise.all(promises)
         })
 
         it('listObjects', async function() {
+            // Increase timeout
+            this.timeout(60000)
+
+            let fileList = testFiles
+            if (testSuiteOptions.testLargeFiles) {
+                fileList = fileList.concat(largeFiles)
+            }
+
             // Sort objects by key
             // Based on https://stackoverflow.com/a/31725356/192024
             const ksort = (obj) => {
@@ -233,29 +225,28 @@ module.exports = (providerName, testSuiteOptions) => {
                 // Check if it's what we were expecting
                 const expect = []
                 let expectFolders = []
-                for (const i in testFiles) {
-                    const e = testFiles[i]
+                for (const file of fileList) {
                     // Files and folders inside the current path
-                    if (e.destination.startsWith(path)) {
+                    if (file.destination.startsWith(path)) {
                         // Check if we are expecting a folder
-                        const substringEnd = e.destination.indexOf('/', path.length)
+                        const substringEnd = file.destination.indexOf('/', path.length)
                         // We're expecting to find a folder
                         if (~substringEnd) {
-                            const expectFolder = e.destination.substring(0, substringEnd)
+                            const expectFolder = file.destination.substring(0, substringEnd)
                             expectFolders.push(expectFolder)
                         }
                         // We're expecting to find a file
                         else {
                             const expectEl = {
-                                path: e.destination,
+                                path: file.destination,
                                 lastModified: 'date',
-                                size: e.size
+                                size: file.size
                             }
                             if (listObjectOptions.includes('includeContentMD5')) {
-                                expectEl.contentMD5 = e.digestMD5
+                                expectEl.contentMD5 = file.digestMD5
                             }
                             if (listObjectOptions.includes('includeContentType')) {
-                                expectEl.contentType = e.contentType
+                                expectEl.contentType = file.contentType
                             }
                             if (listObjectOptions.includes('includeCreationTime')) {
                                 expectEl.creationTime = 'date'
@@ -285,7 +276,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('getObject', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Download the first 3 files and check their sha1 digest, in parallel
@@ -295,6 +286,9 @@ module.exports = (providerName, testSuiteOptions) => {
 
                 const p = storage.getObject(containers[0], e.destination)
                     .then((stream) => {
+                        // Ensure result is a Readable Stream
+                        assert(StreamUtils.IsReadableStream(stream))
+
                         return new Promise((resolve, reject) => {
                             stream
                                 .on('error', (err) => {
@@ -311,12 +305,34 @@ module.exports = (providerName, testSuiteOptions) => {
                 promises.push(p)
             }
 
+            // If we uploaded large files, test with one of those too
+            if (testSuiteOptions.testLargeFiles) {
+                promises.push(storage.getObject(containers[0], largeFiles[0].destination)
+                    .then((stream) => {
+                        // Ensure result is a Readable Stream
+                        assert(StreamUtils.IsReadableStream(stream))
+
+                        return new Promise((resolve, reject) => {
+                            stream
+                                .on('error', (err) => {
+                                    reject(err)
+                                })
+                                .pipe(digestStream('sha1', 'hex', (digest, length) => {
+                                    assert(length == largeFiles[0].size)
+                                    assert(digest == largeFiles[0].digestSHA1)
+                                    resolve()
+                                }))
+                                .resume()
+                        })
+                    }))
+            }
+
             await Promise.all(promises)
         })
 
         it('getObjectAsBuffer', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Read a file as Buffer and compare the content
@@ -328,7 +344,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
         it('getObjectAsString', async function() {
             // Increase timeout
-            this.timeout(60000)
+            this.timeout(120000)
             this.slow(0)
 
             // Read a file as Buffer and compare the content
@@ -339,10 +355,17 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('deleteObject', async function() {
+            // Increase timeout
+            this.timeout(60000)
+
             // Delete all files uploaded, in parallel
             const promises = []
-            for (const i in testFiles) {
-                promises.push(storage.deleteObject(containers[0], testFiles[i].destination))
+            let fileList = testFiles
+            if (testSuiteOptions.testLargeFiles) {
+                fileList = fileList.concat(largeFiles)
+            }
+            for (const file of fileList) {
+                promises.push(storage.deleteObject(containers[0], file.destination))
             }
             await Promise.all(promises)
         })

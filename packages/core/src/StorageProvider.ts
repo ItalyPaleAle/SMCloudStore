@@ -1,6 +1,7 @@
 'use strict'
 
 import {Stream} from 'stream'
+import {StreamToBuffer, StreamToString} from './StreamUtils'
 
 /** Dictionary of objects returned when listing a container. */
 export interface ListItemObject {
@@ -16,6 +17,8 @@ export interface ListItemObject {
     contentType?: string
     /** MD5 digest of the object, if present */
     contentMD5?: string
+    /** SHA1 digest of the objet, if present */
+    contentSHA1?: string
 }
 
 /** Dictionary of prefixes returned when listing a container. */
@@ -98,7 +101,7 @@ export abstract class StorageProvider {
     abstract listContainers(): Promise<string[]>
 
     /**
-     * Removes a contaienr from the server
+     * Removes a container from the server
      * 
      * @param container - Name of the container
      * @returns Promise that resolves once the container has been removed
@@ -139,37 +142,24 @@ export abstract class StorageProvider {
     getObjectAsBuffer(container: string, path: string): Promise<Buffer> {
         // Get the data as stream
         return this.getObject(container, path)
-            .then((stream) => {
-                // Read the stream into a Buffer
-                return new Promise((resolve, reject) => {
-                    const buffersCache = []
-                    stream.on('data', (data) => {
-                        buffersCache.push(data)
-                    })
-                    stream.on('end', () => {
-                        resolve(Buffer.concat(buffersCache))
-                    })
-                    stream.on('error', (error) => {
-                        reject(error)
-                    })
-                }) as Promise<Buffer>
-            })
+            // Read the stream into a Buffer
+            .then((stream) => StreamToBuffer(stream))
     }
 
     /**
-     * Requests an object from the server. The method returns a Promise that resolves to an utf8-encoded string containing the data from the server.
+     * Requests an object from the server. The method returns a Promise that resolves to a string containing the data from the server.
      * 
      * @param container - Name of the container
      * @param path - Path of the object, inside the container
+     * @param encoding - Optional encoding for the string; defaults to utf8
      * @returns String containing the object's data
      * @async
      */
-    getObjectAsString(container: string, path: string): Promise<string> {
+    getObjectAsString(container: string, path: string, encoding?: string): Promise<string> {
         // Get the data as stream
-        return this.getObjectAsBuffer(container, path)
-            .then((buffer) => {
-                return buffer.toString('utf8')
-            })
+        return this.getObject(container, path)
+            // Read the stream into a string
+            .then((stream) => StreamToString(stream, encoding))
     }
 
     /**
