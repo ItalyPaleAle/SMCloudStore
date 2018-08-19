@@ -30,7 +30,7 @@ interface GoogleCloudCreateContainerOptions {
  * Client to interact with Google Cloud Storage.
  */
 class GoogleCloudStorageProvider extends StorageProvider {
-    protected _client: GCStorage.Storage
+    protected _client: GCStorage
 
     /**
      * Initializes a new client to interact with Minio.
@@ -48,7 +48,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
         }
 
         // The Google Cloud library will validate the connection object
-        this._client = GCStorage(connection)
+        this._client = new GCStorage(connection)
     }
 
     /**

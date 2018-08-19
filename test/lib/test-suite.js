@@ -11,6 +11,10 @@ const StreamUtils = require('../../packages/core/dist/StreamUtils')
 const authData = require('../data/auth')
 
 module.exports = (providerName, testSuiteOptions) => {
+    if (!testSuiteOptions) {
+        testSuiteOptions = {}
+    }
+    
     const genContainerName = () => {
         const parts = []
 
@@ -49,7 +53,7 @@ module.exports = (providerName, testSuiteOptions) => {
         this.bail(true)
 
         before(function() {
-            if (testSuiteOptions.beforeTests) {
+            if (testSuiteOptions && testSuiteOptions.beforeTests) {
                 testSuiteOptions.beforeTests()
             }
         })
@@ -161,7 +165,7 @@ module.exports = (providerName, testSuiteOptions) => {
             addTests(testFiles)
 
             // Check if we need to test with large files
-            if (testSuiteOptions.testLargeFiles) {
+            if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 addTests(largeFiles)
             }
 
@@ -173,7 +177,7 @@ module.exports = (providerName, testSuiteOptions) => {
             this.timeout(60000)
 
             let fileList = testFiles
-            if (testSuiteOptions.testLargeFiles) {
+            if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
 
@@ -306,7 +310,7 @@ module.exports = (providerName, testSuiteOptions) => {
             }
 
             // If we uploaded large files, test with one of those too
-            if (testSuiteOptions.testLargeFiles) {
+            if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 promises.push(storage.getObject(containers[0], largeFiles[0].destination)
                     .then((stream) => {
                         // Ensure result is a Readable Stream
@@ -361,7 +365,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // Delete all files uploaded, in parallel
             const promises = []
             let fileList = testFiles
-            if (testSuiteOptions.testLargeFiles) {
+            if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
             for (const file of fileList) {
