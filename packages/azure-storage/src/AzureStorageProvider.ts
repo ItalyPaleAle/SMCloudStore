@@ -12,7 +12,7 @@ interface AzureStorageConnectionObject {
     storageAccount: string
     /** Access key (secret key) for the storage account */
     storageAccessKey: string
-    /** Endpoint to use. Default is `blob.storage.windows.net` */
+    /** Endpoint to use. Default is `core.windows.net` */
     host?: string
 }
 type AzureStorageConnectionOptions = string | AzureStorageConnectionObject
@@ -37,7 +37,7 @@ class AzureStorageProvider extends StorageProvider {
     /**
      * Initializes a new client to interact with Azure Blob Storage.
      * 
-     * @param connection - Connection options
+     * @param connection - Connection options, passed as an object with interface `AzureStorageConnectionObject`, or as a connection string (e.g. as returned from the Azure Portal)
      */
     constructor(connection: AzureStorageConnectionOptions) {
         super(connection)
@@ -46,8 +46,12 @@ class AzureStorageProvider extends StorageProvider {
         this._provider = 'azure-storage'
 
         // The Azure library will validate the connection object
-        // TODO: Support object
-        this._client = Azure.createBlobService(connection as string)
+        if (typeof connection == 'string') {
+            this._client = Azure.createBlobService(connection as string)
+        }
+        else {
+            this._client = Azure.createBlobService(connection.storageAccount, connection.storageAccessKey, connection.host || undefined)
+        }
     }
 
     /**
