@@ -1,4 +1,4 @@
 #!/bin/sh
 
 npm install
-npx lerna bootstrap --hoist
+./node_modules/.bin/lerna bootstrap --hoist
