@@ -168,6 +168,11 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('listObjects', async function() {
+            let fileList = testFiles
+            if (testSuiteOptions.testLargeFiles) {
+                fileList = fileList.concat(largeFiles)
+            }
+
             // Sort objects by key
             // Based on https://stackoverflow.com/a/31725356/192024
             const ksort = (obj) => {
@@ -216,8 +221,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 // Check if it's what we were expecting
                 const expect = []
                 let expectFolders = []
-                for (const i in testFiles) {
-                    const e = testFiles[i]
+                for (const e of fileList) {
                     // Files and folders inside the current path
                     if (e.destination.startsWith(path)) {
                         // Check if we are expecting a folder

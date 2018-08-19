@@ -297,7 +297,7 @@ class B2Upload {
             })
             // End
             .then((response) => {
-                console.log(response)
+                //console.log(response)
             })
             // In case of errors, if we have a fileId, remove the incomplete upload
             .catch((err) => {

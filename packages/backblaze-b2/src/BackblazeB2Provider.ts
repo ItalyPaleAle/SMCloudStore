@@ -194,39 +194,58 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     listObjects(container: string, prefix?: string): Promise<ListResults> {
-        return new Promise((resolve, reject) => {
-            const stream = this._client.listObjectsV2(container, prefix, false) as Stream
-            const list = [] as ListResults
-            stream.on('data', (obj) => {
-                let res
+        // We might need to do multiple requests if there are many files in the bucket that match the prefix
+        const list = [] as ListResults
+        const requestList = (bucketId: string, startFileName: string): Promise<ListResults> => {
+            return this._client.listFileNames({
+                    bucketId: bucketId,
+                    prefix: prefix || '',
+                    delimiter: '/',
+                    maxFileCount: 1000
+                })
+                .then((response) => {
+                    if (!response || !response.data || !response.data.files) {
+                        throw Error('Invalid response when listing the container')
+                    }
 
-                // If we have a file, add path, lastModified and size
-                if (obj.name && obj.lastModified) {
-                    res = {
-                        lastModified: obj.lastModified,
-                        path: obj.name,
-                        size: obj.size
-                    } as ListItemObject
-                }
-                // If we have a prefix (folder) instead
-                else if (obj.prefix) {
-                    res = {
-                        prefix: obj.prefix
-                    } as ListItemPrefix
-                }
-                else {
-                    throw Error('Invalid object returned from the server')
+                    // Iterate through the response and add everything to the list
+                    for (const file of response.data.files) {
+                        // If we have a file
+                        if (file && file.action == 'upload') {
+                            list.push({
+                                path: file.fileName,
+                                size: file.contentLength,
+                                lastModified: new Date(file.uploadTimestamp),
+                                contentType: file.contentType
+                            } as ListItemObject)
+                        }
+                        else if (file && file.action == 'folder') {
+                            list.push({
+                                prefix: file.fileName
+                            } as ListItemPrefix)
+                        }
+                    }
+                    
+                    // Check if we have to make another request, or just return the list
+                    if (response.data.nextFileName) {
+                        return requestList(bucketId, response.data.nextFileName)
+                    }
+                    else {
+                        return list
+                    }
+                })
+        }
+
+        // Request the bucketId for the container first
+        return this._getBucketId(container)
+            .then((bucketId) => {
+                if (!bucketId) {
+                    throw Error('Container not found: ' + container)
                 }
 
-                list.push(res)
+                // Request the full list (which might require multiple network calls), then return it
+                return requestList(bucketId, null)
             })
-            stream.on('error', (err) => {
-                reject(err)
-            })
-            stream.on('end', () => {
-                resolve(list)
-            })
-        })
     }
 
     /**

@@ -11,6 +11,7 @@ const testSuiteOptions = {
     createContainerOptions: {
         access: 'public'
     },
+    listObjects: ['includeContentType'],
     testLargeFiles: true,
     beforeTests: () => {
         // Before all tests, set the ChunkSize to 5MB, so we can use smaller files during test
