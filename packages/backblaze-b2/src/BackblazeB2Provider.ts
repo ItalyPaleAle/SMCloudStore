@@ -29,6 +29,10 @@ interface BackblazeB2CreateContainerOptions {
 class BackblazeB2Provider extends StorageProvider {
     protected _client: any
     private _isAuthorized: boolean
+    private _bucketIdCache: {[s: string]: {result: string, time: number}}
+
+    /** Specifies for how long (in ms) to keep BucketId data in cache. Set to 0 to disable caching. Default is 15 minutes. */
+    static BucketIdCacheDuration = 900000
 
     /**
      * Initializes a new client to interact with Backblaze B2.
@@ -47,6 +51,9 @@ class BackblazeB2Provider extends StorageProvider {
 
         // Provider name
         this._provider = 'backblaze-b2'
+
+        // Initialize the bucket ID cache
+        this._bucketIdCache = {}
 
         // The B2 library will validate the connection object
         this._client = new B2(connection)
@@ -129,8 +136,10 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     deleteContainer(container: string): Promise<void> {
-        // Request the bucketId for the container
-        return this._getBucketId(container)
+        // Request the bucketId for the container, after ensuring that we're authorized
+        return Promise.resolve()
+            .then(() => this._ensureAuthorized())
+            .then(() => this._getBucketId(container))
             .then((bucketId) => {
                 if (!bucketId) {
                     throw Error('Container not found: ' + container)
@@ -150,7 +159,13 @@ class BackblazeB2Provider extends StorageProvider {
      * The Backblaze B2 APIs have relatively poor support for streams, as it requires the size of the data to be sent at the beginning of the request. As a consequence, this method will upload the file using a different API based on the input data:
      * 
      * 1. If the length of the data can be known before the upload starts, makes a single upload call. This applies to all situations when `data` is a Buffer or a string, and when `data` is a stream and either the `length` argument is specified, or `data.byteLength` is defined.
-     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than 5MB the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. Maximum size is 200GB (using 20MB chunks - configurable with the `chunkSize` property).
+     * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than `B2Upload.ChunkSize` (default: 20MB; minimum: 5MB) the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. Maximum size is 200GB (using 20MB chunks - configurable with the `B2Upload.chunkSize` property).
+     * 
+     * Notes on the metadata:
+     * 
+     * - The `Content-Type` header is always supported and used as-is
+     * - When using the large file APIs, no other custom header can be added
+     * - When using the "normal APIs", you can add up to 10 custom headers, all starting with the `X-Bz-Info-` prefix (if your headers don't start with this prefix, it will be added automatically)
      * 
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
@@ -162,6 +177,8 @@ class BackblazeB2Provider extends StorageProvider {
      */
     putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, length?: number): Promise<void> {
         return Promise.resolve()
+            // Step zero: ensure we're authorized
+            .then(() => this._ensureAuthorized())
             // First step: get the bucketId for the container
             // This also calls _ensureAuthorized
             .then(() => this._getBucketId(container))
@@ -253,8 +270,10 @@ class BackblazeB2Provider extends StorageProvider {
                 })
         }
 
-        // Request the bucketId for the container first
-        return this._getBucketId(container)
+        // Request the bucketId for the container first (after ensuring that we're authorized)
+        return Promise.resolve()
+            .then(() => this._ensureAuthorized())
+            .then(() => this._getBucketId(container))
             .then((bucketId) => {
                 if (!bucketId) {
                     throw Error('Container not found: ' + container)
@@ -274,8 +293,10 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     deleteObject(container: string, path: string): Promise<void> {
-        // Request the bucketId for the container first
-        return this._getBucketId(container)
+        // Request the bucketId for the container first, after ensuring we're authorized
+        return Promise.resolve()
+            .then(() => this._ensureAuthorized())
+            .then(() => this._getBucketId(container))
             .then((bucketId) => {
                 if (!bucketId) {
                     throw Error('Container not found: ' + container)
@@ -298,17 +319,27 @@ class BackblazeB2Provider extends StorageProvider {
     }
 
     /**
-     * Returns the bucketId property for a given bucket name, as most B2 methods require a bucket's ID
+     * Returns the bucketId property for a given bucket name, as most B2 methods require a bucket's ID.
+     * 
+     * The result is cached in memory for a certain amount of time configured with `BackblazeB2Provider.BucketIdCacheDuration` (default: 15 minutes), and up to 100 IDs.
      * 
      * @param bucketName - Name of the bucket
      * @returns Promise that resolves with the bucketId
      * @async
      */
     private _getBucketId(bucketName: string): Promise<string> {
-        // Ensure we are authorized, then perform the request
+        // First, check if the data is cached, and the cache hasn't expired
+        // (If caching is enabled at all)
+        const cachingEnabled = BackblazeB2Provider.BucketIdCacheDuration && BackblazeB2Provider.BucketIdCacheDuration > 0
+        if (cachingEnabled
+            && this._bucketIdCache[bucketName]
+            && (Date.now() - this._bucketIdCache[bucketName].time <  BackblazeB2Provider.BucketIdCacheDuration)
+        ) {
+            return Promise.resolve(this._bucketIdCache[bucketName].result)
+        }
+
         // There's no method in the B2 APIs to get a single bucket, so we need to request the full list
-        // TODO: ADD CACHING
-        return this._ensureAuthorized()
+        return Promise.resolve()
             .then(() => this._client.listBuckets())
             .then((response) => {
                 if (!response || !response.data || !response.data.buckets || !Array.isArray(response.data.buckets)) {
@@ -318,6 +349,19 @@ class BackblazeB2Provider extends StorageProvider {
                 // Look for the bucket with the requested name, then return the id
                 for (const el of response.data.buckets) {
                     if (el.bucketName == bucketName) {
+                        // If caching is enabled, store the result
+                        if (cachingEnabled) {
+                            this._bucketIdCache[bucketName] = {
+                                result: el.bucketId,
+                                time: Date.now()
+                            }
+                            // If there are more than 100 elements in the cache, remove the first ones
+                            // This should be in order with ES2015
+                            const keys = Object.keys(this._bucketIdCache)
+                            if (keys.length > 100) {
+                                delete this._bucketIdCache[keys.shift()]
+                            }
+                        }
                         return el.bucketId as string
                     }
                 }

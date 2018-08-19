@@ -5,7 +5,9 @@ import {Stream, Readable} from 'stream'
 import {WaitPromise} from '@smcloudstore/core/dist/Utils'
 
 /**
- * Manages the upload of objects to Backblaze B2
+ * Manages the upload of objects to Backblaze B2.
+ * 
+ * This supports using Buffers and strings with the "simple APIs". It supports streams too, using either the "simple APIs" if the stream is less than `ChunkSize`, or the large file APIs otherwise. The selection happens automatically.
  */
 class B2Upload {
     /** Size of each chunk that is uploaded when using B2's large file APIs, in bytes. Minimum value is 5MB; default is 20 MB. */
@@ -194,8 +196,6 @@ class B2Upload {
                 return this.client.uploadFile(requestArgs)
             })
             .catch((err) => {
-                // TODO: REMOVE THIS
-                console.error('Upload failed with error ', err)
                 if (retryCounter < B2Upload.Retries) {
                     retryCounter++
                     // Before retrying, wait for an increasing delay
@@ -273,8 +273,21 @@ class B2Upload {
         let fileId = null
         return Promise.resolve()
             // First step: request the fileId
-            // TODO: METADATA
-            .then(() => this.client.startLargeFile({bucketId: this.bucketId, fileName: this.path}))
+            .then(() => {
+                let contentType = 'application/octet-stream'
+
+                // Metadata
+                // When using the large file API, we can't add custom headers, so we're only looking at Content-Type
+                if (this.metadata && this.metadata['Content-Type']) {
+                    contentType = this.metadata['Content-Type']
+                }
+                
+                return this.client.startLargeFile({
+                    bucketId: this.bucketId,
+                    fileName: this.path,
+                    contentType: contentType
+                })
+            })
             // Second step: upload all parts
             .then((response) => {
                 if (!response || !response.data || !response.data.fileId) {
@@ -336,8 +349,6 @@ class B2Upload {
                 })
             })
             .catch((err) => {
-                // TODO: REMOVE THIS
-                console.error('Upload failed with error ', err)
                 if (retryCounter < 3) {
                     retryCounter++
                     // Before retrying, wait for an increasing delay
