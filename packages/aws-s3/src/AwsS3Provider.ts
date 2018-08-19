@@ -17,25 +17,57 @@ interface AwsS3ConnectionOptions {
 }
 
 /**
- * Options passed when creating a container
+ * ACL for containers and objects. Refer to the [documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl) for more details. Default value is `private` for containers and null (inherited) for objects.
+ * 
+ * For consistency with other providers, a few aliases are added:
+ * - `none` is an alias for `private`
+ * - `public` is an alias for `public-read`
  */
-interface AwsS3CreateContainerOptions {
-    /**
-     * Determine access level for all files in the container. Refer to the (https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl)[documentation] for more details. Default value is `private`.
-     * 
-     * For consistency with other providers, a few aliases are added:
-     * - `none` is an alias for `private`
-     * - `public` is an alias for `public-read`
-     */
-    access?: 'private' | 'public-read' | 'public-read-write' | 'authenticated-read' | 'none' | 'public'
-}
+type AwsS3ACL = 'private' | 'public-read' | 'public-read-write' | 'authenticated-read' | 'none' | 'public'
 
 /**
  * Options passed when creating a container
  */
-interface GenericS3CreateContainerOptions {
-    /** Region in which to create the container; useful for AWS S3 and some other providers based on this */
-    region?: string
+interface AwsS3CreateContainerOptions {
+    /** Determine access level for all objects in the container */
+    access?: AwsS3ACL
+}
+
+/**
+ * Options passed when putting an object
+ */
+interface AwsS3PutObjectOptions {
+    /** Determine access level for the object. Default: inherit from the container */
+    access?: AwsS3ACL,
+
+    /** Enable AES256 server-side encryption for the object at rest, with AWS-managed keys. Default: disabled */
+    serverSideEncryption?: boolean
+
+    /** Storage class to use. Refer to the [documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html) for more details. Default is 'STANDARD' */
+    class?: 'STANDARD' | 'REDUCED_REDUNDANCY' | 'STANDARD_IA' | 'ONEZONE_IA'
+}
+
+/**
+ * Returns the value for the ACL to pass to the APIs, given an access argument
+ * 
+ * @param access Value among the types of `AwsS3ACL`
+ * @returns String value to pass to the S3 APIs
+ */
+function ACLString(access: AwsS3ACL): string {
+    switch (access) {
+        case 'public-read':
+        case 'public':
+            return 'public-read'
+            break
+        case 'public-read-write':
+        case 'authenticated-read':
+            return access
+            break
+        case 'none':
+        case 'private':
+        default:
+            return 'private'
+    }
 }
 
 /**
@@ -81,26 +113,9 @@ class AwsS3Provider extends StorageProvider {
             if (!options) {
                 options = {}
             }
-            // Get the ACL param
-            let ACL
-            switch (options.access) {
-                case 'public-read':
-                case 'public':
-                    ACL = 'public-read'
-                    break
-                case 'public-read-write':
-                case 'authenticated-read':
-                    ACL = options.access
-                    break
-                case 'none':
-                case 'private':
-                default:
-                    ACL = 'private'
-                    break
-            }
 
             const methodOptions = {
-                ACL: ACL,
+                ACL: ACLString(options.access),
                 Bucket: container,
                 CreateBucketConfiguration: {
                     LocationConstraint: this._region
@@ -209,7 +224,7 @@ class AwsS3Provider extends StorageProvider {
             }
             this._client.deleteBucket(methodOptions, function(err, data) {
                 if (err || !data) {
-                    return reject(err || Error('Invalid response while deleting container'))   
+                    return reject(err || Error('Invalid response while deleting container'))
                 }
                 
                 resolve()
@@ -224,11 +239,80 @@ class AwsS3Provider extends StorageProvider {
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
      * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
+     * @param options - Additional options used to create the object on the server
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any): Promise<void> {
-        return Promise.resolve()
+    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, options?: AwsS3PutObjectOptions): Promise<void> {
+        if (!options) {
+            options = {}
+        }
+
+        return new Promise((resolve, reject) => {
+            // Basic method options
+            const methodOptions = {
+                Bucket: container,
+                Body: data,
+                Key: path
+            } as S3.PutObjectRequest
+
+            // ACL: add only if explicitly passed
+            if (options.access) {
+                methodOptions.ACL = ACLString(options.access)
+            }
+
+            // Storage class
+            if (options.class) {
+                methodOptions.StorageClass = options.class
+            }
+
+            // Enable server-side encryption
+            if (options.serverSideEncryption) {
+                methodOptions.ServerSideEncryption = 'AES256'
+            }
+
+            // Metadata
+            if (metadata) {
+                // Clone the metadata object before altering it
+                const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
+    
+                if (metadataClone['Content-Type']) {
+                    methodOptions.ContentType = metadataClone['Content-Type']
+                    delete metadataClone['Content-Type']
+                }
+                if (metadataClone['Content-Encoding']) {
+                    methodOptions.ContentEncoding = metadataClone['Content-Encoding']
+                    delete metadataClone['Content-Encoding']
+                }
+                if (metadataClone['Content-Language']) {
+                    methodOptions.ContentLanguage = metadataClone['Content-Language']
+                    delete metadataClone['Content-Language']
+                }
+                if (metadataClone['Cache-Control']) {
+                    methodOptions.CacheControl = metadataClone['Cache-Control']
+                    delete metadataClone['Cache-Control']
+                }
+                if (metadataClone['Content-Disposition']) {
+                    methodOptions.ContentDisposition = metadataClone['Content-Disposition']
+                    delete metadataClone['Content-Disposition']
+                }
+                if (metadataClone['Content-MD5']) {
+                    methodOptions.ContentMD5 = metadataClone['Content-MD5']
+                    delete metadataClone['Content-MD5']
+                }
+    
+                methodOptions.Metadata = metadataClone
+            }
+
+            // Send the request
+            this._client.putObject(methodOptions, function(err, data) {
+                if (err || !data || !data.ETag) {
+                    return reject(err || Error('Invalid response while putting object'))
+                }
+
+                resolve()
+            })
+        })
     }
 
     /**
