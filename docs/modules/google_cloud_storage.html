@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ListItemObject | SMCloudStore</title>
+	<title>google-cloud-storage | SMCloudStore</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="listitemobject.html">ListItemObject</a>
+					<a href="google_cloud_storage.html">google-cloud-storage</a>
 				</li>
 			</ul>
-			<h1>Interface ListItemObject</h1>
+			<h1>Package google-cloud-storage</h1>
 		</div>
 	</div>
 </header>
@@ -68,127 +68,26 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Dictionary of objects returned when listing a container.</p>
-					</div>
+					<h1 id="-smcloudstore-google-cloud-storage">@smcloudstore/google-cloud-storage</h1>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">ListItemObject</span>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#contentmd5" class="tsd-kind-icon">contentMD5</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#contenttype" class="tsd-kind-icon">content<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#creationtime" class="tsd-kind-icon">creation<wbr>Time</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#lastmodified" class="tsd-kind-icon">last<wbr>Modified</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#path" class="tsd-kind-icon">path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listitemobject.html#size" class="tsd-kind-icon">size</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/google_cloud_storage.googlecloudstorageprovider.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Storage<wbr>Provider</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="contentmd5" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> contentMD5</h3>
-					<div class="tsd-signature tsd-kind-icon">contentMD5<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L18">core/src/StorageProvider.ts:18</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>MD5 digest of the object, if present</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="contenttype" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> content<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">content<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L16">core/src/StorageProvider.ts:16</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Content-Type header of the object, if present</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="creationtime" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> creation<wbr>Time</h3>
-					<div class="tsd-signature tsd-kind-icon">creation<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L14">core/src/StorageProvider.ts:14</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Date when the object was created</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="lastmodified" class="tsd-anchor"></a>
-					<h3>last<wbr>Modified</h3>
-					<div class="tsd-signature tsd-kind-icon">last<wbr>Modified<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L12">core/src/StorageProvider.ts:12</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Date when the object was last modified</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
-					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L8">core/src/StorageProvider.ts:8</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Full path of the object inside the container</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="size" class="tsd-anchor"></a>
-					<h3>size</h3>
-					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/183654a/packages/core/src/StorageProvider.ts#L10">core/src/StorageProvider.ts:10</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Size in bytes of the object</p>
-						</div>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/google_cloud_storage.googlecloudconnectionoptions.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Connection<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/google_cloud_storage.googlecloudcreatecontaineroptions.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Create<wbr>Container<wbr>Options</a></li>
+							</ul>
+						</section>
 					</div>
 				</section>
 			</section>
@@ -199,48 +98,42 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="aws_s3.html">aws-<wbr>s3</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="azure_storage.html">azure-<wbr>storage</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="backblaze_b2.html">backblaze-<wbr>b2</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="core.html">core</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="generic_s3.html">generic-<wbr>s3</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="google_cloud_storage.html">google-<wbr>cloud-<wbr>storage</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="minio.html">minio</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="smcloudstore.html">smcloudstore</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="../classes/storageprovider.html" class="tsd-kind-icon">Storage<wbr>Provider</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/google_cloud_storage.googlecloudstorageprovider.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Storage<wbr>Provider</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="listitemobject.html" class="tsd-kind-icon">List<wbr>Item<wbr>Object</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#contentmd5" class="tsd-kind-icon">contentMD5</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#contenttype" class="tsd-kind-icon">content<wbr>Type</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#creationtime" class="tsd-kind-icon">creation<wbr>Time</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#lastmodified" class="tsd-kind-icon">last<wbr>Modified</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#path" class="tsd-kind-icon">path</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="listitemobject.html#size" class="tsd-kind-icon">size</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/google_cloud_storage.googlecloudconnectionoptions.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Connection<wbr>Options</a>
 					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface">
-						<a href="listitemprefix.html" class="tsd-kind-icon">List<wbr>Item<wbr>Prefix</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="../globals.html#listresults" class="tsd-kind-icon">List<wbr>Results</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="../globals.html#smcloudstore" class="tsd-kind-icon">SMCloud<wbr>Store</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/google_cloud_storage.googlecloudcreatecontaineroptions.html" class="tsd-kind-icon">Google<wbr>Cloud<wbr>Create<wbr>Container<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

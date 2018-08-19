@@ -69,6 +69,7 @@
 				<ul>
 					<li><a href="https://aws.amazon.com/s3/">AWS S3</a></li>
 					<li><a href="https://azure.microsoft.com/en-us/services/storage/blobs/">Azure Blob Storage</a></li>
+					<li><a href="https://www.backblaze.com/b2/cloud-storage.html">Backblaze B2</a></li>
 					<li><a href="https://cloud.google.com/storage/">Google Cloud Storage</a></li>
 					<li><a href="https://minio.io/">Minio</a></li>
 					<li>Other S3-compatible providers</li>
@@ -84,12 +85,12 @@
 				<p>This code is licensed under the terms of the MIT license (see LICENSE.md).</p>
 				<h2 id="add-to-your-project">Add to your project</h2>
 				<p>To start, install the <a href="https://www.npmjs.com/package/smcloudstore">smcloudstore</a> package:</p>
-				<pre><code class="lang-sh">npm install --save smcloudstore
-</code></pre>
+				<pre><code class="language-sh">npm install --save smcloudstore</code></pre>
 				<p>Modules for each cloud provider are available on separate packages, so you can choose which ones to include. You need to install at least one of the following packages to use SMCloudStore:</p>
 				<ul>
 					<li><a href="https://www.npmjs.com/package/@smcloudstore/aws-s3">@smcloudstore/aws-s3</a>: <br /> <code>npm install --save @smcloudstore/aws-s3</code></li>
 					<li><a href="https://www.npmjs.com/package/@smcloudstore/azure-storage">@smcloudstore/azure-storage</a>: <br /> <code>npm install --save @smcloudstore/azure-storage</code></li>
+					<li><a href="https://www.npmjs.com/package/@smcloudstore/backblaze-b2">@smcloudstore/backblaze-b2</a>: <br /> <code>npm install --save @smcloudstore/backblaze-b2</code></li>
 					<li><a href="https://www.npmjs.com/package/@smcloudstore/google-cloud-storage">@smcloudstore/google-cloud-storage</a>: <br /> <code>npm install --save @smcloudstore/google-cloud-storage</code></li>
 					<li><a href="https://www.npmjs.com/package/@smcloudstore/minio">@smcloudstore/minio</a>: <br /> <code>npm install --save @smcloudstore/minio</code></li>
 					<li><a href="https://www.npmjs.com/package/@smcloudstore/generic-s3">@smcloudstore/generic-s3</a>: <br /> <code>npm install --save @smcloudstore/generic-s3</code></li>
@@ -102,15 +103,16 @@
 							<th>SMCloudStore</th>
 							<th>AWS</th>
 							<th>Azure</th>
+							<th>Backblaze</th>
 							<th>Google Cloud</th>
 							<th>Minio</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody><tr>
 							<td><strong>Object</strong></td>
 							<td>Object</td>
 							<td>Blob</td>
+							<td>File</td>
 							<td>Object</td>
 							<td>Object</td>
 						</tr>
@@ -120,16 +122,16 @@
 							<td>Container</td>
 							<td>Bucket</td>
 							<td>Bucket</td>
+							<td>Bucket</td>
 						</tr>
-					</tbody>
-				</table>
+				</tbody></table>
 				<h2 id="api-guide">API Guide</h2>
 				<p>Full API documentation is available on this project&#39;s <a href="https://italypaleale.github.io/SMCloudStore/index.html">GitHub page</a> and in the <a href="https://github.com/ItalyPaleAle/SMCloudStore/tree/master/docs"><code>/docs</code></a> folder.</p>
 				<p>Each cloud storage provider is implemented in a class defined in one of the modules above. All providers inherit from the <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html"><code>StorageProvider</code></a> abstract class, which is in the <code>@smcloudstore/core</code> package.</p>
 				<p>All asynchronous methods in the examples below return Promises, which can be used as then-ables or with async/await in ES2016. The examples below show using async/await syntax, and assume that all async calls are included in async functions.</p>
 				<h3 id="initialization">Initialization</h3>
 				<p>The main way to initialize the library is to use the <a href="https://italypaleale.github.io/SMCloudStore/globals.html#smcloudstore"><code>SMCloudStore.Create(provider, connection)</code></a> factory method. Using the factory method is recommended because it supports loading all providers with a &quot;pluggable API&quot;, by just specifying their identifier in the first argument.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Require the package</span>
 <span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
 
 <span class="hljs-comment">// Identifier of the provider</span>
@@ -141,11 +143,10 @@
 }
 
 <span class="hljs-comment">// Return an instance of the cloud storage provider class</span>
-<span class="hljs-keyword">const</span> storage = SMCloudStore.create(provider, connection)
-</code></pre>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(provider, connection)</code></pre>
 				<p>The format of the <code>connection</code> argument varies by cloud provider. For more details, please refer to the README for each provider in the <a href="https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages"><code>packages/</code></a> folder.</p>
 				<p>Alternatively, you can create an instance of each provider by initializating the provider&#39;s class directly and invoking the <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#constructor"><code>constructor(connection)</code></a> method. For example, to create a new Azure Blob Storage provider:</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Require the package</span>
 <span class="hljs-keyword">const</span> AzureProvider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@smcloudstore/azure-storage'</span>)
 
 <span class="hljs-comment">// Complete with the connection options for the provider</span>
@@ -154,42 +155,36 @@
 }
 
 <span class="hljs-comment">// Initialize the provider object</span>
-<span class="hljs-keyword">const</span> storage = <span class="hljs-keyword">new</span> AzureProvider(connection)
-</code></pre>
+<span class="hljs-keyword">const</span> storage = <span class="hljs-keyword">new</span> AzureProvider(connection)</code></pre>
 				<h3 id="storage-createcontainer-container-options-">storage.createContainer(container, [options])</h3>
 				<p>Using <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> you can create a new container on the cloud storage server. The <code>options</code> argument is a dictionary with various options, depending on the provider being used. The method returns a Promise that resolves with no value when the container has been created.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Create a new container called "testcontainer"</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Create a new container called "testcontainer"</span>
 <span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>)
 
 <span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})
-</code></pre>
+<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})</code></pre>
 				<h3 id="storage-containerexists-container-">storage.containerExists(container)</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#containerexists"><code>storage.containerExists(container)</code></a> returns a Promise that resolves with a boolean indicating whether a container exists on the provider.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Once the async method resolves, exists will contain true or false</span>
-<span class="hljs-keyword">const</span> exists = <span class="hljs-keyword">await</span> storage.containerExists(<span class="hljs-string">'testcontainer'</span>)
-</code></pre>
+				<pre><code class="language-js"><span class="hljs-comment">// Once the async method resolves, exists will contain true or false</span>
+<span class="hljs-keyword">const</span> exists = <span class="hljs-keyword">await</span> storage.containerExists(<span class="hljs-string">'testcontainer'</span>)</code></pre>
 				<h3 id="storage-ensurecontainer-container-options-">storage.ensureContainer(container, [options])</h3>
 				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> is similar to <code>storage.createContainer()</code>, but it creates the container only if it doesn&#39;t already exist. The method returns a Promise that resolves with no value when the container has been created.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Container "testcontainer" will be created only if it doesn't already exists</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Container "testcontainer" will be created only if it doesn't already exists</span>
 <span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>)
 
 <span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})
-</code></pre>
+<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>, {<span class="hljs-attr">region</span>: <span class="hljs-string">'us-east-1'</span>})</code></pre>
 				<h3 id="storage-listcontainers-">storage.listContainers()</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listcontainers"><code>storage.listContainers()</code></a> returns a Promise that resolves with the list of names of the containers that the user owns on the storage server.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// List all containers the user owns</span>
+				<pre><code class="language-js"><span class="hljs-comment">// List all containers the user owns</span>
 <span class="hljs-keyword">const</span> containers = <span class="hljs-keyword">await</span> storage.listContainers()
-<span class="hljs-comment">// Result is an array of strings, like: ['testcontainer', 'testcontainer2']</span>
-</code></pre>
+<span class="hljs-comment">// Result is an array of strings, like: ['testcontainer', 'testcontainer2']</span></code></pre>
 				<h3 id="storage-deletecontainer-container-">storage.deleteContainer(container)</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#deletecontainer"><code>storage.deleteContainer(container)</code></a> deletes a container from the storage server. It returns a Promise that resolves with no value on success.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Delete a container</span>
-<span class="hljs-keyword">await</span> storage.deleteContainer(<span class="hljs-string">'testcontainer'</span>)
-</code></pre>
+				<pre><code class="language-js"><span class="hljs-comment">// Delete a container</span>
+<span class="hljs-keyword">await</span> storage.deleteContainer(<span class="hljs-string">'testcontainer'</span>)</code></pre>
 				<h3 id="storage-putobject-container-path-data-metadata-">storage.putObject(container, path, data, metadata)</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#putobject"><code>storage.putObject(container, path, data, metadata)</code></a>] is the method to put (upload) an object to the storage server.</p>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#putobject"><code>storage.putObject(container, path, data, metadata)</code></a> is the method to put (upload) an object to the storage server.</p>
 				<p>Arguments are:</p>
 				<ul>
 					<li><code>container</code>: name of the destination container.</li>
@@ -198,7 +193,7 @@
 					<li><code>metadata</code>: object containing custom metadata and properties. An important key in the metadata object is <code>Content-Type</code>, which sets the Content-Type header for the file. Some providers might have special treatment for other keys too.</li>
 				</ul>
 				<p>The method returns a Promise that resolves with no value when the upload is complete.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Upload a stream</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Upload a stream</span>
 <span class="hljs-keyword">const</span> data = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createReadStream(<span class="hljs-string">'someimage.jpg'</span>)
 <span class="hljs-keyword">const</span> metadata = {
     <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'image/jpeg'</span>
@@ -210,43 +205,39 @@
 <span class="hljs-keyword">const</span> metadata = {
     <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'text/plain'</span>
 }
-<span class="hljs-keyword">await</span> storage.putObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/dante.txt'</span>, data, metadata)
-</code></pre>
+<span class="hljs-keyword">await</span> storage.putObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/dante.txt'</span>, data, metadata)</code></pre>
 				<h3 id="storage-getobject-container-path-">storage.getObject(container, path)</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobject"><code>storage.getObject(container, path)</code></a>] allows getting (downloading) an object from the storage server.</p>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobject"><code>storage.getObject(container, path)</code></a> allows getting (downloading) an object from the storage server.</p>
 				<p>Arguments are:</p>
 				<ul>
 					<li><code>container</code>: name of the container with the object.</li>
 					<li><code>path</code>: full path of the object to retrieve, inside the container.</li>
 				</ul>
 				<p>The method returns a Promise that resolves with a Readable Stream.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Retrieve a file</span>
 <span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> storage.getObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
 
 <span class="hljs-comment">// The method returns a Readable Stream that can be processed as you wish</span>
 <span class="hljs-comment">// For example, to write the stream to file:</span>
-stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createWriteStream(<span class="hljs-string">'write/to/someimage.jpg'</span>))
-</code></pre>
+stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createWriteStream(<span class="hljs-string">'write/to/someimage.jpg'</span>))</code></pre>
 				<h3 id="storage-getobjectasbuffer-container-path-">storage.getObjectAsBuffer(container, path)</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer"><code>storage.getObjectAsBuffer(container, path)</code></a>] behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data in a Buffer object loaded in memory.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file as buffer</span>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasbuffer"><code>storage.getObjectAsBuffer(container, path)</code></a> behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data in a Buffer object loaded in memory.</p>
+				<pre><code class="language-js"><span class="hljs-comment">// Retrieve a file as buffer</span>
 <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">await</span> storage.getObjectAsBuffer(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
 
 <span class="hljs-comment">// Print the last 100 bytes from the Buffer</span>
-<span class="hljs-built_in">console</span>.log(buffer.slice(<span class="hljs-number">-100</span>))
-</code></pre>
+<span class="hljs-built_in">console</span>.log(buffer.slice(<span class="hljs-number">-100</span>))</code></pre>
 				<h3 id="storage-getobjectasstring-container-path-">storage.getObjectAsString(container, path)</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring"><code>storage.getObjectAsString(container, path)</code></a>] behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data as an utf8-encoded string.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file as string</span>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#getobjectasstring"><code>storage.getObjectAsString(container, path)</code></a> behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data as a utf8-encoded string.</p>
+				<pre><code class="language-js"><span class="hljs-comment">// Retrieve a file as string</span>
 <span class="hljs-keyword">const</span> string = <span class="hljs-keyword">await</span> storage.getObjectAsString(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'textfile.txt'</span>)
 
 <span class="hljs-comment">// Print the string</span>
-<span class="hljs-built_in">console</span>.log(string)
-</code></pre>
+<span class="hljs-built_in">console</span>.log(string)</code></pre>
 				<h3 id="storage-listobjects-container-prefix-">storage.listObjects(container, [prefix])</h3>
-				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listobjects"><code>storage.listObjects(container, [prefix])</code></a>] returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If <code>prefix</code> is not specified, the method will list the root &quot;folder&quot;.</p>
+				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#listobjects"><code>storage.listObjects(container, [prefix])</code></a> returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If <code>prefix</code> is not specified, the method will list the root &quot;folder&quot;.</p>
 				<p>The method returns a Promise that resolves with an array of objects of type <a href="https://italypaleale.github.io/SMCloudStore/interfaces/listitemobject.html"><code>ListItemObject</code></a>, containing information for an object on the server, or <a href="https://italypaleale.github.io/SMCloudStore/interfaces/listitemprefix.html"><code>ListItemPrefix</code></a>, containing information for a prefix (folder).</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Retrieve the list of objects</span>
+				<pre><code class="language-js"><span class="hljs-comment">// Retrieve the list of objects</span>
 <span class="hljs-keyword">const</span> list = <span class="hljs-keyword">await</span> storage.listObjects(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'/'</span>)
 
 <span class="hljs-comment">// List is an array of elements representing objects or prefixes</span>
@@ -261,14 +252,12 @@ stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string"
     <span class="hljs-attr">path</span>: <span class="hljs-string">'/path/to/file.jpg'</span>,
     <span class="hljs-attr">size</span>: <span class="hljs-number">123</span>, <span class="hljs-comment">// Size in bytes</span>
     lastModified: <span class="hljs-built_in">Date</span>() <span class="hljs-comment">// Date object</span>
-    <span class="hljs-comment">// Some providers might return more data, such as contentType, contentMD5, and creationTime. Please refer to the documentation for details.</span>
-}
-</code></pre>
+    <span class="hljs-comment">// Some providers might return more data, such as contentType, contentMD5, contentSHA1, and creationTime. Please refer to the documentation for details.</span>
+}</code></pre>
 				<h3 id="storage-deleteobject-container-path-">storage.deleteObject(container, path)</h3>
 				<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#deleteobject"><code>storage.deleteObject(container, path)</code></a> deletes an object from a container in the storage server. It returns a Promise that resolves with no value on success.</p>
-				<pre><code class="lang-js"><span class="hljs-comment">// Delete an object</span>
-<span class="hljs-keyword">await</span> storage.deleteObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'path/to/file.jpg)</span>
-</code></pre>
+				<pre><code class="language-js"><span class="hljs-comment">// Delete an object</span>
+<span class="hljs-keyword">await</span> storage.deleteObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'path/to/file.jpg)</span></code></pre>
 				<h3 id="storage-client-">storage.client()</h3>
 				<p><a href="https://italypaleale.github.io/SMCloudStore/classes/storageprovider.html#client"><code>storage.client()</code></a> is a getter that exposes the underlying client for the storage provider, allowing for interaction with the provider directly. This is useful for advanced scenarios, such as needing to invoke provider-specific methods that aren&#39;t available in SMCloudStore.</p>
 				<h3 id="storage-provider-">storage.provider()</h3>
@@ -281,25 +270,34 @@ stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string"
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/aws_s3.html">aws-<wbr>s3</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/azure_storage.html">azure-<wbr>storage</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/backblaze_b2.html">backblaze-<wbr>b2</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/core.html">core</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/generic_s3.html">generic-<wbr>s3</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/google_cloud_storage.html">google-<wbr>cloud-<wbr>storage</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/minio.html">minio</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/smcloudstore.html">smcloudstore</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
-						<a href="classes/storageprovider.html" class="tsd-kind-icon">Storage<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/listitemobject.html" class="tsd-kind-icon">List<wbr>Item<wbr>Object</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/listitemprefix.html" class="tsd-kind-icon">List<wbr>Item<wbr>Prefix</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#listresults" class="tsd-kind-icon">List<wbr>Results</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#smcloudstore" class="tsd-kind-icon">SMCloud<wbr>Store</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
