@@ -1,7 +1,7 @@
 {
   "name": "@smcloudstore/builder",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "bootstrap": "sh scripts/bootstrap.sh",
     "compile": "npm run tsc",
