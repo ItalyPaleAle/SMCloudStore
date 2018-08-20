@@ -120,7 +120,7 @@ class AwsS3Provider extends StorageProvider {
                 CreateBucketConfiguration: {
                     LocationConstraint: this._region
                 }
-            }
+            } as S3.CreateBucketRequest
             this._client.createBucket(methodOptions, function(err, data) {
                 if (err || !data || !data.Location) {
                     return reject(err || Error('Invalid response while creating container'))
@@ -142,7 +142,7 @@ class AwsS3Provider extends StorageProvider {
         return new Promise((resolve, reject) => {
             const methodOptions = {
                 Bucket: container
-            }
+            } as S3.HeadBucketRequest
             this._client.headBucket(methodOptions, function(err, data) {
                 if (err) {
                     // Check error code to see if bucket doesn't exist, or if someone else owns it
@@ -221,7 +221,7 @@ class AwsS3Provider extends StorageProvider {
         return new Promise((resolve, reject) => {
             const methodOptions = {
                 Bucket: container
-            }
+            } as S3.DeleteBucketRequest
             this._client.deleteBucket(methodOptions, function(err, data) {
                 if (err || !data) {
                     return reject(err || Error('Invalid response while deleting container'))
@@ -324,7 +324,13 @@ class AwsS3Provider extends StorageProvider {
      * @async
      */
     getObject(container: string, path: string): Promise<Stream> {
-        return Promise.resolve(null)
+        const methodOptions = {
+            Bucket: container,
+            Key: path
+        } as S3.GetObjectRequest
+
+        const stream = this._client.getObject(methodOptions).createReadStream()
+        return Promise.resolve(stream)
     }
 
     /**
@@ -336,7 +342,56 @@ class AwsS3Provider extends StorageProvider {
      * @async
      */
     listObjects(container: string, prefix?: string): Promise<ListResults> {
-        return Promise.resolve([])
+        const list = [] as ListResults
+        const makeRequest = (continuationToken?: string): Promise<ListResults> => {
+            return new Promise((resolve, reject) => {
+                const methodOptions = {
+                    Bucket: container,
+                    ContinuationToken: continuationToken || undefined,
+                    Delimiter: '/',
+                    MaxKeys: 500,
+                    Prefix: prefix
+                } as S3.ListObjectsV2Request
+                this._client.listObjectsV2(methodOptions, function(err, data) {
+                    if (err || !data || !data.KeyCount || !data.Contents) {
+                        return reject(err || Error('Invalid response while putting object'))
+                    }
+
+                    // Add all objects
+                    for (const object of data.Contents) {
+                        const add = {
+                            lastModified: object.LastModified,
+                            path: object.Key,
+                            size: object.Size
+                        } as ListItemObject
+
+                        // Check if the ETag is the MD5 of the file (this is the case for files that weren't uploaded in multiple parts, in which case there's a dash in the ETag)
+                        if (~object.ETag.indexOf('-')) {
+                            add.contentMD5 = object.ETag
+                        }
+
+                        list.push(add)
+                    }
+
+                    // Add all prefixes
+                    for (const prefix of data.CommonPrefixes) {
+                        list.push({
+                            prefix: prefix.Prefix
+                        } as ListItemPrefix)
+                    }
+
+                    // Check if we have to make another request
+                    if (data.ContinuationToken) {
+                        resolve(makeRequest(data.ContinuationToken))
+                    }
+                    else {
+                        resolve(list)
+                    }
+                })
+            })
+        }
+
+        return makeRequest()
     }
 
     /**
@@ -348,7 +403,20 @@ class AwsS3Provider extends StorageProvider {
      * @async
      */
     deleteObject(container: string, path: string): Promise<void> {
-        return Promise.resolve()
+        return new Promise((resolve, reject) => {
+            const methodOptions = {
+                Bucket: container,
+                Key: path
+            } as S3.DeleteObjectRequest
+
+            this._client.deleteObject(methodOptions, function(err, data) {
+                if (err || !data) {
+                    return reject(err || Error('Invalid response while deleting object'))
+                }
+                
+                resolve()
+            })
+        })
     }
 }
 
