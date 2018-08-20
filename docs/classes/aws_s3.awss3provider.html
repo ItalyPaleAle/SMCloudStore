@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Client to interact with AWS S3. It is based on the GenericS3 Provider class.</p>
+						<p>Client to interact with a generic S3 object storage server, using the Minio library.</p>
 					</div>
 				</div>
 			</section>
@@ -80,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">GenericS3Provider</span>
+						<span class="tsd-signature-type">StorageProvider</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">AwsS3Provider</span>
@@ -99,29 +99,30 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected"><a href="aws_s3.awss3provider.html#_client" class="tsd-kind-icon">_client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="aws_s3.awss3provider.html#_client" class="tsd-kind-icon">_client</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="aws_s3.awss3provider.html#_provider" class="tsd-kind-icon">_provider</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="aws_s3.awss3provider.html#_region" class="tsd-kind-icon">_region</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#client" class="tsd-kind-icon">client</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#provider" class="tsd-kind-icon">provider</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#containerexists" class="tsd-kind-icon">container<wbr>Exists</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#deletecontainer" class="tsd-kind-icon">delete<wbr>Container</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#deleteobject" class="tsd-kind-icon">delete<wbr>Object</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#ensurecontainer" class="tsd-kind-icon">ensure<wbr>Container</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#getobject" class="tsd-kind-icon">get<wbr>Object</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#containerexists" class="tsd-kind-icon">container<wbr>Exists</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#deletecontainer" class="tsd-kind-icon">delete<wbr>Container</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#deleteobject" class="tsd-kind-icon">delete<wbr>Object</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#ensurecontainer" class="tsd-kind-icon">ensure<wbr>Container</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#getobject" class="tsd-kind-icon">get<wbr>Object</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#getobjectasbuffer" class="tsd-kind-icon">get<wbr>Object<wbr>AsBuffer</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="aws_s3.awss3provider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a></li>
 							</ul>
 						</section>
 					</div>
@@ -138,9 +139,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides GenericS3Provider.__constructor</p>
+								<p>Overrides StorageProvider.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/cc828e7/packages/aws-s3/src/AwsS3Provider.ts#L21">aws-s3/src/AwsS3Provider.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L78">aws-s3/src/AwsS3Provider.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -164,17 +165,16 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="_client" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _client</h3>
-					<div class="tsd-signature tsd-kind-icon">_client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MinioClient</span></div>
+					<div class="tsd-signature tsd-kind-icon">_client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">S3</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from GenericS3Provider._client</p>
 						<p>Overrides StorageProvider._client</p>
 						<ul>
-							<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:16</li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L77">aws-s3/src/AwsS3Provider.ts:77</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -185,7 +185,17 @@
 					<aside class="tsd-sources">
 						<p>Inherited from StorageProvider._provider</p>
 						<ul>
-							<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:32</li>
+							<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:32</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_region" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _region</h3>
+					<div class="tsd-signature tsd-kind-icon">_region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L78">aws-s3/src/AwsS3Provider.ts:78</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -196,7 +206,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from StorageProvider.client</p>
 						<ul>
-							<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:48</li>
+							<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:48</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -217,7 +227,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from StorageProvider.provider</p>
 						<ul>
-							<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:43</li>
+							<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:43</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -232,21 +242,20 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="containerexists" class="tsd-anchor"></a>
 					<h3>container<wbr>Exists</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">container<wbr>Exists<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.containerExists</p>
 								<p>Overrides StorageProvider.containerExists</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:39</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L141">aws-s3/src/AwsS3Provider.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,19 +281,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="createcontainer" class="tsd-anchor"></a>
 					<h3>create<wbr>Container</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GenericS3CreateContainerOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-signature-type">AwsS3CreateContainerOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.createContainer</p>
 								<p>Overrides StorageProvider.createContainer</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:31</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L111">aws-s3/src/AwsS3Provider.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,9 +313,9 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">GenericS3CreateContainerOptions</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-signature-type">AwsS3CreateContainerOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).</p>
+										<p>Dictionary with options for creating the container.</p>
 									</div>
 								</li>
 							</ul>
@@ -316,19 +324,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="deletecontainer" class="tsd-anchor"></a>
 					<h3>delete<wbr>Container</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">delete<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.deleteContainer</p>
 								<p>Overrides StorageProvider.deleteContainer</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:63</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L220">aws-s3/src/AwsS3Provider.ts:220</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,19 +361,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="deleteobject" class="tsd-anchor"></a>
 					<h3>delete<wbr>Object</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">delete<wbr>Object<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.deleteObject</p>
 								<p>Overrides StorageProvider.deleteObject</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:101</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L405">aws-s3/src/AwsS3Provider.ts:405</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -398,19 +404,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="ensurecontainer" class="tsd-anchor"></a>
 					<h3>ensure<wbr>Container</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GenericS3CreateContainerOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-signature-type">AwsS3CreateContainerOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.ensureContainer</p>
 								<p>Overrides StorageProvider.ensureContainer</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:48</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L178">aws-s3/src/AwsS3Provider.ts:178</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -431,7 +436,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">GenericS3CreateContainerOptions</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-signature-type">AwsS3CreateContainerOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).</p>
 									</div>
@@ -442,19 +447,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="getobject" class="tsd-anchor"></a>
 					<h3>get<wbr>Object</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Object<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Stream</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.getObject</p>
 								<p>Overrides StorageProvider.getObject</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:83</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L326">aws-s3/src/AwsS3Provider.ts:326</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -497,7 +501,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from StorageProvider.getObjectAsBuffer</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:118</li>
+									<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:118</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -540,7 +544,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from StorageProvider.getObjectAsString</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:128</li>
+									<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:128</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -578,19 +582,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="listcontainers" class="tsd-anchor"></a>
 					<h3>list<wbr>Containers</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">list<wbr>Containers<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.listContainers</p>
 								<p>Overrides StorageProvider.listContainers</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:55</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L195">aws-s3/src/AwsS3Provider.ts:195</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -607,19 +610,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="listobjects" class="tsd-anchor"></a>
 					<h3>list<wbr>Objects</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">list<wbr>Objects<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, prefix<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/core.html#listresults" class="tsd-signature-type">ListResults</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.listObjects</p>
 								<p>Overrides StorageProvider.listObjects</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:92</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L344">aws-s3/src/AwsS3Provider.ts:344</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -651,19 +653,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="putobject" class="tsd-anchor"></a>
 					<h3>put<wbr>Object</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">put<wbr>Object<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Stream</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Buffer</span>, metadata<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">put<wbr>Object<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Stream</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Buffer</span>, metadata<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from GenericS3Provider.putObject</p>
 								<p>Overrides StorageProvider.putObject</p>
 								<ul>
-									<li>Defined in aws-s3/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:74</li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L246">aws-s3/src/AwsS3Provider.ts:246</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -699,6 +700,12 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> metadata: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Key-value pair with metadata for the object, for example <code>Content-Type</code> or custom tags</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Additional options used to create the object on the server</p>
 									</div>
 								</li>
 							</ul>
@@ -751,11 +758,14 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="aws_s3.awss3provider.html#_client" class="tsd-kind-icon">_client</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="aws_s3.awss3provider.html#_provider" class="tsd-kind-icon">_provider</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="aws_s3.awss3provider.html#_region" class="tsd-kind-icon">_region</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="aws_s3.awss3provider.html#client" class="tsd-kind-icon">client</a>
@@ -763,22 +773,22 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="aws_s3.awss3provider.html#provider" class="tsd-kind-icon">provider</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#containerexists" class="tsd-kind-icon">container<wbr>Exists</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#deletecontainer" class="tsd-kind-icon">delete<wbr>Container</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#deleteobject" class="tsd-kind-icon">delete<wbr>Object</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#ensurecontainer" class="tsd-kind-icon">ensure<wbr>Container</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#getobject" class="tsd-kind-icon">get<wbr>Object</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -787,13 +797,13 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="aws_s3.awss3provider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a>
 							</li>
 						</ul>
@@ -802,6 +812,18 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/aws_s3.awss3connectionoptions.html" class="tsd-kind-icon">Aws<wbr>S3Connection<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-kind-icon">Aws<wbr>S3Create<wbr>Container<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-kind-icon">Aws<wbr>S3Put<wbr>Object<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/aws_s3.html#awss3acl" class="tsd-kind-icon">Aws<wbr>S3ACL</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a>
 					</li>
 				</ul>
 			</nav>

@@ -85,9 +85,81 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/aws_s3.awss3connectionoptions.html" class="tsd-kind-icon">Aws<wbr>S3Connection<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-kind-icon">Aws<wbr>S3Create<wbr>Container<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-kind-icon">Aws<wbr>S3Put<wbr>Object<wbr>Options</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="aws_s3.html#awss3acl" class="tsd-kind-icon">Aws<wbr>S3ACL</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="awss3acl" class="tsd-anchor"></a>
+					<h3>Aws<wbr>S3ACL</h3>
+					<div class="tsd-signature tsd-kind-icon">Aws<wbr>S3ACL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"private"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read-write"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"authenticated-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>ACL for containers and objects. Refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">documentation</a> for more details. Default value is <code>private</code> for containers and null (inherited) for objects.</p>
+						</div>
+						<p>For consistency with other providers, a few aliases are added:</p>
+						<ul>
+							<li><code>none</code> is an alias for <code>private</code></li>
+							<li><code>public</code> is an alias for <code>public-read</code></li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="aclstring" class="tsd-anchor"></a>
+					<h3>ACLString</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">ACLString<span class="tsd-signature-symbol">(</span>access<span class="tsd-signature-symbol">: </span><a href="aws_s3.html#awss3acl" class="tsd-signature-type">AwsS3ACL</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the value for the ACL to pass to the APIs, given an access argument</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>access: <a href="aws_s3.html#awss3acl" class="tsd-signature-type">AwsS3ACL</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value among the types of <code>AwsS3ACL</code></p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>String value to pass to the S3 APIs</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -130,6 +202,18 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/aws_s3.awss3connectionoptions.html" class="tsd-kind-icon">Aws<wbr>S3Connection<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/aws_s3.awss3createcontaineroptions.html" class="tsd-kind-icon">Aws<wbr>S3Create<wbr>Container<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-kind-icon">Aws<wbr>S3Put<wbr>Object<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="aws_s3.html#awss3acl" class="tsd-kind-icon">Aws<wbr>S3ACL</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a>
 					</li>
 				</ul>
 			</nav>

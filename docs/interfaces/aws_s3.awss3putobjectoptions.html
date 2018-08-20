@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>backblaze-b2 | SMCloudStore</title>
+	<title>AwsS3PutObjectOptions | SMCloudStore</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="backblaze_b2.html">backblaze-b2</a>
+					<a href="../modules/aws_s3.html">aws-s3</a>
+				</li>
+				<li>
+					<a href="aws_s3.awss3putobjectoptions.html">AwsS3PutObjectOptions</a>
 				</li>
 			</ul>
-			<h1>Package backblaze-b2</h1>
+			<h1>Interface AwsS3PutObjectOptions</h1>
 		</div>
 	</div>
 </header>
@@ -68,47 +71,80 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<h1 id="-smcloudstore-backblaze-b2">@smcloudstore/backblaze-b2</h1>
+					<div class="lead">
+						<p>Options passed when putting an object</p>
+					</div>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">AwsS3PutObjectOptions</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/backblaze_b2.b2upload.html" class="tsd-kind-icon">B2<wbr>Upload</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/backblaze_b2.backblazeb2provider.html" class="tsd-kind-icon">Backblaze<wbr>B2Provider</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Interfaces</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/backblaze_b2.backblazeb2connectionoptions.html" class="tsd-kind-icon">Backblaze<wbr>B2Connection<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/backblaze_b2.backblazeb2createcontaineroptions.html" class="tsd-kind-icon">Backblaze<wbr>B2Create<wbr>Container<wbr>Options</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="backblaze_b2.html#b2" class="tsd-kind-icon">B2</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#access" class="tsd-kind-icon">access</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#class" class="tsd-kind-icon">class</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#serversideencryption" class="tsd-kind-icon">server<wbr>Side<wbr>Encryption</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="b2" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> B2</h3>
-					<div class="tsd-signature tsd-kind-icon">B2<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;backblaze-b2&#x27;) as any</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="access" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> access</h3>
+					<div class="tsd-signature tsd-kind-icon">access<span class="tsd-signature-symbol">:</span> <a href="../modules/aws_s3.html#awss3acl" class="tsd-signature-type">AwsS3ACL</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L41">aws-s3/src/AwsS3Provider.ts:41</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Determine access level for the object. Default: inherit from the container</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="class" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> class</h3>
+					<div class="tsd-signature tsd-kind-icon">class<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"STANDARD"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"REDUCED_REDUNDANCY"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"STANDARD_IA"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ONEZONE_IA"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L47">aws-s3/src/AwsS3Provider.ts:47</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Storage class to use. Refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">documentation</a> for more details. Default is &#39;STANDARD&#39;</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="serversideencryption" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> server<wbr>Side<wbr>Encryption</h3>
+					<div class="tsd-signature tsd-kind-icon">server<wbr>Side<wbr>Encryption<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L44">aws-s3/src/AwsS3Provider.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enable AES256 server-side encryption for the object at rest, with AWS-managed keys. Default: disabled</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -118,48 +154,66 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="aws_s3.html">aws-<wbr>s3</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="azure_storage.html">azure-<wbr>storage</a>
-					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="backblaze_b2.html">backblaze-<wbr>b2</a>
+						<a href="../modules/aws_s3.html">aws-<wbr>s3</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="core.html">core</a>
+						<a href="../modules/azure_storage.html">azure-<wbr>storage</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="generic_s3.html">generic-<wbr>s3</a>
+						<a href="../modules/backblaze_b2.html">backblaze-<wbr>b2</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="google_cloud_storage.html">google-<wbr>cloud-<wbr>storage</a>
+						<a href="../modules/core.html">core</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="minio.html">minio</a>
+						<a href="../modules/generic_s3.html">generic-<wbr>s3</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="smcloudstore.html">smcloudstore</a>
+						<a href="../modules/google_cloud_storage.html">google-<wbr>cloud-<wbr>storage</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/minio.html">minio</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/smcloudstore.html">smcloudstore</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/backblaze_b2.b2upload.html" class="tsd-kind-icon">B2<wbr>Upload</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/backblaze_b2.backblazeb2provider.html" class="tsd-kind-icon">Backblaze<wbr>B2Provider</a>
+						<a href="../classes/aws_s3.awss3provider.html" class="tsd-kind-icon">Aws<wbr>S3Provider</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../interfaces/backblaze_b2.backblazeb2connectionoptions.html" class="tsd-kind-icon">Backblaze<wbr>B2Connection<wbr>Options</a>
+						<a href="aws_s3.awss3connectionoptions.html" class="tsd-kind-icon">Aws<wbr>S3Connection<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../interfaces/backblaze_b2.backblazeb2createcontaineroptions.html" class="tsd-kind-icon">Backblaze<wbr>B2Create<wbr>Container<wbr>Options</a>
+						<a href="aws_s3.awss3createcontaineroptions.html" class="tsd-kind-icon">Aws<wbr>S3Create<wbr>Container<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="backblaze_b2.html#b2" class="tsd-kind-icon">B2</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="aws_s3.awss3putobjectoptions.html" class="tsd-kind-icon">Aws<wbr>S3Put<wbr>Object<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="aws_s3.awss3putobjectoptions.html#access" class="tsd-kind-icon">access</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="aws_s3.awss3putobjectoptions.html#class" class="tsd-kind-icon">class</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="aws_s3.awss3putobjectoptions.html#serversideencryption" class="tsd-kind-icon">server<wbr>Side<wbr>Encryption</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/aws_s3.html#awss3acl" class="tsd-kind-icon">Aws<wbr>S3ACL</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a>
 					</li>
 				</ul>
 			</nav>
