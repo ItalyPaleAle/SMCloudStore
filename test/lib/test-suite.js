@@ -31,6 +31,15 @@ module.exports = (providerName, testSuiteOptions) => {
         return parts.join('-')
     }
 
+    const waitingTest = async function() {
+        this.slow(10000)
+        this.timeout(3000)
+
+        await new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000)
+        })
+    }
+
     describe('Test suite for ' + providerName, function() {
         // Load the provider's class
         const Provider = require('../../packages/' + providerName)
@@ -81,11 +90,17 @@ module.exports = (providerName, testSuiteOptions) => {
             }
         })
 
+        // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
+        it('…waiting…', waitingTest)
+
         it('containerExists', async function() {
             let exists
 
             exists = await storage.containerExists(containers[0])
             assert(exists === true)
+
+            exists = await storage.containerExists(containers[0] + '-2')
+            assert(exists === false)
 
             exists = await storage.containerExists('doesnotexist')
             assert(exists === false)
@@ -95,29 +110,22 @@ module.exports = (providerName, testSuiteOptions) => {
             // New container
             const name = genContainerName()
             containers.push(name)
-            await storage.ensureContainer(name, (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(name, (testSuiteOptions && testSuiteOptions.createContainerOptions))
 
             // Existing container
-            await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.region))
+            await storage.ensureContainer(containers[0], (testSuiteOptions && testSuiteOptions.createContainerOptions))
         })
+
+        // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
+        it('…waiting…', waitingTest)
 
         it('listContainers', async function() {
             // Ensure that we have the containers we created before
             const list = await storage.listContainers()
             assert(list && list.length >= containers.length)
-            for (const i in containers) {
-                assert(list.includes(containers[i]))
+            for (const el of containers) {
+                assert(list.includes(el))
             }
-        })
-
-        // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
-        it('…waiting…', async function() {
-            this.slow(10000)
-            this.timeout(3000)
-
-            await new Promise((resolve, reject) => {
-                setTimeout(resolve, 2000)
-            })
         })
 
         it('deleteContainer', async function() {
@@ -358,6 +366,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 })
         })
 
+        let filesDeleted = false
         it('deleteObject', async function() {
             // Increase timeout
             this.timeout(60000)
@@ -372,12 +381,30 @@ module.exports = (providerName, testSuiteOptions) => {
                 promises.push(storage.deleteObject(containers[0], file.destination))
             }
             await Promise.all(promises)
+
+            filesDeleted = true
         })
 
-        // Delete all containers that we created
-        // Should fail if the containers aren't empty
+        // Delete all objects and containers that we created
         after(async function() {
-            const promises = []
+            // Increase timeout
+            this.timeout(60000)
+
+            // If it hasn't happened already, delete all files uploaded, in parallel
+            let promises = []
+            if (!filesDeleted) {
+                let fileList = testFiles
+                if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
+                    fileList = fileList.concat(largeFiles)
+                }
+                for (const file of fileList) {
+                    promises.push(storage.deleteObject(containers[0], file.destination))
+                }
+                await Promise.all(promises)
+            }
+
+            // Delete all containers
+            promises = []
             for (const i in containers) {
                 promises.push(storage.deleteContainer(containers[i]))
             }
