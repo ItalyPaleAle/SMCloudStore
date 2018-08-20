@@ -196,7 +196,7 @@ class AwsS3Provider extends StorageProvider {
         return new Promise((resolve, reject) => {
             this._client.listBuckets(function(err, data) {
                 if (err || !data || !data.Buckets) {
-                    return reject(err || Error('Invalid response while listing containers'))   
+                    return reject(err || Error('Invalid response while listing containers'))
                 }
 
                 const list = []
@@ -226,7 +226,7 @@ class AwsS3Provider extends StorageProvider {
                 if (err || !data) {
                     return reject(err || Error('Invalid response while deleting container'))
                 }
-                
+
                 resolve()
             })
         })
@@ -251,8 +251,8 @@ class AwsS3Provider extends StorageProvider {
         return new Promise((resolve, reject) => {
             // Basic method options
             const methodOptions = {
-                Bucket: container,
                 Body: data,
+                Bucket: container,
                 Key: path
             } as S3.PutObjectRequest
 
@@ -275,7 +275,7 @@ class AwsS3Provider extends StorageProvider {
             if (metadata) {
                 // Clone the metadata object before altering it
                 const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
-    
+
                 if (metadataClone['Content-Type']) {
                     methodOptions.ContentType = metadataClone['Content-Type']
                     delete metadataClone['Content-Type']
@@ -300,13 +300,13 @@ class AwsS3Provider extends StorageProvider {
                     methodOptions.ContentMD5 = metadataClone['Content-MD5']
                     delete metadataClone['Content-MD5']
                 }
-    
+
                 methodOptions.Metadata = metadataClone
             }
 
             // Send the request
-            this._client.putObject(methodOptions, function(err, data) {
-                if (err || !data || !data.ETag) {
+            this._client.putObject(methodOptions, function(err, response) {
+                if (err || !response || !response.ETag) {
                     return reject(err || Error('Invalid response while putting object'))
                 }
 
@@ -358,25 +358,25 @@ class AwsS3Provider extends StorageProvider {
                     }
 
                     // Add all objects
-                    for (const object of data.Contents) {
+                    for (const el of data.Contents) {
                         const add = {
-                            lastModified: object.LastModified,
-                            path: object.Key,
-                            size: object.Size
+                            lastModified: el.LastModified,
+                            path: el.Key,
+                            size: el.Size
                         } as ListItemObject
 
                         // Check if the ETag is the MD5 of the file (this is the case for files that weren't uploaded in multiple parts, in which case there's a dash in the ETag)
-                        if (~object.ETag.indexOf('-')) {
-                            add.contentMD5 = object.ETag
+                        if (el.ETag.indexOf('-') >= 0) {
+                            add.contentMD5 = el.ETag
                         }
 
                         list.push(add)
                     }
 
                     // Add all prefixes
-                    for (const prefix of data.CommonPrefixes) {
+                    for (const el of data.CommonPrefixes) {
                         list.push({
-                            prefix: prefix.Prefix
+                            prefix: el.Prefix
                         } as ListItemPrefix)
                     }
 
@@ -413,7 +413,7 @@ class AwsS3Provider extends StorageProvider {
                 if (err || !data) {
                     return reject(err || Error('Invalid response while deleting object'))
                 }
-                
+
                 resolve()
             })
         })

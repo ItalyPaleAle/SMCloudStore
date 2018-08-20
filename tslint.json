@@ -26,6 +26,7 @@
         "jsdoc-format": true,
         "no-redundant-jsdoc": true,
         "new-parens": true,
+        "only-arrow-functions": false,
         "one-variable-per-declaration": [true, "ignore-for-loop"],
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
         "member-access": [true, "no-public"],
