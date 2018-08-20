@@ -10,15 +10,21 @@ SMCloudStore is a lightweight Node.js module that offers a simple API to interac
 - Other S3-compatible providers
 - …more to come!
 
-Features:
+## Features
 
 - Simple, unified API to interact with all object storage providers
 - Lightweight and flexible: each provider is published as a separate package, so installing SMCloudStore won't add SDKs for each vendor and thousands of dependencies to your projects
 - Optimized for working with streams when putting/retrieving objects
 
-SMCloudStore is specifically focused on abstracting the differences between multiple object storage providers. This module's goals don't include support for other services that cloud providers might offer, such as databases, VMs, etc.
-
 This code is licensed under the terms of the MIT license (see LICENSE.md).
+
+### SMCloudStore vs other packages
+
+SMCloudStore is specifically focused on abstracting the differences between multiple object storage providers, as storage is the most commonly consumed API from cloud providers that isn't fully standardized. This doesn't aim to support for other services that cloud providers might offer, such as databases, VMs, etc.
+
+- By focusing only on storage, we can keep things simple. There are few APIs and they are clear and easy to use.
+- SMCloudStore is highly modular, and every provider comes with a separate NPM package. This means that you don't need to install the SDKs for every single cloud provider and all their dependencies if you plan to use only one or two of them.
+- We are focusing on a modern development experience. The codebase is primarily written in TypeScript adn transpiled to JavaScript with all the typings published. We are also adopting a stream-centric approach with methods that upload and download objects from storage providers.
 
 ## Add to your project
 
