@@ -1,7 +1,7 @@
 {
   "name": "@smcloudstore/core",
   "version": "0.0.2-1",
-  "description": "Core library for SMCloudStore",
+  "description": "Core library for SMCloudStore (internal)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ItalyPaleAle/SMCloudStore.git"
