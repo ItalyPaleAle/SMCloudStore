@@ -69,6 +69,63 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<h1 id="-smcloudstore-aws-s3">@smcloudstore/aws-s3</h1>
+					<p>This package is a provider for <a href="https://github.com/ItalyPaleAle/SMCloudStore">SMCloudStore</a>, for AWS S3. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.</p>
+					<p>Please refer to the <a href="https://github.com/ItalyPaleAle/SMCloudStore">main package</a> for the SMCloudStore documentation and instructions on how to use it.</p>
+					<h2 id="provider-specific-considerations">Provider-specific considerations</h2>
+					<p>There are a few provider-specific considerations for the AwsS3 provider.</p>
+					<h3 id="connection-argument">Connection argument</h3>
+					<p>When initializing the AwsS3 provider, the <code>connection</code> argument is an object with:</p>
+					<ul>
+						<li><code>connection.accessKeyId</code>: string containing the access key ID (the &quot;public key&quot;)</li>
+						<li><code>connection.secretAccessKey</code>: string containing the secret access key (the &quot;secret key&quot;)</li>
+						<li><code>connection.region</code> (optional): string containing the AWS region to use. List of regions is available on the <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">AWS documentation</a>. Defaults to US Standard (Virginia) if not specified.</li>
+					</ul>
+					<p>Example:</p>
+					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+
+<p><span class="hljs-comment">// Complete with the connection options for the provider</span>
+<span class="hljs-keyword">const</span> connection = {
+    <span class="hljs-attr">accessKeyId</span>: <span class="hljs-string">&#39;PUBLIC_KEY_HERE&#39;</span>,
+    <span class="hljs-attr">secretAccessKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>,
+    <span class="hljs-attr">region</span>: <span class="hljs-string">&#39;us-west-1&#39;</span>
+}</p>
+<p><span class="hljs-comment">// Return an instance of the AwsS3Provider class</span>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;aws-s3&#39;</span>, connection)
+</code></pre></p>
+					<h3 id="creating-a-container">Creating a container</h3>
+					<p>When using the <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> and the <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> methods, the <code>options</code> argument can be used to define some options for the container:</p>
+					<ul>
+						<li><code>options.access</code> (optional): string determining the default ACL for the container. Accepted values are listed below, and please refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">documentation</a> for more details:<ul>
+								<li><code>&#39;public-read&#39;</code> (alias <code>&#39;public&#39;</code> for compatibility with other storage providers)</li>
+								<li><code>&#39;public-read-write&#39;</code></li>
+								<li><code>&#39;authenticated-read&#39;</code></li>
+								<li><code>&#39;private&#39;</code> (alias <code>&#39;none&#39;</code> for compatibility with other storage providers)), this is the default value.</li>
+							</ul>
+						</li>
+					</ul>
+					<h3 id="uploading-an-object">Uploading an object</h3>
+					<p>With the AWS S3 provider, the <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#putobject"><code>storage.putObject(container, path, data, [options])</code></a> method comes with a few more keys for the <code>options</code> dictionary, in addition to the standard <code>options.metadata</code> key:</p>
+					<ul>
+						<li><code>options.access</code> (optional): string determining the ACL for the object. Accepted values are listed below, and please refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">documentation</a> for more details:<ul>
+								<li><code>&#39;public-read&#39;</code> (alias <code>&#39;public&#39;</code> for compatibility with other storage providers)</li>
+								<li><code>&#39;public-read-write&#39;</code></li>
+								<li><code>&#39;authenticated-read&#39;</code></li>
+								<li><code>&#39;private&#39;</code> (alias <code>&#39;none&#39;</code> for compatibility with other storage providers)), this is the default value.</li>
+							</ul>
+						</li>
+						<li><code>options.serverSideEncryption</code> (optional): when true, enables AES256 encryption at rest with keys managed by AWS. Default value is false (disabled).</li>
+						<li><code>options.class</code> (optional): string represeting the storage class to use. Please see the documentation](<a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html</a>) for details; possible values are:<ul>
+								<li><code>&#39;STANDARD&#39;</code></li>
+								<li><code>&#39;REDUCED_REDUNDANCY&#39;</code></li>
+								<li><code>&#39;STANDARD_IA&#39;</code></li>
+								<li><code>&#39;ONEZONE_IA&#39;</code></li>
+							</ul>
+						</li>
+					</ul>
+					<h3 id="accessing-the-aws-sdk">Accessing the AWS-SDK</h3>
+					<p>The AWS S3 provider is built on top of the official <a href="https://github.com/aws/aws-sdk-js">AWS SDK for JavaScript</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#client"><code>storage.client()</code></a>.</p>
+					<p>You can use the object returned by this method to perform low-level operations using the AWS S3 SDK. Note that only the S3 library is loaded, and not the full AWS SDK for JavaScript.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -112,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">Aws<wbr>S3ACL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"private"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read-write"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"authenticated-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -139,7 +196,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

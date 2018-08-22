@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Options passed when putting an object</p>
+						<p>Options passed when putting an object.</p>
 					</div>
 				</div>
 			</section>
@@ -80,7 +80,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AwsS3PutObjectOptions</span>
+						<span class="tsd-signature-type">PutObjectOptions</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">AwsS3PutObjectOptions</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -93,6 +98,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#access" class="tsd-kind-icon">access</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#class" class="tsd-kind-icon">class</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#metadata" class="tsd-kind-icon">metadata</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="aws_s3.awss3putobjectoptions.html#serversideencryption" class="tsd-kind-icon">server<wbr>Side<wbr>Encryption</a></li>
 							</ul>
 						</section>
@@ -107,7 +113,7 @@
 					<div class="tsd-signature tsd-kind-icon">access<span class="tsd-signature-symbol">:</span> <a href="../modules/aws_s3.html#awss3acl" class="tsd-signature-type">AwsS3ACL</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L41">aws-s3/src/AwsS3Provider.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L41">aws-s3/src/AwsS3Provider.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -122,12 +128,28 @@
 					<div class="tsd-signature tsd-kind-icon">class<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"STANDARD"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"REDUCED_REDUNDANCY"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"STANDARD_IA"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ONEZONE_IA"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L47">aws-s3/src/AwsS3Provider.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L47">aws-s3/src/AwsS3Provider.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Storage class to use. Refer to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">documentation</a> for more details. Default is &#39;STANDARD&#39;</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="metadata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from PutObjectOptions.metadata</p>
+						<ul>
+							<li>Defined in aws-s3/node_modules/@smcloudstore/core/dist/StorageProvider.d.ts:23</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Key-value pair with metadata for the object, for example <code>Content-Type</code>, or custom tags</p>
 						</div>
 					</div>
 				</section>
@@ -137,7 +159,7 @@
 					<div class="tsd-signature tsd-kind-icon">server<wbr>Side<wbr>Encryption<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/ff7e8ae/packages/aws-s3/src/AwsS3Provider.ts#L44">aws-s3/src/AwsS3Provider.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L44">aws-s3/src/AwsS3Provider.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -201,6 +223,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
 								<a href="aws_s3.awss3putobjectoptions.html#class" class="tsd-kind-icon">class</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="aws_s3.awss3putobjectoptions.html#metadata" class="tsd-kind-icon">metadata</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
 								<a href="aws_s3.awss3putobjectoptions.html#serversideencryption" class="tsd-kind-icon">server<wbr>Side<wbr>Encryption</a>

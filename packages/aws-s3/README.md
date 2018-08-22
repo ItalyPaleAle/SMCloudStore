@@ -42,6 +42,16 @@ When using the [`storage.createContainer(container, [options])`](https://italypa
   - `'public-read-write'`
   - `'authenticated-read'`
   - `'private'` (alias `'none'` for compatibility with other storage providers)), this is the default value.
+
+### Uploading an object
+
+With the AWS S3 provider, the [`storage.putObject(container, path, data, [options])`](https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#putobject) method comes with a few more keys for the `options` dictionary, in addition to the standard `options.metadata` key:
+
+- `options.access` (optional): string determining the ACL for the object. Accepted values are listed below, and please refer to the [documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl) for more details:
+  - `'public-read'` (alias `'public'` for compatibility with other storage providers)
+  - `'public-read-write'`
+  - `'authenticated-read'`
+  - `'private'` (alias `'none'` for compatibility with other storage providers)), this is the default value.
 - `options.serverSideEncryption` (optional): when true, enables AES256 encryption at rest with keys managed by AWS. Default value is false (disabled).
 - `options.class` (optional): string represeting the storage class to use. Please see the documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html) for details; possible values are:
   - `'STANDARD'`
@@ -54,5 +64,3 @@ When using the [`storage.createContainer(container, [options])`](https://italypa
 The AWS S3 provider is built on top of the official [AWS SDK for JavaScript](https://github.com/aws/aws-sdk-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#client).
 
 You can use the object returned by this method to perform low-level operations using the AWS S3 SDK. Note that only the S3 library is loaded, and not the full AWS SDK for JavaScript.
-
-

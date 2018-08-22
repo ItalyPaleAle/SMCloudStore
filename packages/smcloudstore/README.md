@@ -1,3 +1,1 @@
-# smcloudstore
-
-Base package for SMCloudStore
+../../README.md

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GenericS3CreateContainerOptions | SMCloudStore</title>
+	<title>PutObjectOptions | SMCloudStore</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/generic_s3.html">generic-s3</a>
+					<a href="../modules/core.html">core</a>
 				</li>
 				<li>
-					<a href="generic_s3.generics3createcontaineroptions.html">GenericS3CreateContainerOptions</a>
+					<a href="core.putobjectoptions.html">PutObjectOptions</a>
 				</li>
 			</ul>
-			<h1>Interface GenericS3CreateContainerOptions</h1>
+			<h1>Interface PutObjectOptions</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Options passed when creating a container</p>
+						<p>Dictionary of options used when putting an object. Many providers will extend this.</p>
 					</div>
 				</div>
 			</section>
@@ -80,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GenericS3CreateContainerOptions</span>
+						<span class="target">PutObjectOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -88,29 +88,29 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="generic_s3.generics3createcontaineroptions.html#region" class="tsd-kind-icon">region</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="core.putobjectoptions.html#metadata" class="tsd-kind-icon">metadata</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="region" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> region</h3>
-					<div class="tsd-signature tsd-kind-icon">region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="metadata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/generic-s3/src/GenericS3Provider.ts#L12">generic-s3/src/GenericS3Provider.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/core/src/StorageProvider.ts#L27">core/src/StorageProvider.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Region in which to create the container; useful for AWS S3 and some other providers based on this</p>
+							<p>Key-value pair with metadata for the object, for example <code>Content-Type</code>, or custom tags</p>
 						</div>
 					</div>
 				</section>
@@ -131,10 +131,10 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/backblaze_b2.html">backblaze-<wbr>b2</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/core.html">core</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/generic_s3.html">generic-<wbr>s3</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -151,20 +151,47 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/generic_s3.generics3provider.html" class="tsd-kind-icon">Generic<wbr>S3Provider</a>
+						<a href="../classes/core.storageprovider.html" class="tsd-kind-icon">Storage<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="core.listitemobject.html" class="tsd-kind-icon">List<wbr>Item<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="core.listitemprefix.html" class="tsd-kind-icon">List<wbr>Item<wbr>Prefix</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="generic_s3.generics3createcontaineroptions.html" class="tsd-kind-icon">Generic<wbr>S3Create<wbr>Container<wbr>Options</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="core.putobjectoptions.html" class="tsd-kind-icon">Put<wbr>Object<wbr>Options</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="generic_s3.generics3createcontaineroptions.html#region" class="tsd-kind-icon">region</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="core.putobjectoptions.html#metadata" class="tsd-kind-icon">metadata</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/core.html#listresults" class="tsd-kind-icon">List<wbr>Results</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#isreadablestream" class="tsd-kind-icon">Is<wbr>Readable<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#isstream" class="tsd-kind-icon">Is<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#readchunkfromstream" class="tsd-kind-icon">Read<wbr>Chunk<wbr>From<wbr>Stream</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#streamtobuffer" class="tsd-kind-icon">Stream<wbr>ToBuffer</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#streamtostring" class="tsd-kind-icon">Stream<wbr>ToString</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/core.html#waitpromise" class="tsd-kind-icon">Wait<wbr>Promise</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
