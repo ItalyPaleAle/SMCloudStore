@@ -1,6 +1,6 @@
 'use strict'
 
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import S3 = require('aws-sdk/clients/s3')
 import {Stream} from 'stream'
 
@@ -34,9 +34,9 @@ interface AwsS3CreateContainerOptions {
 }
 
 /**
- * Options passed when putting an object
+ * Options passed when putting an object.
  */
-interface AwsS3PutObjectOptions {
+interface AwsS3PutObjectOptions extends PutObjectOptions {
     /** Determine access level for the object. Default: inherit from the container */
     access?: AwsS3ACL,
 
@@ -238,12 +238,11 @@ class AwsS3Provider extends StorageProvider {
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
-     * @param options - Additional options used to create the object on the server
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary and additional S3-specific options
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, options?: AwsS3PutObjectOptions): Promise<void> {
+    putObject(container: string, path: string, data: Stream|string|Buffer, options?: AwsS3PutObjectOptions): Promise<void> {
         if (!options) {
             options = {}
         }
@@ -272,9 +271,9 @@ class AwsS3Provider extends StorageProvider {
             }
 
             // Metadata
-            if (metadata) {
+            if (options.metadata) {
                 // Clone the metadata object before altering it
-                const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
+                const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
 
                 if (metadataClone['Content-Type']) {
                     methodOptions.ContentType = metadataClone['Content-Type']

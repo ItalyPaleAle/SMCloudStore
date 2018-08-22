@@ -160,13 +160,15 @@ module.exports = (providerName, testSuiteOptions) => {
                         upload = files[i].buffer
                     }
 
-                    // Metadata
-                    const metadata = {
-                        'Content-Type': files[i].contentType
+                    // Options & metadata
+                    const options = {
+                        metadata: {
+                            'Content-Type': files[i].contentType
+                        }
                     }
 
                     // Promise
-                    const p = storage.putObject(containers[0], files[i].destination, upload, metadata)
+                    const p = storage.putObject(containers[0], files[i].destination, upload, options)
                     promises.push(p)
                 }
             }

@@ -1,6 +1,6 @@
 'use strict'
 
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {Stream} from 'stream'
 import B2Upload = require('./B2Upload')
 // tslint:disable-next-line:no-var-requires
@@ -22,6 +22,12 @@ interface BackblazeB2ConnectionOptions {
 interface BackblazeB2CreateContainerOptions {
     /** Determine access level for all files in the container. Defaults to 'private' if not specified */
     access?: 'public' | 'private'
+}
+
+/** Dictionary of options used when putting an object. Many providers will extend this. */
+interface BackblazeB2PutObjectOptions extends PutObjectOptions {
+    /** When passing a stream as `data` object, being able to specify the length of the data allows for faster uploads; this argument is ignored if `data` is not a Stream object */
+    length?: number
 }
 
 /**
@@ -159,7 +165,7 @@ class BackblazeB2Provider extends StorageProvider {
      * 
      * The Backblaze B2 APIs have relatively poor support for streams, as it requires the size of the data to be sent at the beginning of the request. As a consequence, this method will upload the file using a different API based on the input data:
      * 
-     * 1. If the length of the data can be known before the upload starts, makes a single upload call. This applies to all situations when `data` is a Buffer or a string, and when `data` is a stream and either the `length` argument is specified, or `data.byteLength` is defined.
+     * 1. If the length of the data can be known before the upload starts, makes a single upload call. This applies to all situations when `data` is a Buffer or a string, and when `data` is a stream and either the `options.length` argument is specified, or `data.byteLength` is defined.
      * 2. In the situation when `data` is a stream and the length can't be known beforehand, if the data is longer than `B2Upload.chunkSize` (default: 9MB; minimum: 5MB) the method will use B2's [large files APIs](https://www.backblaze.com/b2/docs/large_files.html). With those, it's possible to chunk the file into many chunks and upload them separately, thus it's not necessary to load the entire strema in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. Maximum size is 200GB (using 9MB chunks - configurable with the `B2Upload.chunkSize` property).
      * 
      * Notes on the metadata:
@@ -171,12 +177,14 @@ class BackblazeB2Provider extends StorageProvider {
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
-     * @param length - When passing a stream as data object, being able to specify the length of the data allows for faster uploads; this argument is ignored if `data` is not a Stream object
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary. For the Backblaze B2 provider, this object contains the `length` property too, which is useful when passing a stream as data object, as it might allow for faster uploads.
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any, length?: number): Promise<void> {
+    putObject(container: string, path: string, data: Stream|string|Buffer, options?: BackblazeB2PutObjectOptions): Promise<void> {
+        if (!options) {
+            options = {}
+        }
         return Promise.resolve()
             // Step zero: ensure we're authorized
             .then(() => this._ensureAuthorized())
@@ -185,7 +193,7 @@ class BackblazeB2Provider extends StorageProvider {
             .then(() => this._getBucketId(container))
             // Initialize the B2Upload class and start the upload process
             .then((bucketId) => {
-                const uploader = new B2Upload(this._client, bucketId, path, data, metadata, length)
+                const uploader = new B2Upload(this._client, bucketId, path, data, options.metadata, options.length)
                 // This returns a promise
                 return uploader.start()
             })

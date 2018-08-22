@@ -1,6 +1,6 @@
 'use strict'
 
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import * as Azure from 'azure-storage'
 import {Stream, Transform} from 'stream'
 
@@ -184,53 +184,56 @@ class AzureStorageProvider extends StorageProvider {
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any): Promise<void> {
+    putObject(container: string, path: string, data: Stream|string|Buffer, options?: PutObjectOptions): Promise<void> {
         if (!data) {
             throw Error('Argument data is empty')
         }
+        if (!options) {
+            options = {}
+        }
 
         // Azure wants some headers, like Content-Type, outside of the metadata object
-        const options = {
+        const requestOptions = {
             contentSettings: {},
             metadata: {}
         } as Azure.BlobService.CreateBlockBlobRequestOptions
 
-        if (metadata) {
+        if (options.metadata) {
             // Clone the metadata object before altering it
-            const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
+            const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
 
             if (metadataClone['Content-Type']) {
-                options.contentSettings.contentType = metadataClone['Content-Type']
+                requestOptions.contentSettings.contentType = metadataClone['Content-Type']
                 delete metadataClone['Content-Type']
             }
             if (metadataClone['Content-Encoding']) {
-                options.contentSettings.contentEncoding = metadataClone['Content-Encoding']
+                requestOptions.contentSettings.contentEncoding = metadataClone['Content-Encoding']
                 delete metadataClone['Content-Encoding']
             }
             if (metadataClone['Content-Language']) {
-                options.contentSettings.contentLanguage = metadataClone['Content-Language']
+                requestOptions.contentSettings.contentLanguage = metadataClone['Content-Language']
                 delete metadataClone['Content-Language']
             }
             if (metadataClone['Cache-Control']) {
-                options.contentSettings.cacheControl = metadataClone['Cache-Control']
+                requestOptions.contentSettings.cacheControl = metadataClone['Cache-Control']
                 delete metadataClone['Cache-Control']
             }
             if (metadataClone['Content-Disposition']) {
-                options.contentSettings.contentDisposition = metadataClone['Content-Disposition']
+                requestOptions.contentSettings.contentDisposition = metadataClone['Content-Disposition']
                 delete metadataClone['Content-Disposition']
             }
             if (metadataClone['Content-MD5']) {
                 // Content-MD5 is auto-generated if not sent by the user
                 // If sent by the user, then Azure uses it to ensure data did not get altered in transit
-                options.contentSettings.contentMD5 = metadataClone['Content-MD5']
+                requestOptions.contentSettings.contentMD5 = metadataClone['Content-MD5']
                 delete metadataClone['Content-MD5']
             }
 
-            options.metadata = metadataClone
+            requestOptions.metadata = metadataClone
         }
 
         return new Promise((resolve, reject) => {
@@ -249,11 +252,11 @@ class AzureStorageProvider extends StorageProvider {
 
             // Check if we have a stream
             if (typeof data == 'object' && typeof (data as any).pipe == 'function') {
-                (data as Stream).pipe(this._client.createWriteStreamToBlockBlob(container, path, options, callback))
+                (data as Stream).pipe(this._client.createWriteStreamToBlockBlob(container, path, requestOptions, callback))
             }
             // Strings and Buffers are supported too
             else if (typeof data == 'string' || (typeof data == 'object' && Buffer.isBuffer(data))) {
-                this._client.createBlockBlobFromText(container, path, data, options, callback)
+                this._client.createBlockBlobFromText(container, path, data, requestOptions, callback)
             }
             // Fail otherwise
             else {

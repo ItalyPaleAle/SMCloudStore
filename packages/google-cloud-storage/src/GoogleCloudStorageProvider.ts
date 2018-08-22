@@ -1,7 +1,7 @@
 'use strict'
 
 import GCStorage = require('@google-cloud/storage')
-import {ListItemObject, ListItemPrefix, ListResults, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
+import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
 
@@ -166,11 +166,15 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    putObject(container: string, path: string, data: Stream|string|Buffer, metadata: any): Promise<void> {
+    putObject(container: string, path: string, data: Stream|string|Buffer, options?: PutObjectOptions): Promise<void> {
+        if (!options) {
+            options = {}
+        }
+
         const bucket = this._client.bucket(container)
         const file = bucket.file(path)
 
@@ -196,9 +200,9 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
         return new Promise((resolve, reject) => {
             // Clone the metadata object before modifying it
-            const metadataClone = Object.assign({}, metadata) as {[k: string]: string}
+            const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
 
-            const options = {
+            const streamOptions = {
                 metadata: metadataClone,
                 resumable: false,
                 validation: 'md5'
@@ -206,11 +210,11 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
             // Check if we have a Content-Type
             if (metadataClone['Content-Type']) {
-                options.contentType = metadataClone['Content-Type']
+                streamOptions.contentType = metadataClone['Content-Type']
                 delete metadataClone['Content-Type']
             }
 
-            dataStream.pipe(file.createWriteStream(options))
+            dataStream.pipe(file.createWriteStream(streamOptions))
                 .on('error', (err) => {
                     reject(err)
                 })

@@ -149,33 +149,38 @@ The method [`storage.deleteContainer(container)`](https://italypaleale.github.io
 await storage.deleteContainer('testcontainer')
 ````
 
-### storage.putObject(container, path, data, metadata)
+### storage.putObject(container, path, data, [options])
 
-[`storage.putObject(container, path, data, metadata)`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#putobject) is the method to put (upload) an object to the storage server.
+[`storage.putObject(container, path, data, [options])`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#putobject) is the method to put (upload) an object to the storage server.
 
 Arguments are:
 
 - `container`: name of the destination container.
 - `path`: full path inside the container where to store the object.
 - `data`: the data to be uploaded. This could be a Readable Stream, or a string or Buffer containing the full data. Streams are preferred when dealing with larger amounts of data.
-- `metadata`: object containing custom metadata and properties. An important key in the metadata object is `Content-Type`, which sets the Content-Type header for the file. Some providers might have special treatment for other keys too.
+- `options`: dictionary with options. Options are primarily provider-dependent, so please refer to the documentation for each provider for more information. The list below includes only the common ones
+  - `options.metadata`: object containing custom metadata and properties. An important key in the metadata object is `Content-Type`, which sets the Content-Type header for the file. Some providers might have special treatment for other keys too.
 
 The method returns a Promise that resolves with no value when the upload is complete.
 
 ````js
 // Upload a stream
 const data = require('fs').createReadStream('someimage.jpg')
-const metadata = {
-    'Content-Type': 'image/jpeg'
+const options = {
+    metadata: {
+        'Content-Type': 'image/jpeg'
+    }
 }
-await storage.putObject('testcontainer', 'directory/someimage.jpg', data, metadata)
+await storage.putObject('testcontainer', 'directory/someimage.jpg', data, options)
 
 // Upload the content of a string or Buffer
 const data = 'Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura ché la diritta via era smarrita'
-const metadata = {
-    'Content-Type': 'text/plain'
+const options = {
+    metadata: {
+        'Content-Type': 'text/plain'
+    }
 }
-await storage.putObject('testcontainer', 'directory/dante.txt', data, metadata)
+await storage.putObject('testcontainer', 'directory/dante.txt', data, options)
 ````
 
 ### storage.getObject(container, path)

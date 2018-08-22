@@ -21,6 +21,12 @@ export interface ListItemObject {
     contentSHA1?: string
 }
 
+/** Dictionary of options used when putting an object. Many providers will extend this. */
+export interface PutObjectOptions {
+    /** Key-value pair with metadata for the object, for example `Content-Type`, or custom tags */
+    metadata?: any
+}
+
 /** Dictionary of prefixes returned when listing a container. */
 export interface ListItemPrefix {
     /** Name of the prefix */
@@ -115,11 +121,11 @@ export abstract class StorageProvider {
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
      * @param data - Object data or stream. Can be a Stream (Readable Stream), Buffer or string.
-     * @param metadata - Key-value pair with metadata for the object, for example `Content-Type` or custom tags
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
      * @returns Promise that resolves once the object has been uploaded
      * @async
      */
-    abstract putObject(container: string, path: string, data: Stream|string|Buffer, metadata?: any): Promise<void>
+    abstract putObject(container: string, path: string, data: Stream|string|Buffer, options?: PutObjectOptions): Promise<void>
 
     /**
      * Requests an object from the server. The method returns a Promise that resolves to a Readable Stream containing the data.
