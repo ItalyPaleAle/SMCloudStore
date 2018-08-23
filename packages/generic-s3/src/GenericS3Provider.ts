@@ -5,14 +5,6 @@ import {Client as MinioClient, ClientOptions as MinioClientOptions} from 'minio'
 import {Stream} from 'stream'
 
 /**
- * Options passed when creating a container
- */
-interface GenericS3CreateContainerOptions {
-    /** Region in which to create the container; useful for AWS S3 and some other providers based on this */
-    region?: string
-}
-
-/**
  * Client to interact with a generic S3 object storage server, using the Minio library.
  */
 class GenericS3Provider extends StorageProvider {
@@ -41,12 +33,12 @@ class GenericS3Provider extends StorageProvider {
      * Create a container ("bucket") on the server.
      * 
      * @param container - Name of the container
-     * @param options - Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).
+     * @param options - The option argument is ignored by this provider.
      * @returns Promise that resolves once the container has been created. The promise doesn't contain any meaningful return value.
      * @async
      */
-    createContainer(container: string, options?: GenericS3CreateContainerOptions): Promise<void> {
-        const region = (options && options.region) || ''
+    createContainer(container: string, options?: any): Promise<void> {
+        const region = ((this._client as any).region) || ''
 
         // This returns a promise
         return this._client.makeBucket(container, region)
@@ -74,11 +66,11 @@ class GenericS3Provider extends StorageProvider {
      * Create a container ("bucket") on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param options - Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).
+     * @param options - The option argument is ignored by this provider.
      * @returns Promise that resolves once the container has been created
      * @async
      */
-    ensureContainer(container: string, options?: GenericS3CreateContainerOptions): Promise<void> {
+    ensureContainer(container: string, options?: any): Promise<void> {
         return this.containerExists(container).then((exists) => {
             if (!exists) {
                 return this.createContainer(container, options)
