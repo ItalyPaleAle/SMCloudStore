@@ -140,7 +140,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides GenericS3Provider.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/minio/src/MinioProvider.ts#L9">minio/src/MinioProvider.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/minio/src/MinioProvider.ts#L9">minio/src/MinioProvider.ts:9</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -174,7 +174,7 @@
 						<p>Inherited from GenericS3Provider._client</p>
 						<p>Overrides StorageProvider._client</p>
 						<ul>
-							<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:16</li>
+							<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:9</li>
 						</ul>
 					</aside>
 				</section>
@@ -246,7 +246,7 @@
 								<p>Inherited from GenericS3Provider.containerExists</p>
 								<p>Overrides StorageProvider.containerExists</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:39</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:32</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -276,7 +276,7 @@
 					<a name="createcontainer" class="tsd-anchor"></a>
 					<h3>create<wbr>Container</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GenericS3CreateContainerOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -284,7 +284,7 @@
 								<p>Inherited from GenericS3Provider.createContainer</p>
 								<p>Overrides StorageProvider.createContainer</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:31</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:24</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,9 +305,9 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">GenericS3CreateContainerOptions</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).</p>
+										<p>The option argument is ignored by this provider.</p>
 									</div>
 								</li>
 							</ul>
@@ -328,7 +328,7 @@
 								<p>Inherited from GenericS3Provider.deleteContainer</p>
 								<p>Overrides StorageProvider.deleteContainer</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:63</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:56</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -366,7 +366,7 @@
 								<p>Inherited from GenericS3Provider.deleteObject</p>
 								<p>Overrides StorageProvider.deleteObject</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:101</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:94</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -402,7 +402,7 @@
 					<a name="ensurecontainer" class="tsd-anchor"></a>
 					<h3>ensure<wbr>Container</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GenericS3CreateContainerOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -410,7 +410,7 @@
 								<p>Inherited from GenericS3Provider.ensureContainer</p>
 								<p>Overrides StorageProvider.ensureContainer</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:48</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:41</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -431,9 +431,9 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">GenericS3CreateContainerOptions</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).</p>
+										<p>The option argument is ignored by this provider.</p>
 									</div>
 								</li>
 							</ul>
@@ -454,7 +454,7 @@
 								<p>Inherited from GenericS3Provider.getObject</p>
 								<p>Overrides StorageProvider.getObject</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:83</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:76</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -590,7 +590,7 @@
 								<p>Inherited from GenericS3Provider.listContainers</p>
 								<p>Overrides StorageProvider.listContainers</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:55</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:48</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -619,7 +619,7 @@
 								<p>Inherited from GenericS3Provider.listObjects</p>
 								<p>Overrides StorageProvider.listObjects</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:92</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:85</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -663,7 +663,7 @@
 								<p>Inherited from GenericS3Provider.putObject</p>
 								<p>Overrides StorageProvider.putObject</p>
 								<ul>
-									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:74</li>
+									<li>Defined in minio/node_modules/@smcloudstore/generic-s3/dist/GenericS3Provider.d.ts:67</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

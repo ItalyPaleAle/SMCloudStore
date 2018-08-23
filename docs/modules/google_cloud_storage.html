@@ -69,6 +69,43 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<h1 id="-smcloudstore-google-cloud-storage">@smcloudstore/google-cloud-storage</h1>
+					<p>This package is a provider for <a href="https://github.com/ItalyPaleAle/SMCloudStore">SMCloudStore</a>, for Google Cloud Storage. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.</p>
+					<p>Please refer to the <a href="https://github.com/ItalyPaleAle/SMCloudStore">main package</a> for the SMCloudStore documentation and instructions on how to use it.</p>
+					<h2 id="provider-specific-considerations">Provider-specific considerations</h2>
+					<p>There are a few provider-specific considerations for the GoogleCloudStorage provider.</p>
+					<h3 id="connection-argument">Connection argument</h3>
+					<p>When initializing the GoogleCloudStorage provider, the <code>connection</code> argument is an object with:</p>
+					<ul>
+						<li><code>connection.projectId</code>: ID of the Google Cloud project</li>
+						<li><code>connection.keyFilename</code>: path of the JSON file containing the key</li>
+					</ul>
+					<p>Example:</p>
+					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+
+<p><span class="hljs-comment">// Complete with the connection options for Google Cloud Storage</span>
+<span class="hljs-keyword">const</span> connection = {
+    <span class="hljs-attr">projectId</span>: <span class="hljs-string">&#39;name-100123&#39;</span>,
+    <span class="hljs-attr">keyFilename</span>: <span class="hljs-string">&#39;path/to/file.json&#39;</span>
+}</p>
+<p><span class="hljs-comment">// Return an instance of the GoogleCloudStorage class</span>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;google-cloud-storage&#39;</span>, connection)
+</code></pre></p>
+					<h3 id="creating-a-container">Creating a container</h3>
+					<p>When using the <a href="https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> and the <a href="https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> methods, the <code>options</code> argument can be used to define some options for the container:</p>
+					<ul>
+						<li><code>options.class</code> (optional): string determining the storage class to use. Please refer to the <a href="https://cloud.google.com/storage/docs/storage-classes">documentation</a> for more informatiom.<ul>
+								<li><code>&#39;multi_regional&#39;</code> (default value)</li>
+								<li><code>&#39;regional&#39;</code></li>
+								<li><code>&#39;nearline&#39;</code></li>
+								<li><code>&#39;coldline&#39;</code></li>
+							</ul>
+						</li>
+						<li><code>options.region</code> (optional): string determining the region in which to create the container; you can see a list in the <a href="https://cloud.google.com/storage/docs/bucket-locations">official documentation</a>. Default value is <code>us</code> if storage class is <code>multi_regional</code>; <code>us-central1</code> otherwise.</li>
+					</ul>
+					<h3 id="accessing-the-google-cloud-storage-sdk">Accessing the Google Cloud Storage SDK</h3>
+					<p>The Google Cloud Storage provider is built on top of the official <a href="https://github.com/googleapis/nodejs-storage">Google Cloud Storage Node.js client</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#client"><code>storage.client()</code></a>.</p>
+					<p>You can use the object returned by this method to perform low-level operations using the Google Cloud Storage SDK.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">

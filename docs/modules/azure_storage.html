@@ -69,6 +69,46 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<h1 id="-smcloudstore-azure-storage">@smcloudstore/azure-storage</h1>
+					<p>This package is a provider for <a href="https://github.com/ItalyPaleAle/SMCloudStore">SMCloudStore</a>, for Azure Blob Storage. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.</p>
+					<p>Please refer to the <a href="https://github.com/ItalyPaleAle/SMCloudStore">main package</a> for the SMCloudStore documentation and instructions on how to use it.</p>
+					<h2 id="provider-specific-considerations">Provider-specific considerations</h2>
+					<p>There are a few provider-specific considerations for the AzureStorage provider.</p>
+					<h3 id="connection-argument">Connection argument</h3>
+					<p>When initializing the AzureStorage provider, the <code>connection</code> argument can be one of the following:</p>
+					<ul>
+						<li>A string containing the full &quot;connection string&quot; for the storage account, for example as copied from the Azure Portal. This looks like <code>&#39;DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net&#39;</code>.</li>
+						<li>Alternatively, you can pass the connection options as a dictionary:<ul>
+								<li><code>connection.storageAccount</code>: string containing the Storage Account name</li>
+								<li><code>connection.storageAccessKey</code>: string containing the Storage Account access key (the &quot;secret key&quot;)</li>
+								<li><code>connection.host</code> (optional): string containing the endpoint to use: this is useful if you&#39;re using Azure China (<code>core.chinacloudapi.cn</code>) or Azure Germany (<code>core.cloudapi.de</code>), or if you&#39;re using Azure Stack. Default value is <code>core.windows.net</code>, which is the default for public, global Azure regions.</li>
+							</ul>
+						</li>
+					</ul>
+					<p>Example:</p>
+					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+
+<p><span class="hljs-comment">// Complete with the connection options for Azure Blob Storage</span>
+<span class="hljs-keyword">const</span> connection = {
+    <span class="hljs-attr">storageAccount</span>: <span class="hljs-string">&#39;STORAGE_ACCOUNT_NAME&#39;</span>,
+    <span class="hljs-attr">storageAccessKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>
+}</p>
+<p><span class="hljs-comment">// Return an instance of the AzureStorageProvider class</span>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;azure-storage&#39;</span>, connection)
+</code></pre></p>
+					<h3 id="creating-a-container">Creating a container</h3>
+					<p>When using the <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> and the <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> methods, the <code>options</code> argument can be used to define some options for the container:</p>
+					<ul>
+						<li><code>options.access</code> (optional): string determining the permission level for the container and its contents. Please refer to the <a href="https://docs.microsoft.com/en-us/azure/storage/blobs/storage-manage-access-to-resources#grant-anonymous-users-permissions-to-containers-and-blobs">documentation</a> for more informatiom.<ul>
+								<li><code>&#39;container&#39;</code> (alias <code>&#39;public&#39;</code> for compatibility with other storage providers)</li>
+								<li><code>&#39;blob&#39;</code></li>
+								<li><code>&#39;none&#39;</code> (alias <code>&#39;private&#39;</code> for compatibility with other storage providers)), this is the default value.</li>
+							</ul>
+						</li>
+					</ul>
+					<h3 id="accessing-the-azure-storage-sdk">Accessing the Azure Storage SDK</h3>
+					<p>The Azure Blob Storage provider is built on top of the official <a href="https://github.com/Azure/azure-storage-node">Azure Storage SDK for Node.js</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#client"><code>storage.client()</code></a>.</p>
+					<p>You can use the object returned by this method to perform low-level operations using the Azure Storage SDK.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -105,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/azure_storage.azurestorageconnectionobject.html" class="tsd-signature-type">AzureStorageConnectionObject</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>

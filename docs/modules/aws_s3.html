@@ -84,7 +84,7 @@
 					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
 <span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
 
-<p><span class="hljs-comment">// Complete with the connection options for the provider</span>
+<p><span class="hljs-comment">// Complete with the connection options for AWS S3</span>
 <span class="hljs-keyword">const</span> connection = {
     <span class="hljs-attr">accessKeyId</span>: <span class="hljs-string">&#39;PUBLIC_KEY_HERE&#39;</span>,
     <span class="hljs-attr">secretAccessKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>,
@@ -124,7 +124,7 @@
 						</li>
 					</ul>
 					<h3 id="accessing-the-aws-sdk">Accessing the AWS-SDK</h3>
-					<p>The AWS S3 provider is built on top of the official <a href="https://github.com/aws/aws-sdk-js">AWS SDK for JavaScript</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#client"><code>storage.client()</code></a>.</p>
+					<p>The AWS S3 provider is built on top of the official <a href="https://github.com/aws/aws-sdk-js">AWS SDK for JavaScript</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#client"><code>storage.client()</code></a>.</p>
 					<p>You can use the object returned by this method to perform low-level operations using the AWS S3 SDK. Note that only the S3 library is loaded, and not the full AWS SDK for JavaScript.</p>
 				</div>
 			</section>
@@ -169,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">Aws<wbr>S3ACL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"private"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read-write"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"authenticated-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -196,7 +196,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

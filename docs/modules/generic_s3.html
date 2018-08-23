@@ -69,6 +69,36 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<h1 id="-smcloudstore-generic-s3">@smcloudstore/generic-s3</h1>
+					<p>This package is a provider for <a href="https://github.com/ItalyPaleAle/SMCloudStore">SMCloudStore</a>, for a generic S3-compatible provider, including AWS S3. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.</p>
+					<p>Please refer to the <a href="https://github.com/ItalyPaleAle/SMCloudStore">main package</a> for the SMCloudStore documentation and instructions on how to use it.</p>
+					<h2 id="provider-specific-considerations">Provider-specific considerations</h2>
+					<p>There are a few provider-specific considerations for the GenericS3 provider.</p>
+					<h3 id="connection-argument">Connection argument</h3>
+					<p>When initializing the GenericS3 provider, the <code>connection</code> argument is an object with:</p>
+					<ul>
+						<li><code>connection.endPoint</code>: string representing the endpoint of the server to connect to; for AWS S3, this is <code>s3.amazonaws.com</code> (this is always required)</li>
+						<li><code>connection.accessKey</code>: string containing the access key (the &quot;public key&quot;)</li>
+						<li><code>connection.secretKey</code>: string containing the secret key</li>
+						<li><code>connection.useSSL</code> (optional): boolean that will force the connection using HTTPS if true (default: true)</li>
+						<li><code>connection.port</code> (optional): number representing the port to connect to; defaults to 443 if <code>useSSL</code> is true, 80 otherwise</li>
+						<li><code>connection.region</code> (optional): string containing the AWS region to use, useful for connecting to AWS S3</li>
+					</ul>
+					<p>Example:</p>
+					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+
+<p><span class="hljs-comment">// Complete with the connection options for GenericS3</span>
+<span class="hljs-keyword">const</span> connection = {
+    <span class="hljs-attr">endPoint</span>: <span class="hljs-string">&#39;storage.cloudprovider.com&#39;</span>,
+    <span class="hljs-attr">accessKey</span>: <span class="hljs-string">&#39;PUBLIC_KEY_HERE&#39;</span>,
+    <span class="hljs-attr">secretKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>,
+}</p>
+<p><span class="hljs-comment">// Return an instance of the GenericS3Provider class</span>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;generic-s3&#39;</span>, connection)
+</code></pre></p>
+					<h3 id="accessing-the-minio-library">Accessing the Minio library</h3>
+					<p>The Generic S3 provider is built on top of the <a href="https://github.com/minio/minio-js">Minio JavaScript client</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/generic_s3.generics3provider.html#client"><code>storage.client()</code></a>.</p>
+					<p>You can use the object returned by this method to perform low-level operations using the Minio client.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -79,12 +109,6 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/generic_s3.generics3provider.html" class="tsd-kind-icon">Generic<wbr>S3Provider</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/generic_s3.generics3createcontaineroptions.html" class="tsd-kind-icon">Generic<wbr>S3Create<wbr>Container<wbr>Options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -127,9 +151,6 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/generic_s3.generics3provider.html" class="tsd-kind-icon">Generic<wbr>S3Provider</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../interfaces/generic_s3.generics3createcontaineroptions.html" class="tsd-kind-icon">Generic<wbr>S3Create<wbr>Container<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

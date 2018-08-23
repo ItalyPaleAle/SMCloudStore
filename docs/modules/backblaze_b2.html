@@ -69,6 +69,53 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<h1 id="-smcloudstore-backblaze-b2">@smcloudstore/backblaze-b2</h1>
+					<p>This package is a provider for <a href="https://github.com/ItalyPaleAle/SMCloudStore">SMCloudStore</a>, for Backblaze B2. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.</p>
+					<p>Please refer to the <a href="https://github.com/ItalyPaleAle/SMCloudStore">main package</a> for the SMCloudStore documentation and instructions on how to use it.</p>
+					<h2 id="provider-specific-considerations">Provider-specific considerations</h2>
+					<p>There are a few provider-specific considerations for the BackblazeB2 provider.</p>
+					<h3 id="connection-argument">Connection argument</h3>
+					<p>When initializing the BackblazeB2 provider, the <code>connection</code> argument is an object with:</p>
+					<ul>
+						<li><code>connection.accountId</code>: string containing the account ID (the &quot;public key&quot;)</li>
+						<li><code>connection.applicationKey</code>: string containing the application key (the &quot;secret key&quot;)</li>
+					</ul>
+					<p>Example:</p>
+					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
+<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+
+<p><span class="hljs-comment">// Complete with the connection options for Backblaze B2</span>
+<span class="hljs-keyword">const</span> connection = {
+    <span class="hljs-attr">accountId</span>: <span class="hljs-string">&#39;ACCOUNT_ID_HERE&#39;</span>,
+    <span class="hljs-attr">applicationKey</span>: <span class="hljs-string">&#39;APPLICATION_KEY_HERE&#39;</span>
+}</p>
+<p><span class="hljs-comment">// Return an instance of the BackblazeB2Provider class</span>
+<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;backblaze-b2&#39;</span>, connection)
+</code></pre></p>
+					<h3 id="creating-a-container">Creating a container</h3>
+					<p>When using the <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> and the <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> methods, the <code>options</code> argument can be used to define some options for the container:</p>
+					<ul>
+						<li><code>options.access</code> (optional): string determining the permission for all objects inside the container; possible values are:<ul>
+								<li><code>&#39;public&#39;</code></li>
+								<li><code>&#39;private&#39;</code></li>
+							</ul>
+						</li>
+					</ul>
+					<h3 id="uploading-an-object">Uploading an object</h3>
+					<p>The Backblaze B2 APIs have relatively poor support for streams, as it requires the size of the data to be sent at the beginning of the upload request. Because of that, the Backblaze B2 provider can operate in two separate modes when uploading files:</p>
+					<ol>
+						<li>If the length of the data can be known before the upload starts, the provider makes a single upload call. This applies to all situations when <code>data</code> is a Buffer or a string, and when <code>data</code> is a Stream and either the <code>options.length</code> argument is specified (see below), or <code>data.byteLength</code> is defined (all data is loaded in memory before being sent to the server in this case).</li>
+						<li>In the situation when <code>data</code> is a Stream and the length can&#39;t be known beforehand, if the data is longer than <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.b2upload.html#chunksize"><code>B2Upload.chunkSize</code></a> (default: 9MB; minimum: 5MB) the method will use B2&#39;s <a href="https://www.backblaze.com/b2/docs/large_files.html">large files APIs</a>. With those, it&#39;s possible to chunk the file into many chunks and upload them separately, thus it&#39;s not necessary to load the entire Stream in memory. However, this way of uploading files requires many more network calls, and could be significantly slower. B2 supports up to 1,000 chunks per object, so using 9MB chunks (the default value for <code>B2Upload.chunkSize</code>), maximum file size is 90GB.</li>
+					</ol>
+					<blockquote>
+						<p>Note: There is currently an <a href="https://github.com/yakovkhalinsky/backblaze-b2/issues/45">issue</a> with an upstream package that limits <code>B2Upload.chunkSize</code> to be no more than 10MB.</p>
+					</blockquote>
+					<p>With the Backblaze B2 provider, the <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#putobject"><code>storage.putObject(container, path, data, [options])</code></a> method comes with an extra key for the <code>options</code> dictionary, in addition to the standard <code>options.metadata</code> key:</p>
+					<ul>
+						<li><code>options.length</code> (optional): as described above, when <code>data</code> is a Stream, if the length of the stream can be known in advance, setting <code>options.length</code> with the byte size (or the <code>byteLength</code> property in the <code>data</code> object directly) allows the BackblazeB2 provider to upload the object with a single call. This option is ignored if <code>data</code> is a string or Buffer.</li>
+					</ul>
+					<h3 id="accessing-the-backblaze-b2-library">Accessing the Backblaze B2 library</h3>
+					<p>The AWS S3 provider is built on top of <a href="https://github.com/yakovkhalinsky/backblaze-b2">backblaze-b2</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#client"><code>storage.client()</code></a>.</p>
+					<p>You can use the object returned by this method to perform low-level operations using the backblaze-b2 module.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -107,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">B2<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;backblaze-b2&#x27;) as any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/61fa9eb/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
