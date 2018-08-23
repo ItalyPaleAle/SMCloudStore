@@ -22,7 +22,7 @@ Example:
 // Require the package
 const SMCloudStore = require('smcloudstore')
 
-// Complete with the connection options for the provider
+// Complete with the connection options for AWS S3
 const connection = {
     accessKeyId: 'PUBLIC_KEY_HERE',
     secretAccessKey: 'SECRET_KEY_HERE',
@@ -61,6 +61,6 @@ With the AWS S3 provider, the [`storage.putObject(container, path, data, [option
 
 ### Accessing the AWS-SDK
 
-The AWS S3 provider is built on top of the official [AWS SDK for JavaScript](https://github.com/aws/aws-sdk-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#client).
+The AWS S3 provider is built on top of the official [AWS SDK for JavaScript](https://github.com/aws/aws-sdk-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#client).
 
 You can use the object returned by this method to perform low-level operations using the AWS S3 SDK. Note that only the S3 library is loaded, and not the full AWS SDK for JavaScript.

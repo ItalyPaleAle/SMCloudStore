@@ -171,7 +171,7 @@ class AwsS3Provider extends StorageProvider {
      * Create a container ("bucket") on the server if it doesn't already exist.
      * 
      * @param container - Name of the container
-     * @param options - Dictionary with options for creating the container, including the region (useful when dealing with AWS S3, for example).
+     * @param options - Dictionary with options for creating the container.
      * @returns Promise that resolves once the container has been created
      * @async
      */
