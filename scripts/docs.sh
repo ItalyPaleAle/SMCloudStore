@@ -15,3 +15,6 @@
   --external-modulemap  ".*\/packages\/([\\w\\-_]+)\/" \
   --mode modules \
     packages/*/src
+
+# Fix for GitHub pages
+touch docs/.nojekyll
