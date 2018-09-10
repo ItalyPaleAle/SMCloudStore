@@ -19,7 +19,6 @@
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore",
   "dependencies": {},
   "devDependencies": {
-    "@types/google-cloud__storage": "^1.7.2",
     "@types/minio": "^7.0.0",
     "@types/node": "^10.9.4",
     "coveralls": "^3.0.2",
