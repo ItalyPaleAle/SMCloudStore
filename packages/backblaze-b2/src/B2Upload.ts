@@ -218,6 +218,13 @@ class B2Upload {
         return doUpload()
     }
 
+    /**
+     * Uploads a Readable Stream.
+     * 
+     * @param stream - Readable Stream containing the data to upload
+     * @returns Promise that resolves when the object has been uploaded
+     * @async
+     */
     private putLargeFile(stream?: Readable): Promise<any> {
         // If we are not passed a stream, use this.data
         if (!stream) {
@@ -336,6 +343,15 @@ class B2Upload {
             })
     }
 
+    /**
+     * Uploads a single part of a large file.
+     * 
+     * @param fileId - ID of the large file that is being uploaded
+     * @param partNumber - Number of the part, starting from 1
+     * @param data - Data to upload, in a Buffer
+     * @returns Promise that resolves when the part has been uploaded.
+     * @async
+     */
     private putPart(fileId: string, partNumber: number, data: Buffer): Promise<any> {
         // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
         let retryCounter = 0

@@ -371,10 +371,18 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('presignedPutUrl', async function() {
+            // Increase timeout
+            this.timeout(120000)
+            this.slow(0)
+
             const file = presignedFiles[0]
 
             // Get a URL to upload a file
-            const uploadUrl = await storage.presignedPutUrl(containers[0], file.destination)
+            const uploadUrl = await storage.presignedPutUrl(containers[0], file.destination, {
+                metadata: {
+                    'Content-Type': file.contentType
+                }
+            })
 
             // Ensure this is a URL
             assert(uploadUrl)
@@ -382,7 +390,13 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Try uploading a file via PUT
             await new Promise((resolve, reject) => {
-                request.put(uploadUrl, {body: file.string}, (error, response, body) => {
+                const options = {
+                    body: file.string,
+                    headers: {
+                        'Content-Type': file.contentType
+                    }
+                }
+                request.put(uploadUrl, options, (error, response, body) => {
                     if (error) {
                         reject(error)
                     }
@@ -426,6 +440,9 @@ module.exports = (providerName, testSuiteOptions) => {
                         return reject(Error('Empty response'))
                     }
                     assert(body == presignedFiles[0].string)
+
+                    // Test the Content-Type header
+                    assert(response.headers && response.headers['content-type'] == presignedFiles[0].contentType)
 
                     resolve()
                 })

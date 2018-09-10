@@ -4,6 +4,8 @@ import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StoragePr
 import S3 = require('aws-sdk/clients/s3')
 import {Stream} from 'stream'
 
+// Note: when using the AWS SDK, do not use arrow functions as callbacks, as many methods need access to the "this" context the callbacks provide
+
 /**
  * Connection options for an AWS S3 provider.
  */
@@ -68,6 +70,71 @@ function ACLString(access: AwsS3ACL): string {
         default:
             return 'private'
     }
+}
+
+/**
+ * Returns the methodOptions dictionary for the `putObject` S3 method
+ * 
+ * @param options - Dictionary with options
+ * @returns Dictionary to add to methodOptions
+ */
+function PutObjectMethodOptions(options: AwsS3PutObjectOptions): S3.PutObjectRequest {
+    const methodOptions = {} as S3.PutObjectRequest
+
+    // If no other options...
+    if (!options) {
+        return methodOptions
+    }
+
+    // ACL: add only if explicitly passed
+    if (options.access) {
+        methodOptions.ACL = ACLString(options.access)
+    }
+
+    // Storage class
+    if (options.class) {
+        methodOptions.StorageClass = options.class
+    }
+
+    // Enable server-side encryption
+    if (options.serverSideEncryption) {
+        methodOptions.ServerSideEncryption = 'AES256'
+    }
+
+    // Metadata
+    if (options.metadata) {
+        // Clone the metadata object before altering it
+        const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
+
+        if (metadataClone['Content-Type']) {
+            methodOptions.ContentType = metadataClone['Content-Type']
+            delete metadataClone['Content-Type']
+        }
+        if (metadataClone['Content-Encoding']) {
+            methodOptions.ContentEncoding = metadataClone['Content-Encoding']
+            delete metadataClone['Content-Encoding']
+        }
+        if (metadataClone['Content-Language']) {
+            methodOptions.ContentLanguage = metadataClone['Content-Language']
+            delete metadataClone['Content-Language']
+        }
+        if (metadataClone['Cache-Control']) {
+            methodOptions.CacheControl = metadataClone['Cache-Control']
+            delete metadataClone['Cache-Control']
+        }
+        if (metadataClone['Content-Disposition']) {
+            methodOptions.ContentDisposition = metadataClone['Content-Disposition']
+            delete metadataClone['Content-Disposition']
+        }
+        if (metadataClone['Content-MD5']) {
+            methodOptions.ContentMD5 = metadataClone['Content-MD5']
+            delete metadataClone['Content-MD5']
+        }
+
+        methodOptions.Metadata = metadataClone
+    }
+
+    return methodOptions
 }
 
 /**
@@ -248,60 +315,16 @@ class AwsS3Provider extends StorageProvider {
         }
 
         return new Promise((resolve, reject) => {
-            // Basic method options
-            const methodOptions = {
-                Body: data,
-                Bucket: container,
-                Key: path
-            } as S3.PutObjectRequest
-
-            // ACL: add only if explicitly passed
-            if (options.access) {
-                methodOptions.ACL = ACLString(options.access)
-            }
-
-            // Storage class
-            if (options.class) {
-                methodOptions.StorageClass = options.class
-            }
-
-            // Enable server-side encryption
-            if (options.serverSideEncryption) {
-                methodOptions.ServerSideEncryption = 'AES256'
-            }
-
-            // Metadata
-            if (options.metadata) {
-                // Clone the metadata object before altering it
-                const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
-
-                if (metadataClone['Content-Type']) {
-                    methodOptions.ContentType = metadataClone['Content-Type']
-                    delete metadataClone['Content-Type']
-                }
-                if (metadataClone['Content-Encoding']) {
-                    methodOptions.ContentEncoding = metadataClone['Content-Encoding']
-                    delete metadataClone['Content-Encoding']
-                }
-                if (metadataClone['Content-Language']) {
-                    methodOptions.ContentLanguage = metadataClone['Content-Language']
-                    delete metadataClone['Content-Language']
-                }
-                if (metadataClone['Cache-Control']) {
-                    methodOptions.CacheControl = metadataClone['Cache-Control']
-                    delete metadataClone['Cache-Control']
-                }
-                if (metadataClone['Content-Disposition']) {
-                    methodOptions.ContentDisposition = metadataClone['Content-Disposition']
-                    delete metadataClone['Content-Disposition']
-                }
-                if (metadataClone['Content-MD5']) {
-                    methodOptions.ContentMD5 = metadataClone['Content-MD5']
-                    delete metadataClone['Content-MD5']
-                }
-
-                methodOptions.Metadata = metadataClone
-            }
+            // Build all the methodOptions dictionary
+            const methodOptions = Object.assign(
+                {},
+                {
+                    Body: data,
+                    Bucket: container,
+                    Key: path
+                },
+                PutObjectMethodOptions(options)
+            ) as S3.PutObjectRequest
 
             // Send the request
             this._client.putObject(methodOptions, function(err, response) {
@@ -414,6 +437,71 @@ class AwsS3Provider extends StorageProvider {
                 }
 
                 resolve()
+            })
+        })
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedGetUrl(container: string, path: string, ttl?: number): Promise<string> {
+        return this.presignedUrl('getObject', container, path, ttl)
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary and additional S3-specific options
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedPutUrl(container: string, path: string, options?: AwsS3PutObjectOptions, ttl?: number): Promise<string> {
+        const additionalMethodOptions = PutObjectMethodOptions(options)
+        return this.presignedUrl('putObject', container, path, additionalMethodOptions, ttl)
+    }
+
+    /**
+     * Returns a presigned URL for the specific S3 operation.
+     * 
+     * @param operation - S3 operation: "getObject" or "putObject"
+     * @param container - Name of the container
+     * @param path - Path of the target object, inside the container
+     * @param additionalMethodOptions - Additional options to pass to the method
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for the specified operation
+     * @async
+     */
+    private presignedUrl(operation: 'getObject'|'putObject', container: string, path: string, additionalMethodOptions: any, ttl?: number): Promise<string> {
+        if (!ttl || ttl < 1) {
+            ttl = 86400
+        }
+
+        const methodOptions = Object.assign(
+            {},
+            {
+                Bucket: container,
+                Expires: ttl,
+                Key: path
+            },
+            additionalMethodOptions
+        )
+
+        return new Promise((resolve, reject) => {
+            this._client.getSignedUrl(operation, methodOptions, function(err, url) {
+                if (err || !url) {
+                    return reject(err || Error('Invalid result when generating the presigned url'))
+                }
+
+                resolve(url)
             })
         })
     }
