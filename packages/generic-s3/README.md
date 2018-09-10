@@ -36,6 +36,10 @@ const connection = {
 const storage = SMCloudStore.create('generic-s3', connection)
 ````
 
+### Using pre-signed URLs
+
+In the method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/generic_s3.generics3provider.html#presignedputurl), the Generic S3 provider ignores the `options` argument, which has no effect on the generated tokens.
+
 ### Accessing the Minio library
 
 The Generic S3 provider is built on top of the [Minio JavaScript client](https://github.com/minio/minio-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/generic_s3.generics3provider.html#client).
