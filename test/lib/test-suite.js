@@ -393,7 +393,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 const headers = Object.assign(
                     {},
                     testSuiteOptions.signedPutRequestHeaders || {},
-                    {'Content-Type': file.contentType,}
+                    {'Content-Type': file.contentType}
                 )
                 const options = {
                     body: file.string,
@@ -481,7 +481,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // If it hasn't happened already, delete all files uploaded, in parallel
             let promises = []
             if (!filesDeleted) {
-                let fileList = testFiles
+                let fileList = [].concat(testFiles, presignedFiles)
                 if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                     fileList = fileList.concat(largeFiles)
                 }

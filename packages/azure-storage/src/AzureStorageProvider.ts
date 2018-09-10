@@ -80,7 +80,6 @@ function PutObjectRequestOptions(options: PutObjectOptions): Azure.BlobService.C
         requestOptions.metadata = metadataClone
     }
 
-
     return requestOptions
 }
 
@@ -431,7 +430,7 @@ class AzureStorageProvider extends StorageProvider {
      * 
      * @param container - Name of the container
      * @param path - Path where to store the object, inside the container
-     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary and additional S3-specific options
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
      * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
      * @returns Promise that resolves with the pre-signed URL for GET requests
      * @async
@@ -442,9 +441,9 @@ class AzureStorageProvider extends StorageProvider {
     }
 
     /**
-     * Returns a presigned URL for the specific S3 operation.
+     * Returns a presigned URL for the specific operation.
      * 
-     * @param operation - S3 operation: "getObject" or "putObject"
+     * @param operation - Operation: "getObject" or "putObject"
      * @param container - Name of the container
      * @param path - Path of the target object, inside the container
      * @param contentSettings - Additional headers that are required
