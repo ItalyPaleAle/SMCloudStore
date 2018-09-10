@@ -203,7 +203,7 @@ class GenericS3Provider extends StorageProvider {
      * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
      * 
      * @param container - Name of the container
-     * @param path - Path of the object, inside the container
+     * @param path - Path where to store the object, inside the container
      * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
      * @returns Promise that resolves with the pre-signed URL for GET requests
      * @async

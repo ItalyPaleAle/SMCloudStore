@@ -58,6 +58,7 @@ module.exports = (providerName, testSuiteOptions) => {
         // Contains a list of test files
         const testFiles = require('../data/test-files')
         const largeFiles = require('../data/large-files')
+        const presignedFiles = require('../data/presigned-files')
 
         // Enable bailing (skip further tests) if a test fails
         this.bail(true)
@@ -369,29 +370,50 @@ module.exports = (providerName, testSuiteOptions) => {
                 })
         })
 
+        it('presignedPutUrl', async function() {
+            const file = presignedFiles[0]
+
+            // Get a URL to upload a file
+            const uploadUrl = await storage.presignedPutUrl(containers[0], file.destination)
+
+            // Ensure this is a URL
+            assert(uploadUrl)
+            assert(uploadUrl.substr(0, 4) == 'http')
+
+            // Try uploading a file via PUT
+            await new Promise((resolve, reject) => {
+                request.put(uploadUrl, {body: file.string}, (error, response, body) => {
+                    if (error) {
+                        reject(error)
+                    }
+
+                    // Ensure status code is a successful one
+                    if (!response || !response.statusCode || response.statusCode < 200 || response.statusCode > 299) {
+                        return reject(Error('Invalid response status code'))
+                    }
+                    
+                    resolve()
+                })
+            })
+        })
+
         it('presignedGetUrl', async function() {
             // Get the pre-signed URL for some files, in parallel
             const promises = []
-            let testUrl
             for (let i = 0; i < 3; i++) {
-                const el = testFiles[i]
+                const e = testFiles[i]
 
-                ;((e) => {
-                    const p = storage.presignedGetUrl(containers[0], e.destination)
-                        .then((url) => {
-                            assert(url)
-                            assert(url.substr(0, 4) == 'http')
-
-                            // We're going to test the URLs by picking one from the returned list and requesting it
-                            if (e.destination == testFiles[2].destination) {
-                                testUrl = url
-                            }
-                        })
-                    promises.push(p)
-                })(el)
+                const p = storage.presignedGetUrl(containers[0], e.destination)
+                    .then((url) => {
+                        assert(url)
+                        assert(url.substr(0, 4) == 'http')
+                    })
+                promises.push(p)
             }
-
             await Promise.all(promises)
+
+            // Request also the URL for the file that was just uploaded
+            const testUrl = await storage.presignedGetUrl(containers[0], presignedFiles[0].destination)
 
             // Request one of the URLs that was returned, to ensure it actually works
             await new Promise((resolve, reject) => {
@@ -401,9 +423,9 @@ module.exports = (providerName, testSuiteOptions) => {
                     }
 
                     if (!body) {
-                        throw Error('Empty response')
+                        return reject(Error('Empty response'))
                     }
-                    assert(body == testFiles[2].string)
+                    assert(body == presignedFiles[0].string)
 
                     resolve()
                 })
@@ -417,7 +439,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Delete all files uploaded, in parallel
             const promises = []
-            let fileList = testFiles
+            let fileList = testFiles.concat(presignedFiles)
             if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
