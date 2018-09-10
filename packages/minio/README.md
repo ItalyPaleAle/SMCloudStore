@@ -37,6 +37,10 @@ const connection = {
 const storage = SMCloudStore.create('minio', connection)
 ````
 
+### Using pre-signed URLs
+
+In the method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/minio.minioprovider.html#presignedputurl), the Minio provider ignores the `options` argument, which has no effect on the generated tokens.
+
 ### Accessing the Minio library
 
 The Minio provider is built on top of the [Minio JavaScript client](https://github.com/minio/minio-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/minio.minioprovider.html#client).

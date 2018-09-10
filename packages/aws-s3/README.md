@@ -59,6 +59,10 @@ With the AWS S3 provider, the [`storage.putObject(container, path, data, [option
   - `'STANDARD_IA'`
   - `'ONEZONE_IA'`
 
+### Using pre-signed URLs
+
+In the method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#presignedputurl), the AWS S3 provider accepts for the `options` argument the same dictionary as the ['`storage.putObject(container, path, data, [options])`'](https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#putobject) method. If you specify a Content-Type in the request for the presigned URL, for example, clients will need to make PUT requests with the same Content-Type.
+
 ### Accessing the AWS-SDK
 
 The AWS S3 provider is built on top of the official [AWS SDK for JavaScript](https://github.com/aws/aws-sdk-js), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#client).

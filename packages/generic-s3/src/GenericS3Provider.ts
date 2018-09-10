@@ -181,6 +181,41 @@ class GenericS3Provider extends StorageProvider {
     deleteObject(container: string, path: string): Promise<void> {
         return this._client.removeObject(container, path)
     }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedGetUrl(container: string, path: string, ttl?: number): Promise<string> {
+        if (!ttl || ttl < 1) {
+            ttl = 86400
+        }
+
+        return this._client.presignedGetObject(container, path, ttl)
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - This argument is ignored by the GenericS3 provider
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedPutUrl(container: string, path: string, options?: any, ttl?: number): Promise<string> {
+        if (!ttl || ttl < 1) {
+            ttl = 86400
+        }
+
+        return this._client.presignedPutObject(container, path, ttl)
+    }
 }
 
 export = GenericS3Provider
