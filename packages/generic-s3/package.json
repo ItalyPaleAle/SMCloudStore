@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@smcloudstore/core": "^0.1.0",
-    "minio": "^7.0.0"
+    "minio": "^7.0.1"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
 }
