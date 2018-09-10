@@ -91,7 +91,7 @@ class BackblazeB2Provider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         // There's no method in the B2 APIs to get a single bucket, so list all buckets and look for the one we're interested in
         return this.listContainers()
             .then((list) => {
@@ -108,7 +108,7 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     ensureContainer(container: string, options?: BackblazeB2CreateContainerOptions): Promise<void> {
-        return this.containerExists(container).then((exists) => {
+        return this.isContainer(container).then((exists) => {
             if (!exists) {
                 return this.createContainer(container)
             }

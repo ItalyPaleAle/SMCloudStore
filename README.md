@@ -109,13 +109,13 @@ await storage.createContainer('testcontainer')
 await storage.createContainer('testcontainer', {region: 'us-east-1'})
 ````
 
-### storage.containerExists(container)
+### storage.isContainer(container)
 
-The method [`storage.containerExists(container)`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#containerexists) returns a Promise that resolves with a boolean indicating whether a container exists on the provider.
+The method [`storage.isContainer(container)`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#iscontainer) returns a Promise that resolves with a boolean indicating whether a container exists on the provider.
 
 ````js
 // Once the async method resolves, exists will contain true or false
-const exists = await storage.containerExists('testcontainer')
+const exists = await storage.isContainer('testcontainer')
 ````
 
 ### storage.ensureContainer(container, [options])

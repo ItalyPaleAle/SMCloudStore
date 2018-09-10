@@ -138,7 +138,7 @@ class AwsS3Provider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             const methodOptions = {
                 Bucket: container
@@ -177,7 +177,7 @@ class AwsS3Provider extends StorageProvider {
      */
     ensureContainer(container: string, options?: AwsS3CreateContainerOptions): Promise<void> {
         // First, check if the container exists
-        return this.containerExists(container)
+        return this.isContainer(container)
             .then((exists) => {
                 // Create the container if it doesn't exist already
                 if (!exists) {

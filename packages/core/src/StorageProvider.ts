@@ -86,7 +86,7 @@ export abstract class StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    abstract containerExists(container: string): Promise<boolean>
+    abstract isContainer(container: string): Promise<boolean>
 
     /**
      * Creates a container on the server if it doesn't already exist.

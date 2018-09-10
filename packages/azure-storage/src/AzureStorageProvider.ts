@@ -75,7 +75,7 @@ class AzureStorageProvider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this._client.getContainerProperties(container, (err, response) => {
                 if (err) {

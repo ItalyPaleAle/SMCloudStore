@@ -105,7 +105,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         const bucket = this._client.bucket(container)
 
         return bucket.exists().then((response) => {
@@ -122,7 +122,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @async
      */
     ensureContainer(container: string, options?: GoogleCloudCreateContainerOptions): Promise<void> {
-        return this.containerExists(container).then((exists) => {
+        return this.isContainer(container).then((exists) => {
             if (!exists) {
                 return this.createContainer(container, options)
             }

@@ -176,10 +176,10 @@
 <p><span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
 <span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">&#39;testcontainer&#39;</span>, {region: <span class="hljs-string">&#39;us-east-1&#39;</span>})
 </code></pre></p>
-					<h3 id="storage-containerexists-container-">storage.containerExists(container)</h3>
-					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#containerexists"><code>storage.containerExists(container)</code></a> returns a Promise that resolves with a boolean indicating whether a container exists on the provider.</p>
+					<h3 id="storage-iscontainer-container-">storage.isContainer(container)</h3>
+					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#iscontainer"><code>storage.isContainer(container)</code></a> returns a Promise that resolves with a boolean indicating whether a container exists on the provider.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Once the async method resolves, exists will contain true or false</span>
-<span class="hljs-keyword">const</span> <span class="hljs-built_in">exists</span> = await storage.containerExists(<span class="hljs-string">'testcontainer'</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">exists</span> = await storage.isContainer(<span class="hljs-string">'testcontainer'</span>)
 </code></pre>
 					<h3 id="storage-ensurecontainer-container-options-">storage.ensureContainer(container, [options])</h3>
 					<p><a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> is similar to <code>storage.createContainer()</code>, but it creates the container only if it doesn&#39;t already exist. The method returns a Promise that resolves with no value when the container has been created.</p>

@@ -93,16 +93,16 @@ module.exports = (providerName, testSuiteOptions) => {
         // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
         it('…waiting…', waitingTest)
 
-        it('containerExists', async function() {
+        it('isContainer', async function() {
             let exists
 
-            exists = await storage.containerExists(containers[0])
+            exists = await storage.isContainer(containers[0])
             assert(exists === true)
 
-            exists = await storage.containerExists(containers[0] + '-2')
+            exists = await storage.isContainer(containers[0] + '-2')
             assert(exists === false)
 
-            exists = await storage.containerExists('doesnotexist')
+            exists = await storage.isContainer('doesnotexist')
             assert(exists === false)
         })
 
