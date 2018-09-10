@@ -60,11 +60,9 @@ function ACLString(access: AwsS3ACL): string {
         case 'public-read':
         case 'public':
             return 'public-read'
-            break
         case 'public-read-write':
         case 'authenticated-read':
             return access
-            break
         case 'none':
         case 'private':
         default:
@@ -73,7 +71,7 @@ function ACLString(access: AwsS3ACL): string {
 }
 
 /**
- * Returns the methodOptions dictionary for the `putObject` S3 method
+ * Returns the methodOptions dictionary for the `putObject` method
  * 
  * @param options - Dictionary with options
  * @returns Dictionary to add to methodOptions

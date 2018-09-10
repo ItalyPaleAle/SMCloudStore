@@ -390,11 +390,14 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Try uploading a file via PUT
             await new Promise((resolve, reject) => {
+                const headers = Object.assign(
+                    {},
+                    testSuiteOptions.signedPutRequestHeaders || {},
+                    {'Content-Type': file.contentType,}
+                )
                 const options = {
                     body: file.string,
-                    headers: {
-                        'Content-Type': file.contentType
-                    }
+                    headers: headers
                 }
                 request.put(uploadUrl, options, (error, response, body) => {
                     if (error) {
@@ -403,6 +406,8 @@ module.exports = (providerName, testSuiteOptions) => {
 
                     // Ensure status code is a successful one
                     if (!response || !response.statusCode || response.statusCode < 200 || response.statusCode > 299) {
+                        // eslint-disable-next-line no-console
+                        console.log(response.statusCode, body)
                         return reject(Error('Invalid response status code'))
                     }
                     
@@ -456,7 +461,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Delete all files uploaded, in parallel
             const promises = []
-            let fileList = testFiles.concat(presignedFiles)
+            let fileList = [].concat(testFiles, presignedFiles)
             if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
