@@ -165,7 +165,7 @@ module.exports = (providerName, testSuiteOptions) => {
                     // Options & metadata
                     const options = {
                         metadata: {
-                            'Content-Type': files[i].contentType
+                            'content-type': files[i].contentType
                         }
                     }
 
@@ -388,7 +388,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // Get a URL to upload a file
             const uploadUrl = await storage.presignedPutUrl(containers[0], file.destination, {
                 metadata: {
-                    'Content-Type': file.contentType
+                    'content-type': file.contentType
                 }
             })
 
@@ -401,7 +401,7 @@ module.exports = (providerName, testSuiteOptions) => {
                 const headers = Object.assign(
                     {},
                     testSuiteOptions.signedPutRequestHeaders || {},
-                    {'Content-Type': file.contentType}
+                    {'content-type': file.contentType}
                 )
                 const options = {
                     body: file.string,

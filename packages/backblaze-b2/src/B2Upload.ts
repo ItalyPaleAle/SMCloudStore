@@ -169,8 +169,8 @@ class B2Upload {
                         }
 
                         // Content-Type header has a special treatment
-                        if (key == 'Content-Type') {
-                            requestArgs.mime = this.metadata['Content-Type']
+                        if (key && key.toLowerCase() == 'content-type') {
+                            requestArgs.mime = this.metadata[key]
                         }
                         else {
                             // We can't have more than 10 headers

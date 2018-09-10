@@ -101,35 +101,38 @@ function PutObjectMethodOptions(options: AwsS3PutObjectOptions): S3.PutObjectReq
 
     // Metadata
     if (options.metadata) {
-        // Clone the metadata object before altering it
-        const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
+        methodOptions.Metadata = {}
 
-        if (metadataClone['Content-Type']) {
-            methodOptions.ContentType = metadataClone['Content-Type']
-            delete metadataClone['Content-Type']
-        }
-        if (metadataClone['Content-Encoding']) {
-            methodOptions.ContentEncoding = metadataClone['Content-Encoding']
-            delete metadataClone['Content-Encoding']
-        }
-        if (metadataClone['Content-Language']) {
-            methodOptions.ContentLanguage = metadataClone['Content-Language']
-            delete metadataClone['Content-Language']
-        }
-        if (metadataClone['Cache-Control']) {
-            methodOptions.CacheControl = metadataClone['Cache-Control']
-            delete metadataClone['Cache-Control']
-        }
-        if (metadataClone['Content-Disposition']) {
-            methodOptions.ContentDisposition = metadataClone['Content-Disposition']
-            delete metadataClone['Content-Disposition']
-        }
-        if (metadataClone['Content-MD5']) {
-            methodOptions.ContentMD5 = metadataClone['Content-MD5']
-            delete metadataClone['Content-MD5']
-        }
+        for (const key in options.metadata) {
+            if (!options.metadata.hasOwnProperty(key)) {
+                continue
+            }
 
-        methodOptions.Metadata = metadataClone
+            const keyLowerCase = key.toLowerCase()
+            switch (keyLowerCase) {
+                case 'cache-control':
+                    methodOptions.CacheControl = options.metadata[key]
+                    break
+                case 'content-disposition':
+                    methodOptions.ContentDisposition = options.metadata[key]
+                    break
+                case 'content-encoding':
+                    methodOptions.ContentEncoding = options.metadata[key]
+                    break
+                case 'content-language':
+                    methodOptions.ContentLanguage = options.metadata[key]
+                    break
+                case 'content-md5':
+                    methodOptions.ContentMD5 = options.metadata[key]
+                    break
+                case 'content-type':
+                    methodOptions.ContentType = options.metadata[key]
+                    break
+                default:
+                    methodOptions.Metadata[key] = options.metadata[key]
+                    break
+            }
+        }
     }
 
     return methodOptions

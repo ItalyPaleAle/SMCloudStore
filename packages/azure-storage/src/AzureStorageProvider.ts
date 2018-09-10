@@ -46,38 +46,40 @@ function PutObjectRequestOptions(options: PutObjectOptions): Azure.BlobService.C
         return requestOptions
     }
 
+    // Metadata
     if (options.metadata) {
-        // Clone the metadata object before altering it
-        const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
+        requestOptions.metadata = {}
 
-        if (metadataClone['Content-Type']) {
-            requestOptions.contentSettings.contentType = metadataClone['Content-Type']
-            delete metadataClone['Content-Type']
-        }
-        if (metadataClone['Content-Encoding']) {
-            requestOptions.contentSettings.contentEncoding = metadataClone['Content-Encoding']
-            delete metadataClone['Content-Encoding']
-        }
-        if (metadataClone['Content-Language']) {
-            requestOptions.contentSettings.contentLanguage = metadataClone['Content-Language']
-            delete metadataClone['Content-Language']
-        }
-        if (metadataClone['Cache-Control']) {
-            requestOptions.contentSettings.cacheControl = metadataClone['Cache-Control']
-            delete metadataClone['Cache-Control']
-        }
-        if (metadataClone['Content-Disposition']) {
-            requestOptions.contentSettings.contentDisposition = metadataClone['Content-Disposition']
-            delete metadataClone['Content-Disposition']
-        }
-        if (metadataClone['Content-MD5']) {
-            // Content-MD5 is auto-generated if not sent by the user
-            // If sent by the user, then Azure uses it to ensure data did not get altered in transit
-            requestOptions.contentSettings.contentMD5 = metadataClone['Content-MD5']
-            delete metadataClone['Content-MD5']
-        }
+        for (const key in options.metadata) {
+            if (!options.metadata.hasOwnProperty(key)) {
+                continue
+            }
 
-        requestOptions.metadata = metadataClone
+            const keyLowerCase = key.toLowerCase()
+            switch (keyLowerCase) {
+                case 'cache-control':
+                    requestOptions.contentSettings.cacheControl = options.metadata[key]
+                    break
+                case 'content-disposition':
+                    requestOptions.contentSettings.contentDisposition = options.metadata[key]
+                    break
+                case 'content-encoding':
+                    requestOptions.contentSettings.contentEncoding = options.metadata[key]
+                    break
+                case 'content-language':
+                    requestOptions.contentSettings.contentLanguage = options.metadata[key]
+                    break
+                case 'content-md5':
+                    requestOptions.contentSettings.contentMD5 = options.metadata[key]
+                    break
+                case 'content-type':
+                    requestOptions.contentSettings.contentType = options.metadata[key]
+                    break
+                default:
+                    requestOptions.metadata[key] = options.metadata[key]
+                    break
+            }
+        }
     }
 
     return requestOptions

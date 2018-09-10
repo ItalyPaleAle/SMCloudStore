@@ -208,10 +208,17 @@ class GoogleCloudStorageProvider extends StorageProvider {
                 validation: 'md5'
             } as GCStorage.WriteStreamOptions
 
-            // Check if we have a Content-Type
-            if (metadataClone['Content-Type']) {
-                streamOptions.contentType = metadataClone['Content-Type']
-                delete metadataClone['Content-Type']
+            // Check if we have a Content-Type (case-insensitive)
+            for (const key in metadataClone) {
+                if (!metadataClone.hasOwnProperty(key)) {
+                    continue
+                }
+
+                if (key.toLowerCase() == 'content-type') {
+                    streamOptions.contentType = metadataClone[key]
+                    delete metadataClone[key]
+                    break
+                }
             }
 
             dataStream.pipe(file.createWriteStream(streamOptions))
@@ -357,8 +364,18 @@ class GoogleCloudStorageProvider extends StorageProvider {
      */
     presignedPutUrl(container: string, path: string, options?: PutObjectOptions, ttl?: number): Promise<string> {
         const contentSettings = {} as any
-        if (options && options.metadata && options.metadata['Content-Type']) {
-            contentSettings.contentType = options.metadata['Content-Type']
+        if (options && options.metadata) {
+            // Check if we have a Content-Type (case-insensitive)
+            for (const key in options.metadata) {
+                if (!options.metadata.hasOwnProperty(key)) {
+                    continue
+                }
+
+                if (key.toLowerCase() == 'content-type') {
+                    contentSettings.contentType = options.metadata[key]
+                    break
+                }
+            }
         }
         return this.presignedUrl('write', container, path, contentSettings, ttl)
     }
