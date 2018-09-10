@@ -6,6 +6,7 @@ const assert = require('assert')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
+const request = require('request')
 const StreamUtils = require('../../packages/core/dist/StreamUtils')
 
 const authData = require('../data/auth')
@@ -366,6 +367,47 @@ module.exports = (providerName, testSuiteOptions) => {
                 .then((str) => {
                     assert(str == testFiles[2].string)
                 })
+        })
+
+        it('presignedGetUrl', async function() {
+            // Get the pre-signed URL for some files, in parallel
+            const promises = []
+            let testUrl
+            for (let i = 0; i < 3; i++) {
+                const el = testFiles[i]
+
+                ;((e) => {
+                    const p = storage.presignedGetUrl(containers[0], e.destination)
+                        .then((url) => {
+                            assert(url)
+                            assert(url.substr(0, 4) == 'http')
+
+                            // We're going to test the URLs by picking one from the returned list and requesting it
+                            if (e.destination == testFiles[2].destination) {
+                                testUrl = url
+                            }
+                        })
+                    promises.push(p)
+                })(el)
+            }
+
+            await Promise.all(promises)
+
+            // Request one of the URLs that was returned, to ensure it actually works
+            await new Promise((resolve, reject) => {
+                request(testUrl, (error, response, body) => {
+                    if (error) {
+                        reject(error)
+                    }
+
+                    if (!body) {
+                        throw Error('Empty response')
+                    }
+                    assert(body == testFiles[2].string)
+
+                    resolve()
+                })
+            })
         })
 
         let filesDeleted = false
