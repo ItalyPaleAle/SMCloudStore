@@ -23,6 +23,14 @@ module.exports = {
         accessKey: '...',
         secretKey: '...'
     },
+    
+    // Generic S3
+    'generic-s3': {
+        endPoint: 's3.amazonaws.com',
+        accessKey: '...',
+        secretKey: '...',
+        region: 'ca-central-1'
+    },
 
     // Google Cloud
     'google-cloud-storage': {
