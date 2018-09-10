@@ -371,6 +371,14 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('presignedPutUrl', async function() {
+            // Skip if the provider doesn't support this
+            if (testSuiteOptions.skipPresignedUrlTests) {
+                assert.throws(() => {
+                    storage.presignedGetUrl()
+                })
+                return
+            }
+
             // Increase timeout
             this.timeout(120000)
             this.slow(0)
@@ -417,6 +425,14 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('presignedGetUrl', async function() {
+            // Skip if the provider doesn't support this
+            if (testSuiteOptions.skipPresignedUrlTests) {
+                assert.throws(() => {
+                    storage.presignedGetUrl()
+                })
+                return
+            }
+
             // Get the pre-signed URL for some files, in parallel
             const promises = []
             for (let i = 0; i < 3; i++) {
@@ -461,7 +477,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Delete all files uploaded, in parallel
             const promises = []
-            let fileList = [].concat(testFiles, presignedFiles)
+            let fileList = [].concat(testFiles, testSuiteOptions.skipPresignedUrlTests ? [] : presignedFiles)
             if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
@@ -481,7 +497,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // If it hasn't happened already, delete all files uploaded, in parallel
             let promises = []
             if (!filesDeleted) {
-                let fileList = [].concat(testFiles, presignedFiles)
+                let fileList = [].concat(testFiles, testSuiteOptions.skipPresignedUrlTests ? [] : presignedFiles)
                 if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                     fileList = fileList.concat(largeFiles)
                 }

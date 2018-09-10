@@ -328,6 +328,37 @@ class BackblazeB2Provider extends StorageProvider {
     }
 
     /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * **Backblaze B2 currently does not support this API**, and calling this method will always throw an error. Sorry!
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedGetUrl(container: string, path: string, ttl?: number): Promise<string> {
+        throw Error('Presigned URLs are not supported by the BackblazeB2 Provider')
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * **Backblaze B2 currently does not support this API**, and calling this method will always throw an error. Sorry!
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedPutUrl(container: string, path: string, options?: PutObjectOptions, ttl?: number): Promise<string> {
+        throw Error('Presigned URLs are not supported by the BackblazeB2 Provider')
+    }
+
+    /**
      * Returns the bucketId property for a given bucket name, as most B2 methods require a bucket's ID.
      * 
      * The result is cached in memory for a certain amount of time configured with `BackblazeB2Provider.bucketIdCacheDuration` (default: 15 minutes), and up to 100 IDs.
