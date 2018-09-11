@@ -295,9 +295,19 @@ class B2Upload {
                 let contentType = 'application/octet-stream'
 
                 // Metadata
-                // When using the large file API, we can't add custom headers, so we're only looking at Content-Type
-                if (this.metadata && this.metadata['Content-Type']) {
-                    contentType = this.metadata['Content-Type']
+                // When using the large file API, we can't add custom headers, so we're only looking for Content-Type (case-insensitive)
+                if (this.metadata) {
+                    for (const key in this.metadata) {
+                        if (!this.metadata.hasOwnProperty(key)) {
+                            continue
+                        }
+
+                        const keyLowerCase = key.toLowerCase()
+                        if (keyLowerCase == 'content-type') {
+                            contentType = this.metadata[key]
+                            break
+                        }
+                    }
                 }
 
                 return this.client.startLargeFile({
