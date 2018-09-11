@@ -12,7 +12,7 @@ There are a few provider-specific considerations for the GenericS3 provider.
 
 When initializing the GenericS3 provider, the `connection` argument is an object with:
 
-- `connection.endPoint`: string representing the endpoint of the server to connect to; for AWS S3, this is `s3.amazonaws.com` (this is always required)
+- `connection.endPoint`: string representing the endpoint of the server to connect to; for AWS S3, set this to `s3.amazonaws.com` and the library will pick the correct endpoint based on the `connection.region` argument (default: 'us-east-1')
 - `connection.accessKey`: string containing the access key (the "public key")
 - `connection.secretKey`: string containing the secret key
 - `connection.useSSL` (optional): boolean that will force the connection using HTTPS if true (default: true)
@@ -35,6 +35,10 @@ const connection = {
 // Return an instance of the GenericS3Provider class
 const storage = SMCloudStore.create('generic-s3', connection)
 ````
+
+### Using pre-signed URLs
+
+In the method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/generic_s3.generics3provider.html#presignedputurl), the Generic S3 provider ignores the `options` argument, which has no effect on the generated tokens.
 
 ### Accessing the Minio library
 

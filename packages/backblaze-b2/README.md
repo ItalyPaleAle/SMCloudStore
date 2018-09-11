@@ -52,6 +52,10 @@ With the Backblaze B2 provider, the [`storage.putObject(container, path, data, [
 
 - `options.length` (optional): as described above, when `data` is a Stream, if the length of the stream can be known in advance, setting `options.length` with the byte size (or the `byteLength` property in the `data` object directly) allows the BackblazeB2 provider to upload the object with a single call. This option is ignored if `data` is a string or Buffer.
 
+### Using pre-signed URLs
+
+Backblaze B2 does not support pre-signed URLs, which are not available in their APIs. Because of that, the methods `presignedGetUrl` and `presignedPutUrl` always throw an exception when called on the BackblazeB2 provider.
+
 ### Accessing the Backblaze B2 library
 
 The AWS S3 provider is built on top of [backblaze-b2](https://github.com/yakovkhalinsky/backblaze-b2), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#client).

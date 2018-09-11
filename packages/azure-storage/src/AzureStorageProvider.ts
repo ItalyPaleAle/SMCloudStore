@@ -29,6 +29,63 @@ interface AzureStorageCreateContainerOptions {
 }
 
 /**
+ * Returns the request options dictionary for the `putObject` method
+ * 
+ * @param options - Dictionary with options
+ * @returns Dictionary with options to send to Azure
+ */
+function PutObjectRequestOptions(options: PutObjectOptions): Azure.BlobService.CreateBlockBlobRequestOptions {
+    // Azure wants some headers, like Content-Type, outside of the metadata object
+    const requestOptions = {
+        contentSettings: {},
+        metadata: {}
+    } as Azure.BlobService.CreateBlockBlobRequestOptions
+
+    // If no other options...
+    if (!options) {
+        return requestOptions
+    }
+
+    // Metadata
+    if (options.metadata) {
+        requestOptions.metadata = {}
+
+        for (const key in options.metadata) {
+            if (!options.metadata.hasOwnProperty(key)) {
+                continue
+            }
+
+            const keyLowerCase = key.toLowerCase()
+            switch (keyLowerCase) {
+                case 'cache-control':
+                    requestOptions.contentSettings.cacheControl = options.metadata[key]
+                    break
+                case 'content-disposition':
+                    requestOptions.contentSettings.contentDisposition = options.metadata[key]
+                    break
+                case 'content-encoding':
+                    requestOptions.contentSettings.contentEncoding = options.metadata[key]
+                    break
+                case 'content-language':
+                    requestOptions.contentSettings.contentLanguage = options.metadata[key]
+                    break
+                case 'content-md5':
+                    requestOptions.contentSettings.contentMD5 = options.metadata[key]
+                    break
+                case 'content-type':
+                    requestOptions.contentSettings.contentType = options.metadata[key]
+                    break
+                default:
+                    requestOptions.metadata[key] = options.metadata[key]
+                    break
+            }
+        }
+    }
+
+    return requestOptions
+}
+
+/**
  * Client to interact with Azure Blob Storage.
  */
 class AzureStorageProvider extends StorageProvider {
@@ -75,7 +132,7 @@ class AzureStorageProvider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this._client.getContainerProperties(container, (err, response) => {
                 if (err) {
@@ -192,49 +249,8 @@ class AzureStorageProvider extends StorageProvider {
         if (!data) {
             throw Error('Argument data is empty')
         }
-        if (!options) {
-            options = {}
-        }
 
-        // Azure wants some headers, like Content-Type, outside of the metadata object
-        const requestOptions = {
-            contentSettings: {},
-            metadata: {}
-        } as Azure.BlobService.CreateBlockBlobRequestOptions
-
-        if (options.metadata) {
-            // Clone the metadata object before altering it
-            const metadataClone = Object.assign({}, options.metadata) as {[k: string]: string}
-
-            if (metadataClone['Content-Type']) {
-                requestOptions.contentSettings.contentType = metadataClone['Content-Type']
-                delete metadataClone['Content-Type']
-            }
-            if (metadataClone['Content-Encoding']) {
-                requestOptions.contentSettings.contentEncoding = metadataClone['Content-Encoding']
-                delete metadataClone['Content-Encoding']
-            }
-            if (metadataClone['Content-Language']) {
-                requestOptions.contentSettings.contentLanguage = metadataClone['Content-Language']
-                delete metadataClone['Content-Language']
-            }
-            if (metadataClone['Cache-Control']) {
-                requestOptions.contentSettings.cacheControl = metadataClone['Cache-Control']
-                delete metadataClone['Cache-Control']
-            }
-            if (metadataClone['Content-Disposition']) {
-                requestOptions.contentSettings.contentDisposition = metadataClone['Content-Disposition']
-                delete metadataClone['Content-Disposition']
-            }
-            if (metadataClone['Content-MD5']) {
-                // Content-MD5 is auto-generated if not sent by the user
-                // If sent by the user, then Azure uses it to ensure data did not get altered in transit
-                requestOptions.contentSettings.contentMD5 = metadataClone['Content-MD5']
-                delete metadataClone['Content-MD5']
-            }
-
-            requestOptions.metadata = metadataClone
-        }
+        const requestOptions = PutObjectRequestOptions(options)
 
         return new Promise((resolve, reject) => {
             const callback = (err, response) => {
@@ -393,7 +409,74 @@ class AzureStorageProvider extends StorageProvider {
         })
     }
 
-    /* Internal methods */
+    /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedGetUrl(container: string, path: string, ttl?: number): Promise<string> {
+        return this.presignedUrl('getObject', container, path, ttl)
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * Notes on using presigned URLs to upload files to Azure Storage using PUT:
+     * 
+     * 1. The maximum file size is 100MB; larger files will trigger an error.
+     * 2. You need to set the `X-MS-Blob-Type: BlockBlob` header for uploads to succeed
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedPutUrl(container: string, path: string, options?: PutObjectOptions, ttl?: number): Promise<string> {
+        const requestOptions = PutObjectRequestOptions(options)
+        return this.presignedUrl('putObject', container, path, requestOptions.contentSettings, ttl)
+    }
+
+    /**
+     * Returns a presigned URL for the specific operation.
+     * 
+     * @param operation - Operation: "getObject" or "putObject"
+     * @param container - Name of the container
+     * @param path - Path of the target object, inside the container
+     * @param contentSettings - Additional headers that are required
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for the specified operation
+     * @async
+     */
+    private presignedUrl(operation: 'getObject'|'putObject', container: string, path: string, contentSettings?: any, ttl?: number): Promise<string> {
+        if (!ttl || ttl < 1) {
+            ttl = 86400
+        }
+
+        // Remove contentMD5 from contentSettings, as that can't be known
+        if (contentSettings && contentSettings.contentMD5) {
+            delete contentSettings.contentMD5
+        }
+
+        // Policy
+        const policy = {
+            AccessPolicy: {
+                Expiry: new Date(Date.now() + ttl * 1000), // Convert TTL to a point in time
+                Permissions: (operation == 'getObject') ? Azure.BlobUtilities.SharedAccessPermissions.READ : Azure.BlobUtilities.SharedAccessPermissions.WRITE
+            }
+        } as Azure.common.SharedAccessPolicy
+
+        const signature = this._client.generateSharedAccessSignature(container, path, policy, contentSettings)
+
+        const url = this._client.getUrl(container, path, signature)
+
+        return Promise.resolve(url)
+    }
 
     /**
      * Create a container on the server, choosing whether to use the "ifNotExists" method or not

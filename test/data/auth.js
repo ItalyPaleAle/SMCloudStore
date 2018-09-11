@@ -26,10 +26,10 @@ module.exports = {
     
     // Generic S3
     'generic-s3': {
-        endPoint: 's3.amazonaws.com',
+        endPoint: 's3.amazonaws.com', // Test against AWS S3
         accessKey: '...',
         secretKey: '...',
-        region: 'ca-central-1'
+        region: 'ca-central-1' // Region for when using AWS S3
     },
 
     // Google Cloud

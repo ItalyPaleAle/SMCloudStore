@@ -169,8 +169,8 @@ class B2Upload {
                         }
 
                         // Content-Type header has a special treatment
-                        if (key == 'Content-Type') {
-                            requestArgs.mime = this.metadata['Content-Type']
+                        if (key && key.toLowerCase() == 'content-type') {
+                            requestArgs.mime = this.metadata[key]
                         }
                         else {
                             // We can't have more than 10 headers
@@ -218,6 +218,13 @@ class B2Upload {
         return doUpload()
     }
 
+    /**
+     * Uploads a Readable Stream.
+     * 
+     * @param stream - Readable Stream containing the data to upload
+     * @returns Promise that resolves when the object has been uploaded
+     * @async
+     */
     private putLargeFile(stream?: Readable): Promise<any> {
         // If we are not passed a stream, use this.data
         if (!stream) {
@@ -288,9 +295,19 @@ class B2Upload {
                 let contentType = 'application/octet-stream'
 
                 // Metadata
-                // When using the large file API, we can't add custom headers, so we're only looking at Content-Type
-                if (this.metadata && this.metadata['Content-Type']) {
-                    contentType = this.metadata['Content-Type']
+                // When using the large file API, we can't add custom headers, so we're only looking for Content-Type (case-insensitive)
+                if (this.metadata) {
+                    for (const key in this.metadata) {
+                        if (!this.metadata.hasOwnProperty(key)) {
+                            continue
+                        }
+
+                        const keyLowerCase = key.toLowerCase()
+                        if (keyLowerCase == 'content-type') {
+                            contentType = this.metadata[key]
+                            break
+                        }
+                    }
                 }
 
                 return this.client.startLargeFile({
@@ -336,6 +353,15 @@ class B2Upload {
             })
     }
 
+    /**
+     * Uploads a single part of a large file.
+     * 
+     * @param fileId - ID of the large file that is being uploaded
+     * @param partNumber - Number of the part, starting from 1
+     * @param data - Data to upload, in a Buffer
+     * @returns Promise that resolves when the part has been uploaded.
+     * @async
+     */
     private putPart(fileId: string, partNumber: number, data: Buffer): Promise<any> {
         // Backblaze recommends retrying at least two times (up to five) in case of errors, with an incrementing delay. We're retrying all uploads 3 times
         let retryCounter = 0

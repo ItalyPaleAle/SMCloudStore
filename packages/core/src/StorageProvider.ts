@@ -86,7 +86,7 @@ export abstract class StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    abstract containerExists(container: string): Promise<boolean>
+    abstract isContainer(container: string): Promise<boolean>
 
     /**
      * Creates a container on the server if it doesn't already exist.
@@ -187,4 +187,27 @@ export abstract class StorageProvider {
      * @async
      */
     abstract deleteObject(container: string, path: string): Promise<void>
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    abstract presignedGetUrl(container: string, path: string, ttl?: number): Promise<string>
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    abstract presignedPutUrl(container: string, path: string, options?: PutObjectOptions, ttl?: number): Promise<string>
 }

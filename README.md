@@ -109,13 +109,13 @@ await storage.createContainer('testcontainer')
 await storage.createContainer('testcontainer', {region: 'us-east-1'})
 ````
 
-### storage.containerExists(container)
+### storage.isContainer(container)
 
-The method [`storage.containerExists(container)`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#containerexists) returns a Promise that resolves with a boolean indicating whether a container exists on the provider.
+The method [`storage.isContainer(container)`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#iscontainer) returns a Promise that resolves with a boolean indicating whether a container exists on the provider.
 
 ````js
 // Once the async method resolves, exists will contain true or false
-const exists = await storage.containerExists('testcontainer')
+const exists = await storage.isContainer('testcontainer')
 ````
 
 ### storage.ensureContainer(container, [options])
@@ -261,6 +261,48 @@ The method [`storage.deleteObject(container, path)`](https://italypaleale.github
 // Delete an object
 await storage.deleteObject('testcontainer', 'path/to/file.jpg')
 ````
+
+### storage.presignedGetUrl(container, path, [ttl])
+
+The method [`storage.presignedGetUrl(container, path, [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#presignedgeturl) returns a Promise that resolves with a pre-signed URL that can be used to download an object using any client (e.g. a web browser).
+
+The `ttl` parameter determines how long the signed URL will be valid for, in seconds from present time.
+
+````js
+// Get the pre-signed URL
+const url = await storage.presignedGetUrl('testcontainer', 'path/to/file.jpg', 60)
+// Result is a full URL, like "https://storage.provider/path?token=..."
+````
+
+The URL can be used to retrieve the object. For example, using curl:
+
+````sh
+curl "https://storage.provider/path?token=..." > /path/to/destination/file
+````
+
+Note that **some providers do not support this method** (Backblaze B2), and will throw an exception every time it's called.
+
+### stor age.presignedPutUrl(container, path, [options], [ttl])
+
+The method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#presignedputurl) returns a Promise that resolves with a pre-signed URL that can be used to upload an object to the server, using a PUT request from any client.
+
+The `options` argument can be used by the provider to specify certain requirements for clients that will upload files. For example, it can be used to enforce a certain `Content-Type` header, etc. Its values are the same they are for the `putObject` method. Some providers ignore this value - please refer to the documentation for each provider for more details.
+
+The `ttl` parameter determines how long the signed URL will be valid for, in seconds from present time.
+
+````js
+// Get the pre-signed URL
+const url = await storage.presignedPutUrl('testcontainer', 'path/to/file.jpg', {}, 60)
+// Result is a full URL, like "https://storage.provider/path?token=..."
+````
+
+The URL can be used to upload an object. For example, using curl:
+
+````sh
+curl --request PUT --upload-file "/path/to/file" "https://storage.provider/path?token=..." 
+````
+
+Note that **some providers do not support this method** (Backblaze B2), and will throw an exception every time it's called. Other providers, like Azure Storage, require clients to specify certain options when sending the PUT request; please refer to each provider's documentation.
 
 ### storage.client()
 

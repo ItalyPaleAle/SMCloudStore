@@ -43,6 +43,28 @@ When using the [`storage.createContainer(container, [options])`](https://italypa
   - `'blob'`
   - `'none'` (alias `'private'` for compatibility with other storage providers)), this is the default value.
 
+### Using pre-signed URLs
+
+In the method [`storage.presignedPutUrl(container, path, [options], [ttl])`](https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#presignedputurl), the Azure Storage provider accepts for the `options` argument the same dictionary as the ['`storage.putObject(container, path, data, [options])`'](https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#putobject) method. If you specify a Content-Type in the request for the presigned URL, for example, clients will need to make PUT requests with the same Content-Type.
+
+When uploading an object using a PUT request, Azure Storage requires clients to send an additional header with the request (case-insensitive):
+
+````plain
+X-MS-Blob-Type: BlockBlob
+````
+
+For example, with curl:
+
+````sh
+curl \
+  --request PUT \
+  --upload-file "/path/to/file" \
+  --header 'X-MS-Blob-Type: BlockBlob' \
+  "https://storageaccount.blob.storage.windows.net/path?token=..."
+````
+
+Lastly, please note that Azure Storage supports PUT upload operations with objects no larger than 100 MB. Trying to upload larger objects will fail.
+
 ### Accessing the Azure Storage SDK
 
 The Azure Blob Storage provider is built on top of the official [Azure Storage SDK for Node.js](https://github.com/Azure/azure-storage-node), which is exposed by calling [`storage.client()`](https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#client).

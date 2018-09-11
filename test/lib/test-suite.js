@@ -6,6 +6,7 @@ const assert = require('assert')
 const randomstring = require('randomstring')
 const digestStream = require('digest-stream')
 const fs = require('fs')
+const request = require('request')
 const StreamUtils = require('../../packages/core/dist/StreamUtils')
 
 const authData = require('../data/auth')
@@ -57,6 +58,7 @@ module.exports = (providerName, testSuiteOptions) => {
         // Contains a list of test files
         const testFiles = require('../data/test-files')
         const largeFiles = require('../data/large-files')
+        const presignedFiles = require('../data/presigned-files')
 
         // Enable bailing (skip further tests) if a test fails
         this.bail(true)
@@ -93,16 +95,16 @@ module.exports = (providerName, testSuiteOptions) => {
         // Wait 2 seconds because some providers (like AWS) might cause failures otherwise
         it('…waiting…', waitingTest)
 
-        it('containerExists', async function() {
+        it('isContainer', async function() {
             let exists
 
-            exists = await storage.containerExists(containers[0])
+            exists = await storage.isContainer(containers[0])
             assert(exists === true)
 
-            exists = await storage.containerExists(containers[0] + '-2')
+            exists = await storage.isContainer(containers[0] + '-2')
             assert(exists === false)
 
-            exists = await storage.containerExists('doesnotexist')
+            exists = await storage.isContainer('doesnotexist')
             assert(exists === false)
         })
 
@@ -163,7 +165,7 @@ module.exports = (providerName, testSuiteOptions) => {
                     // Options & metadata
                     const options = {
                         metadata: {
-                            'Content-Type': files[i].contentType
+                            'content-type': files[i].contentType
                         }
                     }
 
@@ -368,6 +370,106 @@ module.exports = (providerName, testSuiteOptions) => {
                 })
         })
 
+        it('presignedPutUrl', async function() {
+            // Skip if the provider doesn't support this
+            if (testSuiteOptions.skipPresignedUrlTests) {
+                assert.throws(() => {
+                    storage.presignedGetUrl()
+                })
+                return
+            }
+
+            // Increase timeout
+            this.timeout(120000)
+            this.slow(0)
+
+            const file = presignedFiles[0]
+
+            // Get a URL to upload a file
+            const uploadUrl = await storage.presignedPutUrl(containers[0], file.destination, {
+                metadata: {
+                    'content-type': file.contentType
+                }
+            })
+
+            // Ensure this is a URL
+            assert(uploadUrl)
+            assert(uploadUrl.substr(0, 4) == 'http')
+
+            // Try uploading a file via PUT
+            await new Promise((resolve, reject) => {
+                const headers = Object.assign(
+                    {},
+                    testSuiteOptions.signedPutRequestHeaders || {},
+                    {'content-type': file.contentType}
+                )
+                const options = {
+                    body: file.string,
+                    headers: headers
+                }
+                request.put(uploadUrl, options, (error, response, body) => {
+                    if (error) {
+                        reject(error)
+                    }
+
+                    // Ensure status code is a successful one
+                    if (!response || !response.statusCode || response.statusCode < 200 || response.statusCode > 299) {
+                        // eslint-disable-next-line no-console
+                        console.log(response.statusCode, body)
+                        return reject(Error('Invalid response status code'))
+                    }
+                    
+                    resolve()
+                })
+            })
+        })
+
+        it('presignedGetUrl', async function() {
+            // Skip if the provider doesn't support this
+            if (testSuiteOptions.skipPresignedUrlTests) {
+                assert.throws(() => {
+                    storage.presignedGetUrl()
+                })
+                return
+            }
+
+            // Get the pre-signed URL for some files, in parallel
+            const promises = []
+            for (let i = 0; i < 3; i++) {
+                const e = testFiles[i]
+
+                const p = storage.presignedGetUrl(containers[0], e.destination)
+                    .then((url) => {
+                        assert(url)
+                        assert(url.substr(0, 4) == 'http')
+                    })
+                promises.push(p)
+            }
+            await Promise.all(promises)
+
+            // Request also the URL for the file that was just uploaded
+            const testUrl = await storage.presignedGetUrl(containers[0], presignedFiles[0].destination)
+
+            // Request one of the URLs that was returned, to ensure it actually works
+            await new Promise((resolve, reject) => {
+                request(testUrl, (error, response, body) => {
+                    if (error) {
+                        reject(error)
+                    }
+
+                    if (!body) {
+                        return reject(Error('Empty response'))
+                    }
+                    assert(body == presignedFiles[0].string)
+
+                    // Test the Content-Type header
+                    assert(response.headers && response.headers['content-type'] == presignedFiles[0].contentType)
+
+                    resolve()
+                })
+            })
+        })
+
         let filesDeleted = false
         it('deleteObject', async function() {
             // Increase timeout
@@ -375,7 +477,7 @@ module.exports = (providerName, testSuiteOptions) => {
 
             // Delete all files uploaded, in parallel
             const promises = []
-            let fileList = testFiles
+            let fileList = [].concat(testFiles, testSuiteOptions.skipPresignedUrlTests ? [] : presignedFiles)
             if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                 fileList = fileList.concat(largeFiles)
             }
@@ -395,7 +497,7 @@ module.exports = (providerName, testSuiteOptions) => {
             // If it hasn't happened already, delete all files uploaded, in parallel
             let promises = []
             if (!filesDeleted) {
-                let fileList = testFiles
+                let fileList = [].concat(testFiles, testSuiteOptions.skipPresignedUrlTests ? [] : presignedFiles)
                 if (testSuiteOptions && testSuiteOptions.testLargeFiles) {
                     fileList = fileList.concat(largeFiles)
                 }

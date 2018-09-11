@@ -105,7 +105,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @returns Promises that resolves with a boolean indicating if the container exists.
      * @async
      */
-    containerExists(container: string): Promise<boolean> {
+    isContainer(container: string): Promise<boolean> {
         const bucket = this._client.bucket(container)
 
         return bucket.exists().then((response) => {
@@ -122,7 +122,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      * @async
      */
     ensureContainer(container: string, options?: GoogleCloudCreateContainerOptions): Promise<void> {
-        return this.containerExists(container).then((exists) => {
+        return this.isContainer(container).then((exists) => {
             if (!exists) {
                 return this.createContainer(container, options)
             }
@@ -208,10 +208,17 @@ class GoogleCloudStorageProvider extends StorageProvider {
                 validation: 'md5'
             } as GCStorage.WriteStreamOptions
 
-            // Check if we have a Content-Type
-            if (metadataClone['Content-Type']) {
-                streamOptions.contentType = metadataClone['Content-Type']
-                delete metadataClone['Content-Type']
+            // Check if we have a Content-Type (case-insensitive)
+            for (const key in metadataClone) {
+                if (!metadataClone.hasOwnProperty(key)) {
+                    continue
+                }
+
+                if (key.toLowerCase() == 'content-type') {
+                    streamOptions.contentType = metadataClone[key]
+                    delete metadataClone[key]
+                    break
+                }
             }
 
             dataStream.pipe(file.createWriteStream(streamOptions))
@@ -329,6 +336,86 @@ class GoogleCloudStorageProvider extends StorageProvider {
         // Returns a promise
         return file.delete().then(() => {
             return
+        })
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path of the object, inside the container
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedGetUrl(container: string, path: string, ttl?: number): Promise<string> {
+        return this.presignedUrl('read', container, path, ttl)
+    }
+
+    /**
+     * Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.
+     * 
+     * @param container - Name of the container
+     * @param path - Path where to store the object, inside the container
+     * @param options - Key-value pair of options used by providers, including the `metadata` dictionary
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for GET requests
+     * @async
+     */
+    presignedPutUrl(container: string, path: string, options?: PutObjectOptions, ttl?: number): Promise<string> {
+        const contentSettings = {} as any
+        if (options && options.metadata) {
+            // Check if we have a Content-Type (case-insensitive)
+            for (const key in options.metadata) {
+                if (!options.metadata.hasOwnProperty(key)) {
+                    continue
+                }
+
+                if (key.toLowerCase() == 'content-type') {
+                    contentSettings.contentType = options.metadata[key]
+                    break
+                }
+            }
+        }
+        return this.presignedUrl('write', container, path, contentSettings, ttl)
+    }
+
+    /**
+     * Returns a presigned URL for the specific operation.
+     * 
+     * @param operation - Action: "read" or "write"
+     * @param container - Name of the container
+     * @param path - Path of the target object, inside the container
+     * @param contentSettings - Additional headers that are required
+     * @param ttl - Expiry time of the URL, in seconds (default: 1 day)
+     * @returns Promise that resolves with the pre-signed URL for the specified operation
+     * @async
+     */
+    private presignedUrl(action: 'read'|'write', container: string, path: string, contentSettings?: any, ttl?: number): Promise<string> {
+        if (!ttl || ttl < 1) {
+            ttl = 86400
+        }
+
+        const bucket = this._client.bucket(container)
+        const file = bucket.file(path)
+
+        // Returns a promise
+        const config = Object.assign(
+            {},
+            {
+                action: action,
+                expires: new Date(Date.now() + ttl * 1000) // Convert TTL to a point in time
+            },
+            contentSettings || {}
+        )
+
+        return file.getSignedUrl(config).then((data: string[]) => {
+            if (data && data[0]) {
+                return data[0]
+            }
+            else {
+                throw Error('No pre-signed URL was returned')
+            }
         })
     }
 }
