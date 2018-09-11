@@ -8,3 +8,5 @@ coverage
 src
 tsconfig.json
 tslint.json
+Changelog.md
+Developer-Docs.md
