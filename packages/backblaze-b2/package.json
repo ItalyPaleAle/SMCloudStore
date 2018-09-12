@@ -1,6 +1,6 @@
 {
   "name": "@smcloudstore/backblaze-b2",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Backblaze B2 library for SMCloudStore",
   "author": "Alessandro Segala (ItalyPaleAle)",
   "homepage": "https://github.com/ItalyPaleAle/SMCloudStore/tree/master/packages/backblaze-b2",
@@ -28,7 +28,7 @@
     "storage"
   ],
   "dependencies": {
-    "@smcloudstore/core": "^0.1.0",
+    "@smcloudstore/core": "^0.2.0",
     "backblaze-b2": "^1.0.4"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
