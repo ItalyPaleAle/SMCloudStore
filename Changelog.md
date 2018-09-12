@@ -13,6 +13,8 @@
 
 **Fixes:**
 
+- **All:** Fixed tests on Node.js 8.
+- **All:** Updated `engines` in `package.json`, making it explicit we require 8.9.1 for all modules, and Backblaze B2 requires 10.
 - **All:** Updated dependencies.
 
 ## All packages: Version 0.1.0 (2018-08-22)
