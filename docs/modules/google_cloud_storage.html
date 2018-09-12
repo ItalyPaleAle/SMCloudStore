@@ -103,6 +103,12 @@
 						</li>
 						<li><code>options.region</code> (optional): string determining the region in which to create the container; you can see a list in the <a href="https://cloud.google.com/storage/docs/bucket-locations">official documentation</a>. Default value is <code>us</code> if storage class is <code>multi_regional</code>; <code>us-central1</code> otherwise.</li>
 					</ul>
+					<h3 id="using-pre-signed-urls">Using pre-signed URLs</h3>
+					<p>In the method <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#presignedputurl"><code>storage.presignedPutUrl(container, path, [options], [ttl])</code></a>, the Google Storage provider accepts the following keys for the <code>options</code> argument:</p>
+					<ul>
+						<li><code>options.metadata[&#39;Content-Type&#39;]</code>: When set, clients uploading objects will have to specify the same &quot;Content-Type&quot; header in the request.</li>
+					</ul>
+					<p>All other values in the <code>options</code> dictionary are ignored.</p>
 					<h3 id="accessing-the-google-cloud-storage-sdk">Accessing the Google Cloud Storage SDK</h3>
 					<p>The Google Cloud Storage provider is built on top of the official <a href="https://github.com/googleapis/nodejs-storage">Google Cloud Storage Node.js client</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#client"><code>storage.client()</code></a>.</p>
 					<p>You can use the object returned by this method to perform low-level operations using the Google Cloud Storage SDK.</p>

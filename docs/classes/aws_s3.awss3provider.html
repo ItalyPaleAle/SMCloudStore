@@ -112,7 +112,6 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#iscontainer" class="tsd-kind-icon">container<wbr>Exists</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#deletecontainer" class="tsd-kind-icon">delete<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#deleteobject" class="tsd-kind-icon">delete<wbr>Object</a></li>
@@ -120,8 +119,12 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#getobject" class="tsd-kind-icon">get<wbr>Object</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#getobjectasbuffer" class="tsd-kind-icon">get<wbr>Object<wbr>AsBuffer</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="aws_s3.awss3provider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#iscontainer" class="tsd-kind-icon">is<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#presignedgeturl" class="tsd-kind-icon">presigned<wbr>Get<wbr>Url</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#presignedputurl" class="tsd-kind-icon">presigned<wbr>Put<wbr>Url</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="aws_s3.awss3provider.html#presignedurl" class="tsd-kind-icon">presigned<wbr>Url</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="aws_s3.awss3provider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a></li>
 							</ul>
 						</section>
@@ -141,7 +144,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L78">aws-s3/src/AwsS3Provider.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L146">aws-s3/src/AwsS3Provider.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -174,7 +177,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides StorageProvider._client</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L77">aws-s3/src/AwsS3Provider.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L145">aws-s3/src/AwsS3Provider.ts:145</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,7 +198,7 @@
 					<div class="tsd-signature tsd-kind-icon">_region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L78">aws-s3/src/AwsS3Provider.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L146">aws-s3/src/AwsS3Provider.ts:146</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -245,43 +248,6 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="iscontainer" class="tsd-anchor"></a>
-					<h3>container<wbr>Exists</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">container<wbr>Exists<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overrides StorageProvider.isContainer</p>
-								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L141">aws-s3/src/AwsS3Provider.ts:141</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Check if a container exists.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>async</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>container: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Name of the container</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promises that resolves with a boolean indicating if the container exists.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="createcontainer" class="tsd-anchor"></a>
 					<h3>create<wbr>Container</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -292,7 +258,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.createContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L111">aws-s3/src/AwsS3Provider.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L179">aws-s3/src/AwsS3Provider.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -335,7 +301,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.deleteContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L220">aws-s3/src/AwsS3Provider.ts:220</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L288">aws-s3/src/AwsS3Provider.ts:288</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -372,7 +338,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.deleteObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L404">aws-s3/src/AwsS3Provider.ts:404</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L428">aws-s3/src/AwsS3Provider.ts:428</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -415,7 +381,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.ensureContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L178">aws-s3/src/AwsS3Provider.ts:178</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L246">aws-s3/src/AwsS3Provider.ts:246</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -458,7 +424,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.getObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L325">aws-s3/src/AwsS3Provider.ts:325</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L349">aws-s3/src/AwsS3Provider.ts:349</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -583,6 +549,43 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="iscontainer" class="tsd-anchor"></a>
+					<h3>is<wbr>Container</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.isContainer</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L209">aws-s3/src/AwsS3Provider.ts:209</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if a container exists.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promises that resolves with a boolean indicating if the container exists.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="listcontainers" class="tsd-anchor"></a>
 					<h3>list<wbr>Containers</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -593,7 +596,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.listContainers</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L195">aws-s3/src/AwsS3Provider.ts:195</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L263">aws-s3/src/AwsS3Provider.ts:263</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -621,7 +624,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.listObjects</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L343">aws-s3/src/AwsS3Provider.ts:343</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L367">aws-s3/src/AwsS3Provider.ts:367</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -654,6 +657,170 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="presignedgeturl" class="tsd-anchor"></a>
+					<h3>presigned<wbr>Get<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Get<wbr>Url<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.presignedGetUrl</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L454">aws-s3/src/AwsS3Provider.ts:454</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path of the object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for GET requests</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="presignedputurl" class="tsd-anchor"></a>
+					<h3>presigned<wbr>Put<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Put<wbr>Url<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.presignedPutUrl</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L468">aws-s3/src/AwsS3Provider.ts:468</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path where to store the object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Key-value pair of options used by providers, including the <code>metadata</code> dictionary and additional S3-specific options</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for GET requests</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="presignedurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> presigned<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Url<span class="tsd-signature-symbol">(</span>operation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"getObject"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"putObject"</span>, container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, additionalMethodOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L484">aws-s3/src/AwsS3Provider.ts:484</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a presigned URL for the specific S3 operation.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>operation: <span class="tsd-signature-type">"getObject"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"putObject"</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>S3 operation: &quot;getObject&quot; or &quot;putObject&quot;</p>
+									</div>
+								</li>
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path of the target object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>additionalMethodOptions: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Additional options to pass to the method</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for the specified operation</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="putobject" class="tsd-anchor"></a>
 					<h3>put<wbr>Object</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -664,7 +831,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.putObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L245">aws-s3/src/AwsS3Provider.ts:245</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L313">aws-s3/src/AwsS3Provider.ts:313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -768,9 +935,6 @@
 								<a href="aws_s3.awss3provider.html#provider" class="tsd-kind-icon">provider</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="aws_s3.awss3provider.html#iscontainer" class="tsd-kind-icon">container<wbr>Exists</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -792,10 +956,22 @@
 								<a href="aws_s3.awss3provider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="aws_s3.awss3provider.html#iscontainer" class="tsd-kind-icon">is<wbr>Container</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="aws_s3.awss3provider.html#presignedgeturl" class="tsd-kind-icon">presigned<wbr>Get<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="aws_s3.awss3provider.html#presignedputurl" class="tsd-kind-icon">presigned<wbr>Put<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="aws_s3.awss3provider.html#presignedurl" class="tsd-kind-icon">presigned<wbr>Url</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="aws_s3.awss3provider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a>
@@ -818,6 +994,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/aws_s3.html#putobjectmethodoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Method<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

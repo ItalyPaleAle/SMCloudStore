@@ -112,7 +112,6 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="azure_storage.azurestorageprovider.html#_createcontainerinternal" class="tsd-kind-icon">_create<wbr>Container<wbr>Internal</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#iscontainer" class="tsd-kind-icon">container<wbr>Exists</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#deletecontainer" class="tsd-kind-icon">delete<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#deleteobject" class="tsd-kind-icon">delete<wbr>Object</a></li>
@@ -120,8 +119,12 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#getobject" class="tsd-kind-icon">get<wbr>Object</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="azure_storage.azurestorageprovider.html#getobjectasbuffer" class="tsd-kind-icon">get<wbr>Object<wbr>AsBuffer</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="azure_storage.azurestorageprovider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#iscontainer" class="tsd-kind-icon">is<wbr>Container</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#presignedgeturl" class="tsd-kind-icon">presigned<wbr>Get<wbr>Url</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#presignedputurl" class="tsd-kind-icon">presigned<wbr>Put<wbr>Url</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="azure_storage.azurestorageprovider.html#presignedurl" class="tsd-kind-icon">presigned<wbr>Url</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="azure_storage.azurestorageprovider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a></li>
 							</ul>
 						</section>
@@ -141,7 +144,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L35">azure-storage/src/AzureStorageProvider.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L92">azure-storage/src/AzureStorageProvider.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -174,7 +177,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides StorageProvider._client</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L35">azure-storage/src/AzureStorageProvider.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L92">azure-storage/src/AzureStorageProvider.ts:92</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -244,7 +247,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L406">azure-storage/src/AzureStorageProvider.ts:406</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L489">azure-storage/src/AzureStorageProvider.ts:489</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -283,43 +286,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="iscontainer" class="tsd-anchor"></a>
-					<h3>container<wbr>Exists</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">container<wbr>Exists<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overrides StorageProvider.isContainer</p>
-								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L78">azure-storage/src/AzureStorageProvider.ts:78</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Check if a container exists.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>async</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>container: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Name of the container</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promises that resolves with a boolean indicating if the container exists.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="createcontainer" class="tsd-anchor"></a>
 					<h3>create<wbr>Container</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -330,7 +296,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.createContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L65">azure-storage/src/AzureStorageProvider.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L122">azure-storage/src/AzureStorageProvider.ts:122</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -373,7 +339,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.deleteContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L165">azure-storage/src/AzureStorageProvider.ts:165</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L222">azure-storage/src/AzureStorageProvider.ts:222</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -410,7 +376,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.deleteObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L380">azure-storage/src/AzureStorageProvider.ts:380</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L396">azure-storage/src/AzureStorageProvider.ts:396</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,7 +419,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.ensureContainer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L105">azure-storage/src/AzureStorageProvider.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L162">azure-storage/src/AzureStorageProvider.ts:162</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -496,7 +462,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.getObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L276">azure-storage/src/AzureStorageProvider.ts:276</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L292">azure-storage/src/AzureStorageProvider.ts:292</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -621,6 +587,43 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="iscontainer" class="tsd-anchor"></a>
+					<h3>is<wbr>Container</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Container<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.isContainer</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L135">azure-storage/src/AzureStorageProvider.ts:135</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if a container exists.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promises that resolves with a boolean indicating if the container exists.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="listcontainers" class="tsd-anchor"></a>
 					<h3>list<wbr>Containers</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -631,7 +634,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.listContainers</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L117">azure-storage/src/AzureStorageProvider.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L174">azure-storage/src/AzureStorageProvider.ts:174</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -659,7 +662,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.listObjects</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L303">azure-storage/src/AzureStorageProvider.ts:303</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L319">azure-storage/src/AzureStorageProvider.ts:319</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -692,6 +695,175 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="presignedgeturl" class="tsd-anchor"></a>
+					<h3>presigned<wbr>Get<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Get<wbr>Url<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.presignedGetUrl</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L421">azure-storage/src/AzureStorageProvider.ts:421</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a URL that clients (e.g. browsers) can use to request an object from the server with a GET request, even if the object is private.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path of the object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for GET requests</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="presignedputurl" class="tsd-anchor"></a>
+					<h3>presigned<wbr>Put<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Put<wbr>Url<span class="tsd-signature-symbol">(</span>container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PutObjectOptions</span>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides StorageProvider.presignedPutUrl</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L440">azure-storage/src/AzureStorageProvider.ts:440</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a URL that clients (e.g. browsers) can use for PUT operations on an object in the server, even if the object is private.</p>
+								</div>
+								<p>Notes on using presigned URLs to upload files to Azure Storage using PUT:</p>
+								<ol>
+									<li>The maximum file size is 100MB; larger files will trigger an error.</li>
+									<li>You need to set the <code>X-MS-Blob-Type: BlockBlob</code> header for uploads to succeed</li>
+								</ol>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path where to store the object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">PutObjectOptions</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Key-value pair of options used by providers, including the <code>metadata</code> dictionary</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for GET requests</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="presignedurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> presigned<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">presigned<wbr>Url<span class="tsd-signature-symbol">(</span>operation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"getObject"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"putObject"</span>, container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, contentSettings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, ttl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L456">azure-storage/src/AzureStorageProvider.ts:456</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a presigned URL for the specific operation.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>operation: <span class="tsd-signature-type">"getObject"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"putObject"</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Operation: &quot;getObject&quot; or &quot;putObject&quot;</p>
+									</div>
+								</li>
+								<li>
+									<h5>container: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the container</p>
+									</div>
+								</li>
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Path of the target object, inside the container</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> contentSettings: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Additional headers that are required</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ttl: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Expiry time of the URL, in seconds (default: 1 day)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Promise that resolves with the pre-signed URL for the specified operation</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="putobject" class="tsd-anchor"></a>
 					<h3>put<wbr>Object</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -702,7 +874,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides StorageProvider.putObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L191">azure-storage/src/AzureStorageProvider.ts:191</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L248">azure-storage/src/AzureStorageProvider.ts:248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -806,9 +978,6 @@
 								<a href="azure_storage.azurestorageprovider.html#_createcontainerinternal" class="tsd-kind-icon">_create<wbr>Container<wbr>Internal</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="azure_storage.azurestorageprovider.html#iscontainer" class="tsd-kind-icon">container<wbr>Exists</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="azure_storage.azurestorageprovider.html#createcontainer" class="tsd-kind-icon">create<wbr>Container</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -830,10 +999,22 @@
 								<a href="azure_storage.azurestorageprovider.html#getobjectasstring" class="tsd-kind-icon">get<wbr>Object<wbr>AsString</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="azure_storage.azurestorageprovider.html#iscontainer" class="tsd-kind-icon">is<wbr>Container</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="azure_storage.azurestorageprovider.html#listcontainers" class="tsd-kind-icon">list<wbr>Containers</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="azure_storage.azurestorageprovider.html#listobjects" class="tsd-kind-icon">list<wbr>Objects</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="azure_storage.azurestorageprovider.html#presignedgeturl" class="tsd-kind-icon">presigned<wbr>Get<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="azure_storage.azurestorageprovider.html#presignedputurl" class="tsd-kind-icon">presigned<wbr>Put<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="azure_storage.azurestorageprovider.html#presignedurl" class="tsd-kind-icon">presigned<wbr>Url</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="azure_storage.azurestorageprovider.html#putobject" class="tsd-kind-icon">put<wbr>Object</a>
@@ -850,6 +1031,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/azure_storage.html#azurestorageconnectionoptions" class="tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/azure_storage.html#putobjectrequestoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Request<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

@@ -106,6 +106,19 @@
 							</ul>
 						</li>
 					</ul>
+					<h3 id="using-pre-signed-urls">Using pre-signed URLs</h3>
+					<p>In the method <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#presignedputurl"><code>storage.presignedPutUrl(container, path, [options], [ttl])</code></a>, the Azure Storage provider accepts for the <code>options</code> argument the same dictionary as the <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#putobject">&#39;<code>storage.putObject(container, path, data, [options])</code>&#39;</a> method. If you specify a Content-Type in the request for the presigned URL, for example, clients will need to make PUT requests with the same Content-Type.</p>
+					<p>When uploading an object using a PUT request, Azure Storage requires clients to send an additional header with the request (case-insensitive):</p>
+					<pre><code class="lang-plain">X-MS-Blob-<span class="hljs-keyword">Type</span>: BlockBlob
+</code></pre>
+					<p>For example, with curl:</p>
+					<pre><code class="lang-sh">curl \
+  -<span class="ruby">-request PUT \
+</span>  -<span class="ruby">-upload-file <span class="hljs-string">"/path/to/file"</span> \
+</span>  -<span class="ruby">-header <span class="hljs-string">'X-MS-Blob-Type: BlockBlob'</span> \
+</span>  "https://storageaccount.blob.storage.windows.net/path?token=..."
+</code></pre>
+					<p>Lastly, please note that Azure Storage supports PUT upload operations with objects no larger than 100 MB. Trying to upload larger objects will fail.</p>
 					<h3 id="accessing-the-azure-storage-sdk">Accessing the Azure Storage SDK</h3>
 					<p>The Azure Blob Storage provider is built on top of the official <a href="https://github.com/Azure/azure-storage-node">Azure Storage SDK for Node.js</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#client"><code>storage.client()</code></a>.</p>
 					<p>You can use the object returned by this method to perform low-level operations using the Azure Storage SDK.</p>
@@ -134,6 +147,12 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="azure_storage.html#azurestorageconnectionoptions" class="tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="azure_storage.html#putobjectrequestoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Request<wbr>Options</a></li>
+							</ul>
+						</section>
 					</div>
 				</section>
 			</section>
@@ -145,9 +164,44 @@
 					<div class="tsd-signature tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/azure_storage.azurestorageconnectionobject.html" class="tsd-signature-type">AzureStorageConnectionObject</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
 						</ul>
 					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="putobjectrequestoptions" class="tsd-anchor"></a>
+					<h3>Put<wbr>Object<wbr>Request<wbr>Options</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">Put<wbr>Object<wbr>Request<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PutObjectOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Azure.BlobService.CreateBlockBlobRequestOptions</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/azure-storage/src/AzureStorageProvider.ts#L37">azure-storage/src/AzureStorageProvider.ts:37</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the request options dictionary for the <code>putObject</code> method</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <span class="tsd-signature-type">PutObjectOptions</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Dictionary with options</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Azure.BlobService.CreateBlockBlobRequestOptions</span></h4>
+							<p>Dictionary with options to send to Azure</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -196,6 +250,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="azure_storage.html#azurestorageconnectionoptions" class="tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="azure_storage.html#putobjectrequestoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Request<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

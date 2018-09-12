@@ -123,6 +123,8 @@
 							</ul>
 						</li>
 					</ul>
+					<h3 id="using-pre-signed-urls">Using pre-signed URLs</h3>
+					<p>In the method <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#presignedputurl"><code>storage.presignedPutUrl(container, path, [options], [ttl])</code></a>, the AWS S3 provider accepts for the <code>options</code> argument the same dictionary as the <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#putobject">&#39;<code>storage.putObject(container, path, data, [options])</code>&#39;</a> method. If you specify a Content-Type in the request for the presigned URL, for example, clients will need to make PUT requests with the same Content-Type.</p>
 					<h3 id="accessing-the-aws-sdk">Accessing the AWS-SDK</h3>
 					<p>The AWS S3 provider is built on top of the official <a href="https://github.com/aws/aws-sdk-js">AWS SDK for JavaScript</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/aws_s3.awss3provider.html#client"><code>storage.client()</code></a>.</p>
 					<p>You can use the object returned by this method to perform low-level operations using the AWS S3 SDK. Note that only the S3 library is loaded, and not the full AWS SDK for JavaScript.</p>
@@ -156,6 +158,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="aws_s3.html#putobjectmethodoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Method<wbr>Options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -169,7 +172,7 @@
 					<div class="tsd-signature tsd-kind-icon">Aws<wbr>S3ACL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"private"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public-read-write"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"authenticated-read"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"public"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L26">aws-s3/src/AwsS3Provider.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L28">aws-s3/src/AwsS3Provider.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -196,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/aws-s3/src/AwsS3Provider.ts#L56">aws-s3/src/AwsS3Provider.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L58">aws-s3/src/AwsS3Provider.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -215,6 +218,38 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 							<p>String value to pass to the S3 APIs</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="putobjectmethodoptions" class="tsd-anchor"></a>
+					<h3>Put<wbr>Object<wbr>Method<wbr>Options</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">Put<wbr>Object<wbr>Method<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PutObjectRequest</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/aws-s3/src/AwsS3Provider.ts#L79">aws-s3/src/AwsS3Provider.ts:79</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the methodOptions dictionary for the <code>putObject</code> method</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <a href="../interfaces/aws_s3.awss3putobjectoptions.html" class="tsd-signature-type">AwsS3PutObjectOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Dictionary with options</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PutObjectRequest</span></h4>
+							<p>Dictionary to add to methodOptions</p>
 						</li>
 					</ul>
 				</section>
@@ -271,6 +306,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="aws_s3.html#aclstring" class="tsd-kind-icon">ACLString</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="aws_s3.html#putobjectmethodoptions" class="tsd-kind-icon">Put<wbr>Object<wbr>Method<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

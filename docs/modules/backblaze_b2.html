@@ -113,6 +113,8 @@
 					<ul>
 						<li><code>options.length</code> (optional): as described above, when <code>data</code> is a Stream, if the length of the stream can be known in advance, setting <code>options.length</code> with the byte size (or the <code>byteLength</code> property in the <code>data</code> object directly) allows the BackblazeB2 provider to upload the object with a single call. This option is ignored if <code>data</code> is a string or Buffer.</li>
 					</ul>
+					<h3 id="using-pre-signed-urls">Using pre-signed URLs</h3>
+					<p>Backblaze B2 does not support pre-signed URLs, which are not available in their APIs. Because of that, the methods <code>presignedGetUrl</code> and <code>presignedPutUrl</code> always throw an exception when called on the BackblazeB2 provider.</p>
 					<h3 id="accessing-the-backblaze-b2-library">Accessing the Backblaze B2 library</h3>
 					<p>The AWS S3 provider is built on top of <a href="https://github.com/yakovkhalinsky/backblaze-b2">backblaze-b2</a>, which is exposed by calling <a href="https://italypaleale.github.io/SMCloudStore/classes/backblaze_b2.backblazeb2provider.html#client"><code>storage.client()</code></a>.</p>
 					<p>You can use the object returned by this method to perform low-level operations using the backblaze-b2 module.</p>
@@ -154,7 +156,7 @@
 					<div class="tsd-signature tsd-kind-icon">B2<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;backblaze-b2&#x27;) as any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/124355f/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/c26b1e7/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
