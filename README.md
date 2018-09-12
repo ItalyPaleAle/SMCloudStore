@@ -34,7 +34,7 @@ To start, install the [smcloudstore](https://www.npmjs.com/package/smcloudstore)
 npm install --save smcloudstore
 ````
 
-> SMCloudStore requires **Node.js version 8.9.1 or higher**. Some providers might require a higher version (Backblaze B2 requires Node.js 10 or higher).
+> SMCloudStore requires **Node.js version 8.9.1 or higher**. Some providers might require a newer version (currently, Backblaze B2 requires Node.js 10 or higher).
 
 Modules for each cloud provider are available on separate packages, so you can choose which ones to include. You need to install at least one of the following packages to use SMCloudStore:
 
