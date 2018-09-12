@@ -21,7 +21,7 @@
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
   "dependencies": {
-    "@google-cloud/storage": "^2.0.0",
+    "@google-cloud/storage": "^1.7.0",
     "@smcloudstore/core": "^0.1.0"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"

@@ -1,11 +1,10 @@
 # SMCloudStore Changelog
 
-## All packages: Version 0.2.0 (unreleased)
+## All packages: Version 0.2.0 (2018-09-12)
 
 **Breaking changes:**
 
 - **All:** Method `containerExists` has been renamed to `isContainer`, for consistency with other method names.
-- **Google Cloud Storage:** Updated Google Cloud Storage SDK for Node.js to version 2.0.
 
 **New features:**
 
