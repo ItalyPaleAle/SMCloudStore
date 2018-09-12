@@ -1,0 +1,29 @@
+# Node.js
+# Build a general Node.js application with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/vsts/pipelines/languages/javascript
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+strategy:
+  matrix:
+    node_8_x:
+      node_version: 8.x
+    node_9_x:
+      node_version: 9.x
+    node_10_x:
+      node_version: 10.x
+
+steps:
+- task: NodeTool@0
+  inputs:
+    version: $(node_version)
+  displayName: 'Install Node.js'
+- script: npm run bootstrap
+  displayName: 'Bootstrap packages with Lerna'
+- script: npm run compile
+  displayName: 'Compile TypeScript files'
+- script: npm run lint
+  displayName: 'Lint JS and TS files'
+- script: npm run test
+  displayName: 'Run unit tests'
