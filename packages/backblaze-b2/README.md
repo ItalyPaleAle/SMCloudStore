@@ -4,6 +4,10 @@ This package is a provider for [SMCloudStore](https://github.com/ItalyPaleAle/SM
 
 Please refer to the [main package](https://github.com/ItalyPaleAle/SMCloudStore) for the SMCloudStore documentation and instructions on how to use it.
 
+## System requirements
+
+The Backblaze B2 provider requires **Node.js version 10 or higher**.
+
 ## Provider-specific considerations
 
 There are a few provider-specific considerations for the BackblazeB2 provider.

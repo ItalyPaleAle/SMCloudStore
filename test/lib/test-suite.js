@@ -136,7 +136,13 @@ module.exports = (providerName, testSuiteOptions) => {
             await storage.deleteContainer(name)
 
             // Deleting a container that doesn't exist
-            await assert.rejects(storage.deleteContainer('doesnotexist'))
+            try {
+                await storage.deleteContainer('doesnotexist')
+                throw Error('Method should have thrown an exception')
+            }
+            catch (e) {
+                // All good
+            }
         })
 
         it('putObject', async function() {

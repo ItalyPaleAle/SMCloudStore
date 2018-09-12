@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/ItalyPaleAle/SMCloudStore/issues"
   },
+  "engines": {
+    "node": ">= 8.9.1"
+  },
   "dependencies": {
     "@smcloudstore/generic-s3": "^0.1.0"
   },

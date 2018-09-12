@@ -100,7 +100,7 @@ export function ReadChunkFromStream(stream: Readable, size: number, peek?: boole
                 }
 
                 // Stop listening on callbacks
-                stream.off('error', errorEvent)
+                stream.removeListener('error', errorEvent)
 
                 // Return the data
                 resolve(data)
