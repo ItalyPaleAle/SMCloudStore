@@ -1,4 +1,6 @@
 # SMCloudStore
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FItalyPaleAle%2FSMCloudStore.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FItalyPaleAle%2FSMCloudStore?ref=badge_shield)
+
 
 SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers, including:
 
@@ -313,3 +315,7 @@ Note that **some providers do not support this method** (Backblaze B2), and will
 ### storage.provider()
 
 [`storage.provider()`](https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#provider) returns the identifier (name) of the storage provider currently in use, for example `generic-s3`.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FItalyPaleAle%2FSMCloudStore.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FItalyPaleAle%2FSMCloudStore?ref=badge_large)
