@@ -30,4 +30,16 @@ describe('SMCloudStore', function() {
         // Successfully create an object
         assert(SMCloudStore.Create('minio', authData.minio))
     })
+
+    it('SMCloudStore.Providers', function() {
+        // Ensure the list is complete
+        assert.deepEqual(SMCloudStore.Providers(), [
+            'aws-s3',
+            'azure-storage',
+            'backblaze-b2',
+            'generic-s3',
+            'google-cloud-storage',
+            'minio'
+        ])
+    })
 })
