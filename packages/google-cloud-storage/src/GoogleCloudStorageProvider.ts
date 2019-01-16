@@ -1,6 +1,6 @@
 'use strict'
 
-import {Storage, CreateBucketRequest, CreateWriteStreamOptions, GetFilesOptions} from '@google-cloud/storage'
+import {CreateBucketRequest, CreateWriteStreamOptions, GetFilesOptions, Storage} from '@google-cloud/storage'
 import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
