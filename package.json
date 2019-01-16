@@ -35,8 +35,8 @@
     "request": "^2.88.0",
     "semver": "^5.6.0",
     "tslint": "^5.12.1",
-    "typedoc": "^0.14.1",
+    "typedoc": "^0.13.0",
     "typedoc-plugin-monorepo": "^0.1.0",
-    "typescript": "^3.2.2"
+    "typescript": "^3.1.6"
   }
 }
