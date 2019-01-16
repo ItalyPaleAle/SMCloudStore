@@ -1,6 +1,6 @@
 'use strict'
 
-import GCStorage = require('@google-cloud/storage')
+import {Storage, CreateBucketRequest, CreateWriteStreamOptions, GetFilesOptions} from '@google-cloud/storage'
 import {ListItemObject, ListItemPrefix, ListResults, PutObjectOptions, StorageProvider} from '@smcloudstore/core/dist/StorageProvider'
 import {IsStream} from '@smcloudstore/core/dist/StreamUtils'
 import {Duplex, Stream} from 'stream'
@@ -30,7 +30,7 @@ interface GoogleCloudCreateContainerOptions {
  * Client to interact with Google Cloud Storage.
  */
 class GoogleCloudStorageProvider extends StorageProvider {
-    protected _client: GCStorage
+    protected _client: Storage
 
     /**
      * Initializes a new client to interact with Minio.
@@ -48,7 +48,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
         }
 
         // The Google Cloud library will validate the connection object
-        this._client = new GCStorage(connection)
+        this._client = new Storage(connection)
     }
 
     /**
@@ -64,7 +64,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
         if (!options) {
             options = {}
         }
-        const metadata = {} as GCStorage.BucketConfig
+        const metadata = {} as CreateBucketRequest
 
         // Set storage class and default location
         switch (options.class) {
@@ -206,7 +206,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
                 metadata: metadataClone,
                 resumable: false,
                 validation: 'md5'
-            } as GCStorage.WriteStreamOptions
+            } as CreateWriteStreamOptions
 
             // Check if we have a Content-Type (case-insensitive)
             for (const key in metadataClone) {
@@ -257,7 +257,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
      */
     listObjects(container: string, prefix?: string): Promise<ListResults> {
         let list = [] as ListResults
-        const requestPromise = (opts: GCStorage.BucketQuery): Promise<ListResults> => {
+        const requestPromise = (opts: GetFilesOptions): Promise<ListResults> => {
             return new Promise((resolve, reject) => {
                 if (!opts) {
                     opts = {
@@ -270,7 +270,7 @@ class GoogleCloudStorageProvider extends StorageProvider {
 
                 // Using the callback API so we can get the full list
                 // Error in typings below
-                (this._client.bucket(container) as any).getFiles(opts, (err, files, nextQuery, apiResponse) => {
+                this._client.bucket(container).getFiles(opts, (err, files, nextQuery, apiResponse) => {
                     if (err) {
                         return reject(err)
                     }
@@ -302,8 +302,9 @@ class GoogleCloudStorageProvider extends StorageProvider {
                         }))
                     }
 
-                    if (apiResponse && apiResponse.prefixes) {
-                        list = list.concat(apiResponse.prefixes.map((el) => {
+                    // Need to use any because of error with types
+                    if (apiResponse && (apiResponse as any).prefixes) {
+                        list = list.concat((apiResponse as any).prefixes.map((el) => {
                             return {prefix: el} as ListItemPrefix
                         }))
                     }

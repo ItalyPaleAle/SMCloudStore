@@ -24,7 +24,7 @@
     "node": ">= 8.9.1"
   },
   "dependencies": {
-    "@google-cloud/storage": "^1.7.0",
+    "@google-cloud/storage": "^2.3.4",
     "@smcloudstore/core": "^0.2.0"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
