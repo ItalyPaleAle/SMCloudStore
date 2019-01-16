@@ -37,6 +37,7 @@ const SMCloudStore = {
         return [
             'aws-s3',
             'azure-storage',
+            'backblaze-b2',
             'generic-s3',
             'google-cloud-storage',
             'minio'
