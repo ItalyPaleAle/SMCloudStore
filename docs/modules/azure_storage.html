@@ -85,16 +85,16 @@
 						</li>
 					</ul>
 					<p>Example:</p>
-					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
-<span class="hljs-keyword">const</span> SMCloudStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'smcloudstore'</span>)
+					<pre><code class="lang-js">// Require the package
+const SMCloudStore = require(<span class="hljs-string">'smcloudstore'</span>)
 
-<p><span class="hljs-comment">// Complete with the connection options for Azure Blob Storage</span>
-<span class="hljs-keyword">const</span> connection = {
-    <span class="hljs-attr">storageAccount</span>: <span class="hljs-string">&#39;STORAGE_ACCOUNT_NAME&#39;</span>,
-    <span class="hljs-attr">storageAccessKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>
+<p>// Complete <span class="hljs-keyword">with</span> the <span class="hljs-keyword">connection</span> <span class="hljs-keyword">options</span> <span class="hljs-keyword">for</span> Azure Blob <span class="hljs-keyword">Storage</span>
+const <span class="hljs-keyword">connection</span> = {
+    storageAccount: <span class="hljs-string">&#39;STORAGE_ACCOUNT_NAME&#39;</span>,
+    storageAccessKey: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>
 }</p>
-<p><span class="hljs-comment">// Return an instance of the AzureStorageProvider class</span>
-<span class="hljs-keyword">const</span> storage = SMCloudStore.create(<span class="hljs-string">&#39;azure-storage&#39;</span>, connection)
+<p>// <span class="hljs-keyword">Return</span> an instance <span class="hljs-keyword">of</span> the AzureStorageProvider <span class="hljs-keyword">class</span>
+const storage = SMCloudStore.<span class="hljs-keyword">create</span>(<span class="hljs-string">&#39;azure-storage&#39;</span>, <span class="hljs-keyword">connection</span>)
 </code></pre></p>
 					<h3 id="creating-a-container">Creating a container</h3>
 					<p>When using the <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> and the <a href="https://italypaleale.github.io/SMCloudStore/classes/azure_storage.azurestorageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> methods, the <code>options</code> argument can be used to define some options for the container:</p>
@@ -112,11 +112,11 @@
 					<pre><code class="lang-plain">X-MS-Blob-<span class="hljs-keyword">Type</span>: BlockBlob
 </code></pre>
 					<p>For example, with curl:</p>
-					<pre><code class="lang-sh">curl \
-  -<span class="ruby">-request PUT \
-</span>  -<span class="ruby">-upload-file <span class="hljs-string">"/path/to/file"</span> \
-</span>  -<span class="ruby">-header <span class="hljs-string">'X-MS-Blob-Type: BlockBlob'</span> \
-</span>  "https://storageaccount.blob.storage.windows.net/path?token=..."
+					<pre><code class="lang-sh">curl <span class="hljs-string">\</span>
+  --request PUT <span class="hljs-string">\</span>
+  --upload-file <span class="hljs-string">"/path/to/file"</span> <span class="hljs-string">\</span>
+  --header <span class="hljs-string">'X-MS-Blob-Type: BlockBlob'</span> <span class="hljs-string">\</span>
+  <span class="hljs-string">"https://storageaccount.blob.storage.windows.net/path?token=..."</span>
 </code></pre>
 					<p>Lastly, please note that Azure Storage supports PUT upload operations with objects no larger than 100 MB. Trying to upload larger objects will fail.</p>
 					<h3 id="accessing-the-azure-storage-sdk">Accessing the Azure Storage SDK</h3>
@@ -164,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">Azure<wbr>Storage<wbr>Connection<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/azure_storage.azurestorageconnectionobject.html" class="tsd-signature-type">AzureStorageConnectionObject</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/1187aae/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/azure-storage/src/AzureStorageProvider.ts#L18">azure-storage/src/AzureStorageProvider.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -181,7 +181,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/1187aae/packages/azure-storage/src/AzureStorageProvider.ts#L37">azure-storage/src/AzureStorageProvider.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/azure-storage/src/AzureStorageProvider.ts#L37">azure-storage/src/AzureStorageProvider.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

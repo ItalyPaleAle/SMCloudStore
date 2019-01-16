@@ -1,5 +1,23 @@
 # SMCloudStore Changelog
 
+## @smcloudstore/google-cloud-sotrage: Version 0.2.1 (2019-01-16)
+
+**Fixes:**
+
+- **@smcloudstore/google-cloud-sotrage:** Updated Google Cloud Storage SDK to version 2.3
+
+## @smcloudstore/aws-s3: Version 0.2.1 (2019-01-16)
+
+**Fixes:**
+
+- **@smcloudstore/aws-s3:** Updated AWS SDK
+
+## smcloudstore: Version 0.2.1 (2019-01-16)
+
+**Fixes:**
+
+- **smcloudstore**: No longer throw error for the supported B2 provider (#8)
+
 ## All packages: Version 0.2.0 (2018-09-12)
 
 **Breaking changes:**

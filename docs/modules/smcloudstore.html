@@ -174,23 +174,23 @@
 					<h3 id="storage-createcontainer-container-options-">storage.createContainer(container, [options])</h3>
 					<p>Using <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#createcontainer"><code>storage.createContainer(container, [options])</code></a> you can create a new container on the cloud storage server. The <code>options</code> argument is a dictionary with various options, depending on the provider being used. The method returns a Promise that resolves with no value when the container has been created.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Create a new container called "testcontainer"</span>
-<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">'testcontainer'</span>)
+await storage.create<span class="hljs-constructor">Container('<span class="hljs-params">testcontainer</span>')</span>
 
 <p><span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.createContainer(<span class="hljs-string">&#39;testcontainer&#39;</span>, {region: <span class="hljs-string">&#39;us-east-1&#39;</span>})
+await storage.create<span class="hljs-constructor">Container(&#39;<span class="hljs-params">testcontainer</span>&#39;, {<span class="hljs-params">region</span>: &#39;<span class="hljs-params">us</span>-<span class="hljs-params">east</span>-1&#39;})</span>
 </code></pre></p>
 					<h3 id="storage-iscontainer-container-">storage.isContainer(container)</h3>
 					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#iscontainer"><code>storage.isContainer(container)</code></a> returns a Promise that resolves with a boolean indicating whether a container exists on the provider.</p>
-					<pre><code class="lang-js"><span class="hljs-comment">// Once the async method resolves, exists will contain true or false</span>
-<span class="hljs-keyword">const</span> <span class="hljs-built_in">exists</span> = await storage.isContainer(<span class="hljs-string">'testcontainer'</span>)
+					<pre><code class="lang-js">// Once the async <span class="hljs-keyword">method</span> resolves, <span class="hljs-keyword">exists</span> will contain <span class="hljs-keyword">true</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">false</span>
+const <span class="hljs-keyword">exists</span> = await <span class="hljs-keyword">storage</span>.isContainer(<span class="hljs-string">'testcontainer'</span>)
 </code></pre>
 					<h3 id="storage-ensurecontainer-container-options-">storage.ensureContainer(container, [options])</h3>
 					<p><a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#ensurecontainer"><code>storage.ensureContainer(container, [options])</code></a> is similar to <code>storage.createContainer()</code>, but it creates the container only if it doesn&#39;t already exist. The method returns a Promise that resolves with no value when the container has been created.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Container "testcontainer" will be created only if it doesn't already exists</span>
-<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">'testcontainer'</span>)
+await storage.ensure<span class="hljs-constructor">Container('<span class="hljs-params">testcontainer</span>')</span>
 
 <p><span class="hljs-comment">// Some providers, like AWS S3, require specifying a region</span>
-<span class="hljs-keyword">await</span> storage.ensureContainer(<span class="hljs-string">&#39;testcontainer&#39;</span>, {region: <span class="hljs-string">&#39;us-east-1&#39;</span>})
+await storage.ensure<span class="hljs-constructor">Container(&#39;<span class="hljs-params">testcontainer</span>&#39;, {<span class="hljs-params">region</span>: &#39;<span class="hljs-params">us</span>-<span class="hljs-params">east</span>-1&#39;})</span>
 </code></pre></p>
 					<h3 id="storage-listcontainers-">storage.listContainers()</h3>
 					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#listcontainers"><code>storage.listContainers()</code></a> returns a Promise that resolves with the list of names of the containers that the user owns on the storage server.</p>
@@ -217,22 +217,22 @@ const </span>containers = await storage.listContainers()
 					</ul>
 					<p>The method returns a Promise that resolves with no value when the upload is complete.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Upload a stream</span>
-<span class="hljs-keyword">const</span> data = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).createReadStream(<span class="hljs-string">'someimage.jpg'</span>)
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">data</span> = require(<span class="hljs-string">'fs'</span>).createReadStream(<span class="hljs-string">'someimage.jpg'</span>)
 <span class="hljs-keyword">const</span> options = {
-    <span class="hljs-attr">metadata</span>: {
+    metadata: {
         <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'image/jpeg'</span>
     }
 }
-<span class="hljs-keyword">await</span> storage.putObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>, data, options)
+await storage.putObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>, <span class="hljs-keyword">data</span>, options)
 
 <p><span class="hljs-comment">// Upload the content of a string or Buffer</span>
-<span class="hljs-keyword">const</span> data = <span class="hljs-string">&#39;Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura ché la diritta via era smarrita&#39;</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">data</span> = <span class="hljs-string">&#39;Nel mezzo del cammin di nostra vita mi ritrovai per una selva oscura ché la diritta via era smarrita&#39;</span>
 <span class="hljs-keyword">const</span> options = {
-    <span class="hljs-attr">metadata</span>: {
+    metadata: {
         <span class="hljs-string">&#39;Content-Type&#39;</span>: <span class="hljs-string">&#39;text/plain&#39;</span>
     }
 }
-<span class="hljs-keyword">await</span> storage.putObject(<span class="hljs-string">&#39;testcontainer&#39;</span>, <span class="hljs-string">&#39;directory/dante.txt&#39;</span>, data, options)
+await storage.putObject(<span class="hljs-string">&#39;testcontainer&#39;</span>, <span class="hljs-string">&#39;directory/dante.txt&#39;</span>, <span class="hljs-keyword">data</span>, options)
 </code></pre></p>
 					<h3 id="storage-getobject-container-path-">storage.getObject(container, path)</h3>
 					<p><a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#getobject"><code>storage.getObject(container, path)</code></a> allows getting (downloading) an object from the storage server.</p>
@@ -243,11 +243,11 @@ const </span>containers = await storage.listContainers()
 					</ul>
 					<p>The method returns a Promise that resolves with a Readable Stream.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Retrieve a file</span>
-<span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> storage.getObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'directory/someimage.jpg'</span>)
+const stream = await storage.get<span class="hljs-constructor">Object('<span class="hljs-params">testcontainer</span>', '<span class="hljs-params">directory</span><span class="hljs-operator">/</span><span class="hljs-params">someimage</span>.<span class="hljs-params">jpg</span>')</span>
 
 <p><span class="hljs-comment">// The method returns a Readable Stream that can be processed as you wish</span>
 <span class="hljs-comment">// For example, to write the stream to file:</span>
-stream.pipe(<span class="hljs-built_in">require</span>(<span class="hljs-string">&#39;fs&#39;</span>).createWriteStream(<span class="hljs-string">&#39;write/to/someimage.jpg&#39;</span>))
+stream.pipe(require(&#39;fs&#39;).create<span class="hljs-constructor">WriteStream(&#39;<span class="hljs-params">write</span><span class="hljs-operator">/</span><span class="hljs-params">to</span><span class="hljs-operator">/</span><span class="hljs-params">someimage</span>.<span class="hljs-params">jpg</span>&#39;)</span>)
 </code></pre></p>
 					<h3 id="storage-getobjectasbuffer-container-path-">storage.getObjectAsBuffer(container, path)</h3>
 					<p><a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#getobjectasbuffer"><code>storage.getObjectAsBuffer(container, path)</code></a> behaves similarly to <code>storage.getObject()</code>, accepting the same arguments, but returns the data in a Buffer object loaded in memory.</p>
@@ -268,32 +268,32 @@ console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">string
 					<h3 id="storage-listobjects-container-prefix-">storage.listObjects(container, [prefix])</h3>
 					<p><a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#listobjects"><code>storage.listObjects(container, [prefix])</code></a> returns a list of all the objects on the storage server at the specified path. This method does not recursively walk into directories (real or virtual, separated by a slash character). If <code>prefix</code> is not specified, the method will list the root &quot;folder&quot;.</p>
 					<p>The method returns a Promise that resolves with an array of objects of type <a href="https://italypaleale.github.io/SMCloudStore/interfaces/listitemobject.html"><code>ListItemObject</code></a>, containing information for an object on the server, or <a href="https://italypaleale.github.io/SMCloudStore/interfaces/listitemprefix.html"><code>ListItemPrefix</code></a>, containing information for a prefix (folder).</p>
-					<pre><code class="lang-js"><span class="hljs-comment">// Retrieve the list of objects</span>
-<span class="hljs-keyword">const</span> <span class="hljs-built_in">list</span> = <span class="hljs-keyword">await</span> storage.listObjects(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'/'</span>)
+					<pre><code class="lang-js">// Retrieve the list <span class="hljs-keyword">of</span> objects
+const list = await <span class="hljs-keyword">storage</span>.listObjects(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'/'</span>)
 
-<p><span class="hljs-comment">// List is an array of elements representing objects or prefixes</span></p>
-<p><span class="hljs-comment">// Prefixes have the structure</span>
+<p>// List <span class="hljs-keyword">is</span> an <span class="hljs-keyword">array</span> <span class="hljs-keyword">of</span> elements representing objects <span class="hljs-keyword">or</span> prefixes</p>
+<p>// Prefixes have the structure
 {
-    <span class="hljs-attribute">prefix</span>: <span class="hljs-string">&#39;/path&#39;</span>
+    prefix: <span class="hljs-string">&#39;/path&#39;</span>
 }</p>
-<p><span class="hljs-comment">// Object have the structure</span>
+<p>// <span class="hljs-keyword">Object</span> have the structure
 {
-    <span class="hljs-attribute">path</span>: <span class="hljs-string">&#39;/path/to/file.jpg&#39;</span>,
-    <span class="hljs-attribute">size</span>: <span class="hljs-number">123</span>, <span class="hljs-comment">// Size in bytes</span>
-    <span class="hljs-attribute">lastModified</span>: <span class="hljs-built_in">Date</span>() <span class="hljs-comment">// Date object</span>
-    <span class="hljs-comment">// Some providers might return more data, such as contentType, contentMD5, contentSHA1, and creationTime. Please refer to the documentation for details.</span>
+    <span class="hljs-type">path</span>: <span class="hljs-string">&#39;/path/to/file.jpg&#39;</span>,
+    size: <span class="hljs-number">123</span>, // Size <span class="hljs-keyword">in</span> bytes
+    lastModified: <span class="hljs-type">Date</span>() // <span class="hljs-type">Date</span> <span class="hljs-keyword">object</span>
+    // <span class="hljs-keyword">Some</span> providers might <span class="hljs-keyword">return</span> more data, such <span class="hljs-keyword">as</span> contentType, contentMD5, contentSHA1, <span class="hljs-keyword">and</span> creationTime. Please refer <span class="hljs-keyword">to</span> the documentation <span class="hljs-keyword">for</span> details.
 }
 </code></pre></p>
 					<h3 id="storage-deleteobject-container-path-">storage.deleteObject(container, path)</h3>
 					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#deleteobject"><code>storage.deleteObject(container, path)</code></a> deletes an object from a container in the storage server. It returns a Promise that resolves with no value on success.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Delete an object</span>
-<span class="hljs-keyword">await</span> storage.deleteObject(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'path/to/file.jpg'</span>)
+await storage.delete<span class="hljs-constructor">Object('<span class="hljs-params">testcontainer</span>', '<span class="hljs-params">path</span><span class="hljs-operator">/</span><span class="hljs-params">to</span><span class="hljs-operator">/</span><span class="hljs-params">file</span>.<span class="hljs-params">jpg</span>')</span>
 </code></pre>
 					<h3 id="storage-presignedgeturl-container-path-ttl-">storage.presignedGetUrl(container, path, [ttl])</h3>
 					<p>The method <a href="https://italypaleale.github.io/SMCloudStore/classes/core.storageprovider.html#presignedgeturl"><code>storage.presignedGetUrl(container, path, [ttl])</code></a> returns a Promise that resolves with a pre-signed URL that can be used to download an object using any client (e.g. a web browser).</p>
 					<p>The <code>ttl</code> parameter determines how long the signed URL will be valid for, in seconds from present time.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Get the pre-signed URL</span>
-<span class="hljs-keyword">const</span> <span class="hljs-built_in">url</span> = <span class="hljs-keyword">await</span> storage.presignedGetUrl(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'path/to/file.jpg'</span>, <span class="hljs-number">60</span>)
+const url = await storage.presigned<span class="hljs-constructor">GetUrl('<span class="hljs-params">testcontainer</span>', '<span class="hljs-params">path</span><span class="hljs-operator">/</span><span class="hljs-params">to</span><span class="hljs-operator">/</span><span class="hljs-params">file</span>.<span class="hljs-params">jpg</span>', 60)</span>
 <span class="hljs-comment">// Result is a full URL, like "https://storage.provider/path?token=..."</span>
 </code></pre>
 					<p>The URL can be used to retrieve the object. For example, using curl:</p>
@@ -305,7 +305,7 @@ console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">string
 					<p>The <code>options</code> argument can be used by the provider to specify certain requirements for clients that will upload files. For example, it can be used to enforce a certain <code>Content-Type</code> header, etc. Its values are the same they are for the <code>putObject</code> method. Some providers ignore this value - please refer to the documentation for each provider for more details.</p>
 					<p>The <code>ttl</code> parameter determines how long the signed URL will be valid for, in seconds from present time.</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Get the pre-signed URL</span>
-<span class="hljs-keyword">const</span> <span class="hljs-built_in">url</span> = <span class="hljs-keyword">await</span> storage.presignedPutUrl(<span class="hljs-string">'testcontainer'</span>, <span class="hljs-string">'path/to/file.jpg'</span>, {}, <span class="hljs-number">60</span>)
+const url = await storage.presigned<span class="hljs-constructor">PutUrl('<span class="hljs-params">testcontainer</span>', '<span class="hljs-params">path</span><span class="hljs-operator">/</span><span class="hljs-params">to</span><span class="hljs-operator">/</span><span class="hljs-params">file</span>.<span class="hljs-params">jpg</span>', {}, 60)</span>
 <span class="hljs-comment">// Result is a full URL, like "https://storage.provider/path?token=..."</span>
 </code></pre>
 					<p>The URL can be used to upload an object. For example, using curl:</p>
@@ -339,7 +339,7 @@ console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">string
 					<div class="tsd-signature tsd-kind-icon">SMCloud<wbr>Store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/1187aae/packages/smcloudstore/src/SMCloudStore.ts#L6">smcloudstore/src/SMCloudStore.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/smcloudstore/src/SMCloudStore.ts#L6">smcloudstore/src/SMCloudStore.ts:6</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -352,7 +352,7 @@ console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">string
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/1187aae/packages/smcloudstore/src/SMCloudStore.ts#L14">smcloudstore/src/SMCloudStore.ts:14</a></li>
+										<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/smcloudstore/src/SMCloudStore.ts#L14">smcloudstore/src/SMCloudStore.ts:14</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
@@ -394,7 +394,7 @@ console.<span class="hljs-built_in">log</span>(<span class="hljs-keyword">string
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/1187aae/packages/smcloudstore/src/SMCloudStore.ts#L36">smcloudstore/src/SMCloudStore.ts:36</a></li>
+										<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/smcloudstore/src/SMCloudStore.ts#L36">smcloudstore/src/SMCloudStore.ts:36</a></li>
 									</ul>
 								</aside>
 								<div class="tsd-comment tsd-typography">
