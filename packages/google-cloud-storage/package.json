@@ -1,6 +1,6 @@
 {
   "name": "@smcloudstore/google-cloud-storage",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Google Cloud Storage library for SMCloudStore",
   "keywords": [],
   "author": "Alessandro Segala (ItalyPaleAle)",

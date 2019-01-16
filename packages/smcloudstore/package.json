@@ -1,6 +1,6 @@
 {
   "name": "smcloudstore",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Multi-cloud object storage module, for AWS, Azure, Google Cloud, B2 and more",
   "repository": {
     "type": "git",
