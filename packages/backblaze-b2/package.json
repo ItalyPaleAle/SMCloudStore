@@ -29,7 +29,7 @@
   ],
   "dependencies": {
     "@smcloudstore/core": "^0.2.0",
-    "backblaze-b2": "^1.0.4"
+    "backblaze-b2": "^1.1.0"
   },
   "gitHead": "8fd0b51950c40d4c2cd6d1184915ee855ba593ca"
 }
