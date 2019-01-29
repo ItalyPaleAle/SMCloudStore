@@ -1,5 +1,11 @@
 # SMCloudStore Changelog
 
+## @smcloudstore/backblaze-b2: Version 0.2.1 (2019-01-28)
+
+**Fixes:**
+
+- **@smcloudstore/backblaze-b2:** Updated `backblaze-b2` dependency to version 1.1.0, to leverage Backblaze B2 APIs version 2.
+
 ## @smcloudstore/google-cloud-sotrage: Version 0.2.1 (2019-01-16)
 
 **Fixes:**
