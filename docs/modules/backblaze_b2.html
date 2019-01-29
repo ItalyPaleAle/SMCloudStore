@@ -79,7 +79,7 @@
 					<p>When initializing the BackblazeB2 provider, the <code>connection</code> argument is an object with:</p>
 					<ul>
 						<li><code>connection.accountId</code>: string containing the account ID (the &quot;public key&quot;)</li>
-						<li><code>connection.applicationKey</code>: string containing the application key (the &quot;secret key&quot;)</li>
+						<li><code>connection.applicationKey</code>: string containing the application key (the &quot;secret key&quot;). Since this provides uses version 2 of the Backblaze B2 APIs, the key could be either the &quot;master application key&quot; or a &quot;normal application key&quot;; for more information, please refer to the <a href="https://www.backblaze.com/b2/docs/application_keys.html">B2 documentation</a>.</li>
 					</ul>
 					<p>Example:</p>
 					<pre><code class="lang-js"><span class="hljs-comment">// Require the package</span>
@@ -158,7 +158,7 @@
 					<div class="tsd-signature tsd-kind-icon">B2<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;backblaze-b2&#x27;) as any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/44052e5/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ItalyPaleAle/SMCloudStore/blob/a7dddaf/packages/backblaze-b2/src/BackblazeB2Provider.ts#L7">backblaze-b2/src/BackblazeB2Provider.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>

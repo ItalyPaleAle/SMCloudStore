@@ -17,7 +17,7 @@ There are a few provider-specific considerations for the BackblazeB2 provider.
 When initializing the BackblazeB2 provider, the `connection` argument is an object with:
 
 - `connection.accountId`: string containing the account ID (the "public key")
-- `connection.applicationKey`: string containing the application key (the "secret key")
+- `connection.applicationKey`: string containing the application key (the "secret key"). Since this provides uses version 2 of the Backblaze B2 APIs, the key could be either the "master application key" or a "normal application key"; for more information, please refer to the [B2 documentation](https://www.backblaze.com/b2/docs/application_keys.html).
 
 Example:
 
