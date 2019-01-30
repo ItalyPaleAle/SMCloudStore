@@ -92,7 +92,7 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     isContainer(container: string): Promise<boolean> {
-        // There's no method in the B2 APIs to get a single bucket, so list all buckets and look for the one we're interested in
+        // TODO: refactor to use B2.getBucket(...)
         return this.listContainers()
             .then((list) => {
                 return list.indexOf(container) >= 0
