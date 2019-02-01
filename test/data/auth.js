@@ -1,40 +1,44 @@
 'use strict'
 
-/* eslint-disable no-unreachable */
-
-// DELETE THIS LINE AFTER SETTING AUTH INFO
-throw Error('Missing authorization info for cloud providers')
-
 module.exports = {
     // Minio
     'minio': {
         endPoint: 'localhost',
         port: 9001,
-        secure: false,
+        useSSL: false,
         accessKey: '8O683FBOQPTVBLX8T11M',
         secretKey: 'ulTofsUnwmgnYLR8I6D4IbFD9N/NJ+XJ0X84bxrH'
     },
 
+    // Generic S3
+    'generic-s3': {
+        endPoint: process.env.SMCS_GENERICS3_ENDPOINT,
+        accessKey: process.env.SMCS_GENERICS3_ACCESS_KEY,
+        secretKey: process.env.SMCS_GENERICS3_SECRET_KEY,
+        region: process.env.SMCS_GENERICS3_REGION
+    },
+
     // Azure
-    'azure-storage': 'DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net',
+    'azure-storage': {
+        storageAccount: process.env.SMCS_AZURESTORAGE_STORAGEACCOUNT,
+        storageAccessKey: process.env.SMCS_AZURESTORAGE_ACCESSKEY
+    },
 
     // AWS
     'aws-s3': {
-        accessKey: '...',
-        secretKey: '...'
-    },
-    
-    // Generic S3
-    'generic-s3': {
-        endPoint: 's3.amazonaws.com', // Test against AWS S3
-        accessKey: '...',
-        secretKey: '...',
-        region: 'ca-central-1' // Region for when using AWS S3
+        accessKeyId: process.env.SMCS_AWSS3_ACCESS_KEY, // Test against AWS S3
+        secretAccessKey: process.env.SMCS_AWSS3_SECRET_KEY,
+        region: process.env.SMCS_AWSS3_REGION // Region for when using AWS S3
     },
 
     // Google Cloud
     'google-cloud-storage': {
-        projectId: '...',
-        keyFilename: '/path/to/file.json'
+        // Use env vars GCLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS
+    },
+
+    // Backblaze B2
+    'backblaze-b2': {
+        accountId: process.env.SMCS_BACKBLAZEB2_ACCOUNT_ID,
+        applicationKey: process.env.SMCS_BACKBLAZEB2_APPLICATION_KEY
     }
 }

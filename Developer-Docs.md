@@ -37,38 +37,33 @@ To start a local Minio server (requires Docker):
 sh scripts/start-minio.sh
 ````
 
-Then edit the file `test/data/auth.js` and change it to add authorization information for other providers:
+Then add the keys for all other providers, passing them as environmental variables. You can put them in the **`.env` file**, which should look like:
 
-````js
-'use strict'
+````sh
+# generic-s3
+# Leave "s3.amazonaws.com" to test against AWS
+SMCS_GENERICS3_ENDPOINT="s3.amazonaws.com"
+SMCS_GENERICS3_ACCESS_KEY="..."
+SMCS_GENERICS3_SECRET_KEY="..."
+# Replace with AWS region id (ignored if not testing against AWS)
+SMCS_GENERICS3_REGION="ca-central-1"
 
-module.exports = {
-    // Minio
-    // If you start minio with the start-minio.sh script, no need to change this
-    'minio': {
-        endPoint: 'localhost',
-        port: 9001,
-        useSSL: false,
-        accessKey: '8O683FBOQPTVBLX8T11M',
-        secretKey: 'ulTofsUnwmgnYLR8I6D4IbFD9N/NJ+XJ0X84bxrH'
-    },
+# azure-storage
+SMCS_AZURESTORAGE_STORAGEACCOUNT="..."
+SMCS_AZURESTORAGE_ACCESSKEY="..."
 
-    // Azure
-    // This example uses a connection string
-    'azure-storage': 'DefaultEndpointsProtocol=https;AccountName=...;AccountKey=...;EndpointSuffix=core.windows.net',
+# aws-s3
+SMCS_AWSS3_ACCESS_KEY="..."
+SMCS_AWSS3_SECRET_KEY="..."
+SMCS_AWSS3_REGION="us-west-2"
 
-    // AWS
-    'aws-s3': {
-        accessKey: '...',
-        secretKey: '...'
-    },
+# google-cloud-storage
+GCLOUD_PROJECT="name-012345"
+GOOGLE_APPLICATION_CREDENTIALS="/full/path/to/name-012345-hex.json"
 
-    // Google Cloud
-    'google-cloud-storage': {
-        projectId: 'name-012345',
-        keyFilename: '/full/path/to/name-012345-hex.json'
-    }
-}
+# backblaze-b2
+SMCS_BACKBLAZEB2_ACCOUNT_ID="..."
+SMCS_BACKBLAZEB2_APPLICATION_KEY="..."
 ````
 
 You can then run tests (which will also trigger a re-compilation of all TypeScript files) with:

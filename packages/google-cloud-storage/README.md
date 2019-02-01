@@ -33,6 +33,8 @@ const connection = {
 const storage = SMCloudStore.create('google-cloud-storage', connection)
 ````
 
+Alternatively, you might pass the same arguments via the `GCLOUD_PROJECT` and `GOOGLE_APPLICATION_CREDENTIALS` environmental variable. See the [official documentation](https://cloud.google.com/docs/authentication/getting-started) for more details.
+
 ### Creating a container
 
 When using the [`storage.createContainer(container, [options])`](https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#createcontainer) and the [`storage.ensureContainer(container, [options])`](https://italypaleale.github.io/SMCloudStore/classes/google_cloud_storage.googlecloudstorageprovider.html#ensurecontainer) methods, the `options` argument can be used to define some options for the container:

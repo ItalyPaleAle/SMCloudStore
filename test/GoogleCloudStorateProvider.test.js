@@ -21,9 +21,21 @@ describe('Provider-specific tests for google-cloud-storage', function() {
     const Provider = require('../packages/google-cloud-storage')
 
     it('constructor', function() {
+        // If the env vars are set, need to temporarily unset them
+        let envVarBak
+        if (process.env.GCLOUD_PROJECT) {
+            envVarBak = process.env.GCLOUD_PROJECT
+            process.env.GCLOUD_PROJECT = ''
+        }
+
         assert.throws(() => {
             // Empty connection
             new Provider({})
         }, /connection argument/i)
+
+        // Restore env var
+        if (envVarBak) {
+            process.env.GCLOUD_PROJECT = envVarBak
+        }
     })
 })
