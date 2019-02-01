@@ -26,7 +26,7 @@ SMCloudStore is specifically focused on abstracting the differences between mult
 
 - By focusing only on storage, we can keep things simple. There are few APIs and they are clear and easy to use.
 - SMCloudStore is highly modular, and every provider comes with a separate NPM package. This means that you don't need to install the SDKs for every single cloud provider and all their dependencies if you plan to use only one or two of them.
-- We are focusing on a modern development experience. The codebase is primarily written in TypeScript adn transpiled to JavaScript with all the typings published. We are also adopting a stream-centric approach with methods that upload and download objects from storage providers.
+- We are focusing on a modern development experience. The codebase is primarily written in TypeScript and transpiled to JavaScript with all the typings published. We are also adopting a stream-centric approach with methods that upload and download objects from storage providers.
 
 ## Add to your project
 
