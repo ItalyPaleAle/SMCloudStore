@@ -1,5 +1,7 @@
 # SMCloudStore
 
+![](https://img.shields.io/npm/v/smcloudstore.svg?style=flat) ![](https://img.shields.io/github/license/ItalyPaleAle/SMCloudStore.svg?style=flat)
+
 SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers, including:
 
 - [AWS S3](https://aws.amazon.com/s3/)

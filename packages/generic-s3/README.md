@@ -1,5 +1,7 @@
 # @smcloudstore/generic-s3
 
+![](https://img.shields.io/npm/v/@smcloudstore/generic-s3.svg?style=flat) ![](https://img.shields.io/github/license/ItalyPaleAle/SMCloudStore.svg?style=flat)
+
 This package is a provider for [SMCloudStore](https://github.com/ItalyPaleAle/SMCloudStore), for a generic S3-compatible provider, including AWS S3. SMCloudStore is a lightweight Node.js module that offers a simple API to interact with the object storage services of multiple cloud providers.
 
 Please refer to the [main package](https://github.com/ItalyPaleAle/SMCloudStore) for the SMCloudStore documentation and instructions on how to use it.
