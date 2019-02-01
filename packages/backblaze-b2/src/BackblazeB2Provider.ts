@@ -10,7 +10,7 @@ const B2 = require('backblaze-b2') as any
  * Connection options for a Backblaze B2 provider.
  */
 interface BackblazeB2ConnectionOptions {
-    /** Account Id */
+    /** Account Id or application ID */
     accountId: string
     /** Application key (secret key) */
     applicationKey: string
@@ -92,11 +92,10 @@ class BackblazeB2Provider extends StorageProvider {
      * @async
      */
     isContainer(container: string): Promise<boolean> {
-        // There's no method in the B2 APIs to get a single bucket, so list all buckets and look for the one we're interested in
-        return this.listContainers()
-            .then((list) => {
-                return list.indexOf(container) >= 0
-            })
+        return this._client.getBucket({bucketName: container})
+            .then(result => !!result)
+            // Treat exceptions as not found
+            .catch(() => false)
     }
 
     /**
