@@ -56,10 +56,6 @@ class GenericS3Provider extends StorageProvider {
             .then((result) => {
                 return !!result
             })
-            .catch((err) => {
-                // Treat exceptions as not founds
-                return false
-            })
     }
 
     /**

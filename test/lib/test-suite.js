@@ -11,6 +11,23 @@ const StreamUtils = require('../../packages/core/dist/StreamUtils')
 
 const authData = require('../data/auth')
 
+// Test an async function to ensure it throws
+// Source: https://stackoverflow.com/a/46957474/192024
+async function assertThrowsAsync(fn, regExp) {
+    let f = () => {}
+    try {
+        await fn()
+    }
+    catch(e) {
+        f = () => {
+            throw e
+        }
+    }
+    finally {
+        assert.throws(f, regExp)
+    }
+}
+
 module.exports = (providerName, testSuiteOptions) => {
     if (!testSuiteOptions) {
         testSuiteOptions = {}
@@ -152,6 +169,9 @@ module.exports = (providerName, testSuiteOptions) => {
             // Increase timeout
             this.timeout(120000)
             this.slow(0)
+
+            // Try uploading something that isn't valid
+            await assertThrowsAsync(async () => await storage.putObject(containers[0], 'void', fs.createWriteStream('/dev/null')))
 
             // Upload some files, in parallel
             const promises = []
