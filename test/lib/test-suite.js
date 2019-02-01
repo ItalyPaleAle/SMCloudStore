@@ -85,6 +85,9 @@ module.exports = (providerName, testSuiteOptions) => {
         })
 
         it('createContainer', async function() {
+            // Increase timeout
+            this.timeout(120000)
+
             // Create 2 randomly-named containers
             for (let i = 0; i < 2; i++) {
                 containers.push(genContainerName())
