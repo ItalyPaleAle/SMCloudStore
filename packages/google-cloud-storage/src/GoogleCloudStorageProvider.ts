@@ -43,14 +43,6 @@ class GoogleCloudStorageProvider extends StorageProvider {
         // Provider name
         this._provider = 'google-cloud-storage'
 
-        // Check if we have a connection
-        if (!connection || !Object.keys(connection).length) {
-            // We might have auth data passed via environmental variables, which will be picked up by the library
-            if (!process.env.GCLOUD_PROJECT || !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-                throw new Error('Connection argument is empty')
-            }
-        }
-
         // The Google Cloud library will validate the connection object
         this._client = new Storage(connection)
     }
