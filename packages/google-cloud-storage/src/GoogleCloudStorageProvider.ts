@@ -10,9 +10,9 @@ import {Duplex, Stream} from 'stream'
  */
 interface GoogleCloudConnectionOptions {
     /** ID of the Google Cloud project */
-    projectId: string
+    projectId?: string
     /** Path of the JSON file containing the keys */
-    keyFilename: string
+    keyFilename?: string
 }
 
 /**
