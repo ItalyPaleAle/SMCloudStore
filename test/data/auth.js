@@ -28,6 +28,7 @@ module.exports = {
     'aws-s3': {
         accessKeyId: process.env.SMCS_AWSS3_ACCESS_KEY, // Test against AWS S3
         secretAccessKey: process.env.SMCS_AWSS3_SECRET_KEY,
+        sessionToken: process.env.SMCS_AWSS3_SESSION_TOKEN,
         region: process.env.SMCS_AWSS3_REGION // Region for when using AWS S3
     },
 

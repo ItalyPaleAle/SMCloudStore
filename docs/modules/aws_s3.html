@@ -79,6 +79,7 @@
 					<ul>
 						<li><code>connection.accessKeyId</code>: string containing the access key ID (the &quot;public key&quot;)</li>
 						<li><code>connection.secretAccessKey</code>: string containing the secret access key (the &quot;secret key&quot;)</li>
+						<li><code>connection.sessionToken</code>: string containing the session token</li>
 						<li><code>connection.region</code> (optional): string containing the AWS region to use. List of regions is available on the <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">AWS documentation</a>. Defaults to US Standard (Virginia) if not specified.</li>
 					</ul>
 					<p>Example:</p>
@@ -89,6 +90,7 @@
 <span class="hljs-keyword">const</span> connection = {
     <span class="hljs-attr">accessKeyId</span>: <span class="hljs-string">&#39;PUBLIC_KEY_HERE&#39;</span>,
     <span class="hljs-attr">secretAccessKey</span>: <span class="hljs-string">&#39;SECRET_KEY_HERE&#39;</span>,
+		<span class="hljs-attr">sessionToken</span>: <span class="hljs-string">&#39;SESSION_TOKEN_HERE&#39;</span>,
     <span class="hljs-attr">region</span>: <span class="hljs-string">&#39;us-west-1&#39;</span>
 }</p>
 <p><span class="hljs-comment">// Return an instance of the AwsS3Provider class</span>

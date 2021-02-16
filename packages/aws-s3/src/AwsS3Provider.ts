@@ -14,6 +14,8 @@ interface AwsS3ConnectionOptions {
     accessKeyId: string
     /** Secret Access Key */
     secretAccessKey: string,
+    /** Session Token */
+    sessionToken: string,
     /** Default region to use; if not set, defaults to "US Standard" (Virginia) */
     region?: string
 }

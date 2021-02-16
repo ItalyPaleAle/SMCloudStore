@@ -16,6 +16,7 @@ When initializing the AwsS3 provider, the `connection` argument is an object wit
 
 - `connection.accessKeyId`: string containing the access key ID (the "public key")
 - `connection.secretAccessKey`: string containing the secret access key (the "secret key")
+- `connection.sessionToken`: string containing the session token
 - `connection.region` (optional): string containing the AWS region to use. List of regions is available on the [AWS documentation](https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region). Defaults to US Standard (Virginia) if not specified.
 
 Example:
@@ -28,6 +29,7 @@ const SMCloudStore = require('smcloudstore')
 const connection = {
     accessKeyId: 'PUBLIC_KEY_HERE',
     secretAccessKey: 'SECRET_KEY_HERE',
+    sessionToken: 'SESSION_TOKEN_HERE',
     region: 'us-west-1'
 }
 
