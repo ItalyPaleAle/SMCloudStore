@@ -14,7 +14,7 @@ const SMCloudStore = {
     Create: (provider: string, connection: any): StorageProvider => {
         // Validate arguments
         const supportedProviders = SMCloudStore.Providers()
-        if (!provider || typeof provider !== 'string' || supportedProviders.indexOf(provider) < 0) {
+        if (!provider || (typeof provider === 'string' && supportedProviders.indexOf(provider) < 0)) {
             throw Error('The specified provider is not valid. Valid providers inlcude: ' + supportedProviders.join(', '))
         }
 
@@ -23,8 +23,10 @@ const SMCloudStore = {
         }
 
         // Require the specific provider, then initialize it
-        const providerModule = require('@smcloudstore/' + provider)
-
+        let providerModule;
+        if(typeof providerModule === "string") providerModule = require('@smcloudstore/' + provider)
+        else providerModule = provider;
+        
         return new providerModule(connection)
     },
 
