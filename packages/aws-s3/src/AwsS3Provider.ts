@@ -185,9 +185,9 @@ class AwsS3Provider extends StorageProvider {
             const methodOptions = {
                 ACL: ACLString(options.access),
                 Bucket: container,
-                CreateBucketConfiguration: {
-                    LocationConstraint: this._region
-                }
+                // CreateBucketConfiguration: { // comment this out so we dont create conflicts
+                //     LocationConstraint: this._region
+                // }
             } as S3.CreateBucketRequest
             this._client.createBucket(methodOptions, function(err, data) {
                 if (err || !data || !data.Location) {
